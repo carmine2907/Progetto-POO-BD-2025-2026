@@ -1,3 +1,5 @@
+package model;
+
 public class Allenatore extends Utente
 {
     private String qualifica;
