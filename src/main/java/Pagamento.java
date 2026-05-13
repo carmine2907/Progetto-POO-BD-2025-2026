@@ -1,19 +1,22 @@
 import java.util.Date;
 
-public class Pagamento{
+public class Pagamento
+{
     private int IdPagamento;
     private double Importo;
     private Date dataPagamento;
     private StatoPag Stato;
     boolean StatoVal=false;
-    public enum StatoPag{
+    public enum StatoPag
+    {
         Approvato,
         Rifiutato,
         in_Attesa
     }
     public boolean Isvalido(boolean StatoVal){
 
-        if (StatoVal==true){
+        if (StatoVal==true)
+        {
             System.out.println("Stato pagamento Accettato");
         }
          System.out.println("pagamento e stato rifiutato o in attesa");
