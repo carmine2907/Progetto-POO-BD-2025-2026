@@ -1,3 +1,5 @@
+package model;
+
 import java.util.Date;
 
 public class Pagamento
@@ -18,8 +20,9 @@ public class Pagamento
         if (StatoVal==true)
         {
             System.out.println("Stato pagamento Accettato");
+            return true;
         }
-         System.out.println("pagamento e stato rifiutato o in attesa");
+         System.out.println("il pagamento è stato rifiutato o in attesa");
         return false;
     }
 

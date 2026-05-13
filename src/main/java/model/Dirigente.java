@@ -1,3 +1,5 @@
+package model;
+
 public class Dirigente extends Utente
 {
     private String ruoloOrganizzativo;
