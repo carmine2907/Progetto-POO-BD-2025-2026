@@ -43,8 +43,8 @@ public class Partita
         return false;
     }
 
-    Time OrarioPart;
-    int idPartita;
-    Date DataPartita;
+    private Time OrarioPart;
+    private int idPartita;
+    private Date DataPartita;
     boolean vieneDisputata=false;
 }
