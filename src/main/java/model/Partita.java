@@ -1,50 +1,66 @@
 package model;
 
-import java.util.Scanner;
-import java.sql.Time;
-import java.util.Date;
 
-public class Partita
-{
-    public Partita(Time orarioPart, int idPartita, Date dataPartita)
-    {
-        OrarioPart = orarioPart;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class Partita {
+
+    private int idPartita;
+    private LocalDate dataPart;
+    private LocalTime oraPart;
+
+    private Campo campo;
+
+    public Partita(int idPartita,
+                   LocalDate dataPart,
+                   LocalTime oraPart,
+                   Campo campo) {
+
         this.idPartita = idPartita;
-        DataPartita = dataPartita;
+        this.dataPart = dataPart;
+        this.oraPart = oraPart;
+        this.campo = campo;
     }
 
-    public Time getOrarioPart() {return OrarioPart;}
-    public void setOrarioPart(Time orarioPart) {OrarioPart = orarioPart;}
-
-    public int getIdPartita() {return idPartita;}
-    public void setIdPartita(int idPartita) {this.idPartita = idPartita;}
-
-    public Date getDataPartita() {return DataPartita;}
-    public void setDataPartita(Date dataPartita) {DataPartita = dataPartita;}
-
-    public void RegistraRisultato()
-    {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Inserisci goal squadra 1");
-        int risultatoSquadra1 = scanner.nextInt();
-        System.out.println("Inserisci goal squadra 2");
-        int risultatoSquadra2 = scanner.nextInt();
-
-        System.out.println("Il risultato e:" + risultatoSquadra1 + "-" + risultatoSquadra2);
+    public void registraRisultato(String risultato) {
+        System.out.println("Risultato: " + risultato);
     }
+
     public boolean isDisputata()
     {
-        if (vieneDisputata==true)
-        {
-            System.out.println("La partita si gioca");
-            return true;
-        }
-        System.out.println("La partita non si gioca");
-        return false;
+        return dataPart.isBefore(LocalDate.now());
     }
 
-    private Time OrarioPart;
-    private int idPartita;
-    private Date DataPartita;
-    boolean vieneDisputata=false;
+    public int getIdPartita() {
+        return idPartita;
+    }
+
+    public void setIdPartita(int idPartita) {
+        this.idPartita = idPartita;
+    }
+
+    public LocalDate getDataPart() {
+        return dataPart;
+    }
+
+    public void setDataPart(LocalDate dataPart) {
+        this.dataPart = dataPart;
+    }
+
+    public LocalTime getOraPart() {
+        return oraPart;
+    }
+
+    public void setOraPart(LocalTime oraPart) {
+        this.oraPart = oraPart;
+    }
+
+    public Campo getCampo() {
+        return campo;
+    }
+
+    public void setCampo(Campo campo) {
+        this.campo = campo;
+    }
 }

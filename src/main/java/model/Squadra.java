@@ -2,7 +2,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Squadra {
+public class Squadra  {
 
     private int idSquadra;
     private String nome;
@@ -47,4 +47,6 @@ public class Squadra {
     public boolean isCompleta() {return atleti.size() >= maxGiocatori;}
 
     public int getNumeroGiocatori() {return atleti.size();}
+     
+
 }
