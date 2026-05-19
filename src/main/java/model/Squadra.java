@@ -1,6 +1,6 @@
 package model;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Squadra  {
 
@@ -9,7 +9,7 @@ public class Squadra  {
     private String categoria;
     private int maxGiocatori;
 
-    private List<Atleta> atleti;
+    private ArrayList<Atleta> atleti;
 
     public Squadra(int idSquadra, String nome, String categoria, int maxGiocatori)
     {
