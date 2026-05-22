@@ -1,34 +1,27 @@
 package model;
 
-public class Campo
-{
-    public Campo(int idCampo, String nome, String tipo)
-    {
-        this.idCampo = idCampo;
-        Nome = nome;
-        Tipo = tipo;
-    }
-
-    public int getIdCampo() {return idCampo;}
-    public void setIdCampo(int idCampo) {this.idCampo = idCampo;}
-
-    public String getNome() {return Nome;}
-    public void setNome(String nome) {Nome = nome;}
-
-    public String getTipo() {return Tipo;}
-    public void setTipo(String tipo) {Tipo = tipo;}
-
-    public boolean IsDisponibile(boolean Disponibilita)
-    {
-        if(Disponibilita==true) {
-            System.out.println("Il Campo è libero");
-            return true;
-        }
-        System.out.println("Il Campo non è libero");
-        return false;
-    }
+public class Campo {
     private int idCampo;
-    private String Nome;
-    private String Tipo;
-    boolean Disponibilita = false;
+    private String nome;
+    private String tipo;
+    private boolean disponibile;
+
+    public Campo(int idCampo, String nome, String tipo, boolean disponibile) {
+        this.idCampo = idCampo;
+        this.nome = nome;
+        this.tipo = tipo;
+        this.disponibile = disponibile;
+    }
+
+    public int getIdCampo() { return idCampo; }
+    public void setIdCampo(int idCampo) { this.idCampo = idCampo; }
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
+
+    public boolean isDisponibile() { return disponibile; }
+    public void setDisponibile(boolean disponibile) { this.disponibile = disponibile; }
 }

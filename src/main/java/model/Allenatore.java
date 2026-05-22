@@ -4,7 +4,7 @@ public class Allenatore extends Utente
 {
     private String qualifica;
 
-    public Allenatore (String login, String passward, String nome, String cognome)
+    public Allenatore (String login, String passward, String nome, String cognome, String qualifica)
     {
         super(login, passward, nome, cognome);
         this.qualifica = qualifica;

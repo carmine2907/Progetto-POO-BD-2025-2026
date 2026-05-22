@@ -1,13 +1,11 @@
 package gui;
 
-import controller.Controller;
-
 import javax.swing.*;
 
 public class Home {
     private JPanel mainPanel;
     private static JFrame frameHome;
-    private Controller controller;
+    private AutontificazioneController controller;
 
     public static void main(String[] args) {
         frameHome = new JFrame("Home");
@@ -20,7 +18,7 @@ public class Home {
     }
 
     public Home() {
-        controller = new Controller();
+        controller = new AutontificazioneController();
         // Add action listeners or other initialization code here
 
     }

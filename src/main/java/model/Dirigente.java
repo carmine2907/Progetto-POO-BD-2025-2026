@@ -4,7 +4,7 @@ public class Dirigente extends Utente
 {
     private String ruoloOrganizzativo;
 
-    public Dirigente (String login, String password, String nome, String cognome)
+    public Dirigente (String login, String password, String nome, String cognome, String ruoloOrganizzativo)
     {
         super(login, password, nome, cognome);
         this.ruoloOrganizzativo = ruoloOrganizzativo;
@@ -14,5 +14,5 @@ public class Dirigente extends Utente
     public void setRuoloOrganizzativo(String ruoloOrganizzativo)
     { this.ruoloOrganizzativo = ruoloOrganizzativo; }
 
-    public String toString() { return super.toString(); }
+    public String toString() { return super.toString() + " Ruolo: " + ruoloOrganizzativo; }
 }
