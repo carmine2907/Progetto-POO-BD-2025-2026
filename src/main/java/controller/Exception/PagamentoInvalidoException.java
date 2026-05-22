@@ -1,4 +1,4 @@
-package controller.exception;
+package controller.Exception;
 
 
 // Segnalata se un atleta tenta di iscriversi o partecipare senza pagamenti in regola

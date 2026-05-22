@@ -37,4 +37,10 @@ public class AutenticazioneController {
     public static boolean isUtenteAutenticato() {
         return utenteLoggato != null;
     }
+
+    public static class SquadraPienaException extends Exception {
+        public SquadraPienaException(String messaggio) {
+            super(messaggio);
+        }
+    }
 }

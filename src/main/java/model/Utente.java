@@ -3,6 +3,16 @@ package model;//package model;
 
 public class Utente
 {
+    private String idUtente;
+
+    public String getIdUtente() {
+        return idUtente;
+    }
+
+    public void setIdUtente(String idUtente) {
+        this.idUtente = idUtente;
+    }
+
     private String login;
     private String password;
     private String nome;
