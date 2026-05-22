@@ -1,6 +1,6 @@
 package controller;
 
-import controller.exception.*;
+import controller.Exception.*;
 import model.Squadra;
 import model.Atleta;
 

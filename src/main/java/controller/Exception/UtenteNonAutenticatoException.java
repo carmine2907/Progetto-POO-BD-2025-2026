@@ -1,4 +1,4 @@
-package controller.exception;
+package controller.Exception;
 
 
 // Segnalata se un utente prova a fare azioni protette senza essersi autenticato
