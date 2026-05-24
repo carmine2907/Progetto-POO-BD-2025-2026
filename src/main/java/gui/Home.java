@@ -4,6 +4,7 @@ import javax.swing.*;
 import controller.AutenticazioneController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import gui.LoginGUI;
 
 public class Home {
     private JPanel mainPanel;

@@ -6,17 +6,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginGUI {
-    private JPanel mainPanel;
-    private JLabel Jtitolo1;
+    private JPanel mainPanel;;
     private JTextField JUsername;
     private JPasswordField Jpassword;
+    private JLabel JtestoUser;
+    private JLabel JtestoPass;
     private JButton JButton;
-    private JLabel JTitolo2;
     private static JFrame frameHome;
     private AutenticazioneController controller;
 
     public LoginGUI() {
         controller = new AutenticazioneController();
+
+        frameHome = new JFrame("Accesso al Sistema");
+        frameHome.setContentPane(mainPanel);
+        frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameHome.pack();
+        frameHome.setLocationRelativeTo(null);
 
         JButton.addActionListener(new ActionListener() {
             @Override
