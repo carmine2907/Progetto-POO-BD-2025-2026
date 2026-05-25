@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Atleta a1 = new Atleta("mariosdi","marsdi10","mario","sdino");
+        Atleta a1 = new Atleta("mariosdi","mar206","mario","sdino",2006-07-22,"difensore");
 
         Squadra squadra = new Squadra(1, "Juventus U19", "Under 19", 25);
 
