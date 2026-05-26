@@ -1,11 +1,15 @@
 package gui;
 
 import javax.swing.*;
+import controller.AutenticazioneController;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import gui.LoginGUI;
 
 public class Home {
     private JPanel mainPanel;
     private static JFrame frameHome;
-    private AutontificazioneController controller;
+    private AutenticazioneController controller;
 
     public static void main(String[] args) {
         frameHome = new JFrame("Home");
@@ -18,10 +22,8 @@ public class Home {
     }
 
     public Home() {
-        controller = new AutontificazioneController();
-        // Add action listeners or other initialization code here
+        controller = new AutenticazioneController();
 
     }
-
-
+    public void mostra(){ frameHome.setVisible(true);}
 }
