@@ -1,12 +1,14 @@
-package model;
+import model.Atleta;
+import model.Squadra;
 
-import java.time.LocalDate;
+import java.util.Date;
+
 
 public class Main {
 
     public static void main(String[] args) {
-
-        Atleta a1 = new Atleta("mariosdi","mar206","mario","sdino",2006-07-22,"difensore");
+        Date dataNascita = new Date(2006 , 8, 4);
+        Atleta a1 = new Atleta("mariosdi","mar206","mario","sdino",dataNascita,"difensore");
 
         Squadra squadra = new Squadra(1, "Juventus U19", "Under 19", 25);
 

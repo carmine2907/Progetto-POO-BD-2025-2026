@@ -12,10 +12,7 @@ public class Partita {
 
     private Campo campo;
 
-    public Partita(int idPartita,
-                   LocalDate dataPart,
-                   LocalTime oraPart,
-                   Campo campo) {
+    public Partita(int idPartita, LocalDate dataPart, LocalTime oraPart, Campo campo) {
 
         this.idPartita = idPartita;
         this.dataPart = dataPart;

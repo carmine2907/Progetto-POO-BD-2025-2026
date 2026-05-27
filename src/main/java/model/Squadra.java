@@ -47,6 +47,7 @@ public class Squadra  {
     public boolean isCompleta() {return atleti.size() >= maxGiocatori;}
 
     public int getNumeroGiocatori() {return atleti.size();}
+    public ArrayList<Atleta> getAtleti() { return atleti; }
      
 
 }

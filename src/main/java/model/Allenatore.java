@@ -4,14 +4,14 @@ public class Allenatore extends Utente
 {
     private String qualifica;
 
-    public Allenatore (String login, String passward, String nome, String cognome, String qualifica)
+    public Allenatore (String login, String password, String nome, String cognome, String qualifica)
     {
-        super(login, passward, nome, cognome);
+        super(login, password, nome, cognome);
         this.qualifica = qualifica;
     }
 
-    public String getQulifica() { return qualifica; }
-    public void setQualifica(String ruolo) { this.qualifica = qualifica; }
+    public String getQualifica() { return qualifica; }
+    public void setQualifica(String qualifica) { this.qualifica = qualifica; }
 
     public String toString() { return super.toString() +qualifica; }
 }
