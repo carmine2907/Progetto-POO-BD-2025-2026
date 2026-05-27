@@ -15,13 +15,13 @@ public class ConnessioneDatabase {
 
 	// parametri PostgreSQL
 	private static final String URL =
-			"jdbc:postgresql://localhost:5432/scuola_calcio";
+			"jdbc:postgresql://localhost:5432/ScuolaCalcio";
 
 	private static final String USER =
 			"postgres";
 
 	private static final String PASSWORD =
-			"postgres";
+			"Mascottino#7";
 
 	// costruttore privato
 	private ConnessioneDatabase()
