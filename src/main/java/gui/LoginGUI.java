@@ -1,5 +1,7 @@
 package gui;
 
+import controller.SistemaController;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,10 +14,12 @@ public class LoginGUI {
     private JLabel JtestoPass;
     private JButton JButton;
     private static JFrame frameHome;
-    private AutenticazioneController controller;
+    private SistemaController controller;
+    private Home frameChiamante;
 
-    public LoginGUI() {
-        controller = new AutenticazioneController();
+    public LoginGUI(SistemaController controller, Home chiamante) {
+        this.controller = controller;
+        this.frameChiamante = frameChiamante;
 
         frameHome = new JFrame("Accesso al Sistema");
         frameHome.setContentPane(mainPanel);
@@ -39,11 +43,9 @@ public class LoginGUI {
                     {
                         JOptionPane.showMessageDialog(frameHome, "Benvenuto " + username + "!");
 
-                        // Qua ho iniziato a mettere una transizione alla home
-                        Home home = new Home();
-                        home.mostra();
+                        chiamante.aggiornaDopoLogin();
+                        chiamante.mostra();
 
-                        frameHome.setVisible(false);
                         frameHome.dispose();
                     }
                     else
@@ -52,14 +54,14 @@ public class LoginGUI {
                     }
                 }
 
-                catch (IllegalArgumentException ex)
+                catch   (IllegalArgumentException ex)
                 {
                     JOptionPane.showMessageDialog(frameHome, ex.getMessage(), "Attenzione", JOptionPane.WARNING_MESSAGE);
                 }
 
                 catch (Exception ex)
                 {
-                    JOptionPane.showMessageDialog(frameHome, "Errore di sistema: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                     JOptionPane.showMessageDialog(frameHome, "Errore di sistema: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

@@ -8,11 +8,14 @@
     <properties/>
     <border type="none"/>
     <children>
-      <vspacer id="93f16">
+      <component id="62c3a" class="javax.swing.JButton" binding="jButtonLogin">
         <constraints>
-          <grid row="0" column="0" row-span="4" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
-      </vspacer>
+        <properties>
+          <text value="login"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
