@@ -6,132 +6,197 @@ import model.Partita;
 import model.Squadra;
 import model.Atleta;
 
+import exceptions.AtletaGiaPresenteException;
+import exceptions.PagamentoNonValidoException;
+import exceptions.SquadraCompletaException;
+import exceptions.UtenteGiaEsistenteException;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class SistemaController {
 
+    // Mantiene la sessione attiva
+    private static Utente utenteLoggato;
 
-    private static Utente utenteLoggato; // Mantiene la sessione attiva
-
-    public SistemaController() {}
-
+    public SistemaController() {
+    }
 
     /**
-     * Esegue il login dell'utente previa verifica delle credenziali.
+     * Esegue il login dell'utente previa verifica credenziali.
      */
     public boolean login(String username, String password) throws Exception {
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username e password non possono essere vuoti.");
+
+        if (username == null || username.trim().isEmpty()
+                || password == null || password.trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "Username e password non possono essere vuoti.");
         }
 
-        // NOTA: Qui inseriremo la chiamata al DAO. Per ora simuliamo un controllo basilare.
-        if ("admin".equals(username) && "password".equals(password)) {
-            // utenteLoggato = utenteDAO.findByLogin(username);
+        // Simulazione login
+        if ("admin".equals(username)
+                && "password".equals(password)) {
+
+            // Simulazione utente loggato
+            utenteLoggato = new Utente(
+                    "Admin",
+                    "Sistema",
+                    username,
+                    password
+            );
+
             return true;
         }
 
         return false;
     }
 
+    /**
+     * Logout utente.
+     */
     public void logout() {
         utenteLoggato = null;
     }
 
+    /**
+     * Restituisce l'utente loggato.
+     */
     public static Utente getUtenteLoggato() {
         return utenteLoggato;
     }
 
+    /**
+     * Verifica autenticazione.
+     */
     public static boolean isUtenteAutenticato() {
         return utenteLoggato != null;
     }
 
-
-
     /**
-     * Serve a pianificare una nuova partita verificando la disponibilità del campo.
+     * Pianifica una nuova partita verificando disponibilità campo.
      */
-    public Partita pianificaPartita(int idPartita, LocalDate data, LocalTime ora, Campo campo)
-            throws UtenteNonAutenticatoException, IllegalStateException {
+    public Partita pianificaPartita(int idPartita,
+                                    LocalDate data,
+                                    LocalTime ora,
+                                    Campo campo)
+            throws Exception {
 
         if (!isUtenteAutenticato()) {
-            throw new UtenteNonAutenticatoException("Operazione consentita solo al personale autorizzato.");
+
+            throw new Exception(
+                    "Operazione consentita solo ad utenti autenticati.");
         }
 
-        // Controllo della regola di business sul campo
+        // Controllo disponibilità campo
         if (!campo.isDisponibile()) {
-            throw new IllegalStateException("Il campo '" + campo.getNome() + "' non è disponibile per la data e l'orario selezionati.");
+
+            throw new IllegalStateException(
+                    "Il campo '" + campo.getNome()
+                            + "' non è disponibile.");
         }
 
-        // Creazione dell'entità partita
-        Partita nuovaPartita = new Partita(idPartita, data, ora, campo);
+        // Creazione partita
+        Partita nuovaPartita =
+                new Partita(idPartita, data, ora, campo);
 
-        // Il campo adesso viene contrassegnato come occupato
+        // Campo occupato
         campo.setDisponibile(false);
 
-        // NOTA: Qui inseriremo il salvataggio su DB tramite partitaDAO e campoDAO
+        // futura chiamata DAO
 
         return nuovaPartita;
     }
 
-
-
     /**
-     * Associa un atleta a una squadra verificando i vincoli di business.
+     * Associa atleta a squadra.
      */
-    public void assegnaAtletaASquadra(Atleta atleta, Squadra squadra)
-            throws UtenteNonAutenticatoException, SquadraPienaException, PagamentoInvalidoException {
+    public void assegnaAtletaASquadra(Atleta atleta,
+                                      Squadra squadra)
+            throws Exception,
+            SquadraCompletaException,
+            PagamentoNonValidoException,
+            AtletaGiaPresenteException {
 
-        // 1. Controllo di sicurezza: l'operazione richiede un utente loggato
+        // Controllo login
         if (!isUtenteAutenticato()) {
-            throw new UtenteNonAutenticatoException("Operazione negata: effettuare prima il login.");
+
+            throw new Exception(
+                    "Effettuare il login prima dell'operazione.");
         }
 
-        // 2. Controllo Vincolo Burocratico: l'atleta ha pagato la quota?
+        // Controllo pagamento
         if (!atleta.isPagamentoInRegola()) {
-            throw new PagamentoInvalidoException("Impossibile inserire l'atleta: la quota di iscrizione non risulta saldata.");
+
+            throw new PagamentoNonValidoException(
+                    "Pagamento non effettuato.");
         }
 
-        // 3. Controllo Vincolo Capienza: la squadra è completa?
+        // Controllo squadra piena
         if (squadra.isCompleta()) {
-            throw new SquadraPienaException("La squadra " + squadra.getNome() + " ha già raggiunto il numero massimo di giocatori.");
+
+            throw new SquadraCompletaException(
+                    "La squadra " + squadra.getNome()
+                            + " è completa.");
         }
 
-        // 4. Se tutti i controlli passano, esegue l'operazione nel modello
+        // Controllo atleta già presente
+        if (squadra.getAtleti().contains(atleta)) {
+
+            throw new AtletaGiaPresenteException(
+                    "Atleta già presente nella squadra.");
+        }
+
+        // Inserimento atleta
         boolean successo = squadra.addAtleta(atleta);
 
         if (successo) {
-            // Qui andrà la chiamata al DAO per rendere persistente l'associazione sul database PostgreSQL
-            // squadraDAO.aggiungiAtletaAStudio(atleta.getLogin(), squadra.getIdSquadra());
-        }
-    }
 
-    
-
-    /**
-     * Segnalata se un utente prova a fare azioni protette senza essersi autenticato.
-     */
-    public static class UtenteNonAutenticatoException extends Exception {
-        public UtenteNonAutenticatoException(String messaggio) {
-            super(messaggio);
+            // futura chiamata DAO
+            // squadraDAO.save(...)
         }
     }
 
     /**
-     * Segnalata se si prova ad aggiungere un atleta a una squadra che ha raggiunto il limite max.
+     * Registrazione nuovo utente.
      */
-    public static class SquadraPienaException extends Exception {
-        public SquadraPienaException(String messaggio) {
-            super(messaggio);
-        }
-    }
+    public Utente registraUtente(String nome,
+                                 String cognome,
+                                 String username,
+                                 String password)
+            throws IllegalArgumentException,
+            UtenteGiaEsistenteException {
 
-    /**
-     * Segnalata se un atleta tenta di iscriversi o partecipare senza pagamenti in regola.
-     */
-    public static class PagamentoInvalidoException extends Exception {
-        public PagamentoInvalidoException(String messaggio) {
-            super(messaggio);
+        // Validazione campi
+        if (nome == null || nome.trim().isEmpty()
+                || cognome == null || cognome.trim().isEmpty()
+                || username == null || username.trim().isEmpty()
+                || password == null || password.trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "Tutti i campi sono obbligatori.");
         }
+
+        // Controllo password
+        if (password.length() < 6) {
+
+            throw new IllegalArgumentException(
+                    "La password deve contenere almeno 6 caratteri.");
+        }
+
+        // Simulazione username già esistente
+        if (username.equalsIgnoreCase("admin")) {
+
+            throw new UtenteGiaEsistenteException(
+                    "Username già esistente.");
+        }
+
+        // Creazione utente
+        Utente nuovoUtente = new Utente(nome, cognome, username, password);
+
+        // futura chiamata DAO
+
+        return nuovoUtente;
     }
 }
+
