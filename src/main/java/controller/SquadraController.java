@@ -33,7 +33,7 @@ public class SquadraController {
         boolean successo = squadra.addAtleta(atleta);
 
         if (successo) {
-            // NOTA: Qui andrà la chiamata al DAO per rendere persistente l'associazione sul database PostgreSQL
+            //  Qui andrà la chiamata al DAO per rendere persistente l'associazione sul database PostgreSQL
             // squadraDAO.aggiungiAtletaAStudio(atleta.getLogin(), squadra.getIdSquadra());
         }
     }

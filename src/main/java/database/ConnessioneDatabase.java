@@ -1,4 +1,4 @@
-package Database;
+package Database; // c'era D grande
 
 import java.sql.Connection;
 import java.sql.DriverManager;
