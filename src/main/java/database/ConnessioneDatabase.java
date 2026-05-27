@@ -1,4 +1,5 @@
-package Database; // c'era D grande
+package database; // c'era D grande
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,34 +7,50 @@ import java.sql.SQLException;
 
 public class ConnessioneDatabase {
 
-	// ATTRIBUTI
+	// istanza singleton
 	private static ConnessioneDatabase instance;
-	public Connection connection = null;
-	private String nome = "postgres";
-	private String password = "password";
-	private String url = "jdbc:postgresql://localhost:5433/Borsa";
-	private String driver = "org.postgresql.Driver";
 
-	// COSTRUTTORE
-	private ConnessioneDatabase() throws SQLException {
-		try {
-			Class.forName(driver);
-			connection = DriverManager.getConnection(url, nome, password);
+	// connessione al database
+	private Connection connection;
 
-		} catch (ClassNotFoundException ex) {
-			System.out.println("Database Connection Creation Failed : " + ex.getMessage());
-			ex.printStackTrace();
-		}
+	// parametri PostgreSQL
+	private static final String URL =
+			"jdbc:postgresql://localhost:5432/scuola_calcio";
 
+	private static final String USER =
+			"postgres";
+
+	private static final String PASSWORD =
+			"postgres";
+
+	// costruttore privato
+	private ConnessioneDatabase()
+			throws SQLException {
+
+		connection =
+				DriverManager.getConnection(
+						URL,
+						USER,
+						PASSWORD
+				);
 	}
 
+	// metodo getInstance
+	public static ConnessioneDatabase getInstance()
+			throws SQLException {
 
-	public static ConnessioneDatabase getInstance() throws SQLException {
 		if (instance == null) {
-			instance = new ConnessioneDatabase();
-		} else if (instance.connection.isClosed()) {
-			instance = new ConnessioneDatabase();
+
+			instance =
+					new ConnessioneDatabase();
 		}
+
 		return instance;
+	}
+
+	// getter connessione
+	public Connection getConnection() {
+
+		return connection;
 	}
 }

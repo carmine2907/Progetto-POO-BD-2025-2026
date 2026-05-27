@@ -1,5 +1,6 @@
 package controller;
 
+import dao.AtletaDAO;
 import model.Utente;
 import model.Campo;
 import model.Partita;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class SistemaController {
-
+    private AtletaDAO atletaDAO;
     // Mantiene la sessione attiva
     private static Utente utenteLoggato;
 

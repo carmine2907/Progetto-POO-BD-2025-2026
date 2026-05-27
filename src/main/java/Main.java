@@ -1,14 +1,15 @@
 import model.Atleta;
 import model.Squadra;
-
+import database.ConnessioneDatabase;
+import java.sql.Connection;
 import java.util.Date;
 
 
 public class Main {
 
     public static void main(String[] args) {
-        Date dataNascita = new Date(2006 , 8, 4);
-        Atleta a1 = new Atleta("mariosdi","mar206","mario","sdino",dataNascita,"difensore");
+
+        Atleta a1 = new Atleta("mariosdi","mar206","mario","sdino","4 luglio 2006","difensore");
 
         Squadra squadra = new Squadra(1, "Juventus U19", "Under 19", 25);
 
