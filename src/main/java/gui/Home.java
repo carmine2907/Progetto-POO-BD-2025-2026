@@ -17,6 +17,7 @@ public class Home
     {
     SistemaController controller = new SistemaController();
     Home home = new Home(controller);
+    home.mostra();
     }
 
     public Home(SistemaController controller)
