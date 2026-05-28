@@ -1,5 +1,6 @@
 package gui;
 
+import com.sun.security.auth.module.JndiLoginModule;
 import controller.SistemaController;
 
 import javax.swing.*;
@@ -8,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class LoginGUI {
     private JPanel mainPanel;;
-    private JTextField JUsername;
+    private JTextField Jlogin;
     private JPasswordField Jpassword;
     private JLabel JtestoUser;
     private JLabel JtestoPass;
@@ -32,16 +33,16 @@ public class LoginGUI {
             public void actionPerformed(ActionEvent e)
             {
 
-                String username = JUsername.getText();
+                String login = Jlogin.getText();
                 String password = new String(Jpassword.getPassword());
 
                 try
                 {
-                    boolean successo = controller.login(username, password);
+                    boolean successo = controller.login(login, password);
 
                     if (successo)
                     {
-                        JOptionPane.showMessageDialog(frameHome, "Benvenuto " + username + "!");
+                        JOptionPane.showMessageDialog(frameHome, "Benvenuto " + login + "!");
 
                         chiamante.aggiornaDopoLogin();
                         chiamante.mostra();

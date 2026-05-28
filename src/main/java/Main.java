@@ -1,38 +1,50 @@
+import gui.Home;
 import model.Atleta;
 import model.Squadra;
-import database.ConnessioneDatabase;
-import java.sql.Connection;
-import java.util.Date;
 import gui.LoginGUI;
 import database.ConnessioneDatabase;
+import controller.SistemaController;
+import implementazionePostgresDAO.AtletaImplementazionePostgresDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Main {
 
+
+    private static SistemaController sistemaController;
+
     public static void main(String[] args) {
 
-        // 1. CHIAMATA AL DATABASE: Carica il driver e stabilisce la connessione all'avvio
+        // 1. CHIAMATA AL DATABASE:
         try {
-            System.out.println("Tentativo di connessione al database in corso...");
+            System.out.println("SISTEMA: Connessione al database in corso...");
             Connection conn = ConnessioneDatabase.getInstance().getConnection();
             if (conn != null && !conn.isClosed()) {
-                System.out.println("Connessione al database PostgreSQL stabilita con successo!");
+                System.out.println("SISTEMA: Connessione a PostgreSQL stabilita!");
             }
         } catch (SQLException e) {
-            System.err.println("ERRORE: Impossibile connettersi al database pgAdmin!");
+            System.err.println("SISTEMA - ERRORE CRITICO: Database offline!");
             e.printStackTrace();
         }
 
+        // 2. INIZIALIZZAZIONE CONTROLLER E INIEZIONE DEL DAO
 
+        AtletaImplementazionePostgresDAO atletaDAO = new AtletaImplementazionePostgresDAO();
+        sistemaController = new SistemaController();
+
+        // 3. AVVIO DELLA COMPONENTE GRAFICA ORIGINALE
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-
-                LoginGUI login = new LoginGUI(1,1);
-                login.mostra();
+               Home h =new Home(sistemaController);
+                LoginGUI login = new LoginGUI(sistemaController, h);
+                //login.mostra();
             }
         });
     }
-}
 
+    // Metodo statico che permette a LoginGUI e Home di recuperare lo stesso identico controller attivo
+    public static SistemaController getSistemaController() {
+        return sistemaController;
+    }
+}
