@@ -5,24 +5,16 @@ public class Utente
 {
     private String idUtente;
 
-    public String getIdUtente() {
-        return idUtente;
-    }
+    public String getIdUtente() { return idUtente; }
 
-    public void setIdUtente(String idUtente) {
-        this.idUtente = idUtente;
-    }
+    public void setIdUtente(String idUtente) { this.idUtente = idUtente; }
 
     private String login;
     private String email;
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
     private String password;
     private String nome;
@@ -37,27 +29,21 @@ public class Utente
     }
 
 
-    public String getNome() { return nome; }
+    public String getNome() { return nome;}
+
     public void setNome(String nome) { this.nome = nome; }
 
     public String getCognome() { return cognome; }
+
     public void setCognome(String nome) { this.cognome = cognome; }
 
     public String toString() { return " " +nome+ ", " +cognome; }
 
-    public String getLogin() {
-        return login;
-    }
+    public String getLogin() { return login; }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+    public void setLogin(String login) { this.login = login; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
 }

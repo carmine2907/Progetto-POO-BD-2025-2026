@@ -16,14 +16,30 @@ public class Iscrizione {
     }
 
     public int getIdIscrizione() { return idIscrizione; }
-    public void setIdIscrizione(int idIscrizione) { this.idIscrizione = idIscrizione; }
 
-    public Date getDataIscrizione() { return dataIscrizione; }
-    public void setDataIscrizione(Date dataIscrizione) { this.dataIscrizione = dataIscrizione; }
+    public void setIdIscrizione(int idIscrizione) {
+        this.idIscrizione = idIscrizione;
+    }
 
-    public String getStagione() { return stagione; }
-    public void setStagione(String stagione) { this.stagione = stagione; }
+    public Date getDataIscrizione() {
+        return dataIscrizione;
+    }
+
+    public void setDataIscrizione(Date dataIscrizione) {
+        this.dataIscrizione = dataIscrizione;
+    }
+
+    public String getStagione() {
+        return stagione;
+    }
+
+    public void setStagione(String stagione) {
+        this.stagione = stagione;
+    }
 
     public boolean isValida() { return valida; }
-    public void setValida(boolean valida) { this.valida = valida; }
+
+    public void setValida(boolean valida) {
+        this.valida = valida;
+    }
 }

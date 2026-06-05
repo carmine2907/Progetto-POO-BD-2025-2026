@@ -16,13 +16,26 @@ public class Atleta extends Utente
     }
 
     public String getDataNascita() { return dataNascita; }
-    public void setDataNascita(String dataNascita) { this.dataNascita = dataNascita; }
 
-    public String getRuolo() { return ruolo; }
-    public void setRuolo(String ruolo) { this.ruolo = ruolo; }
+    public void setDataNascita(String dataNascita) {
+        this.dataNascita = dataNascita;
+    }
 
-    public boolean isPagamentoInRegola() { return pagamentoInReg; }
-    public void setPagamentoInRegola(boolean stato) { this.pagamentoInReg = stato; }
+    public String getRuolo() {
+        return ruolo;
+    }
+
+    public void setRuolo(String ruolo) {
+        this.ruolo = ruolo;
+    }
+
+    public boolean isPagamentoInRegola() {
+        return pagamentoInReg;
+    }
+
+    public void setPagamentoInRegola(boolean stato) {
+        this.pagamentoInReg = stato;
+    }
 
     public String toString() { return super.toString() +dataNascita; }
 }

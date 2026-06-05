@@ -22,12 +22,15 @@ public class Squadra  {
     }
 
     public int getIdSquadra() {return idSquadra;}
+
     public void setIdSquadra(int idSquadra) {this.idSquadra = idSquadra;}
 
     public String getNome() {return nome;}
+
     public void setNome(String nome) {this.nome = nome;}
 
     public String getCategoria() {return categoria;}
+
     public void setCategoria(String categoria) {this.categoria = categoria;}
 
     public boolean addAtleta(Atleta atleta)
@@ -47,6 +50,7 @@ public class Squadra  {
     public boolean isCompleta() {return atleti.size() >= maxGiocatori;}
 
     public int getNumeroGiocatori() {return atleti.size();}
+
     public ArrayList<Atleta> getAtleti() { return atleti; }
      
 

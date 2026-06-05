@@ -11,7 +11,10 @@ public class Allenatore extends Utente
     }
 
     public String getQualifica() { return qualifica; }
+
     public void setQualifica(String qualifica) { this.qualifica = qualifica; }
 
-    public String toString() { return super.toString() +qualifica; }
+    public String toString() {
+        return super.toString() +qualifica;
+    }
 }

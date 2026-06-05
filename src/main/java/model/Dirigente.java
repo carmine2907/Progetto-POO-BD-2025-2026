@@ -11,8 +11,10 @@ public class Dirigente extends Utente
     }
 
     public String getRuoloOrganizzativo() { return ruoloOrganizzativo; }
-    public void setRuoloOrganizzativo(String ruoloOrganizzativo)
-    { this.ruoloOrganizzativo = ruoloOrganizzativo; }
+
+    public void setRuoloOrganizzativo(String ruoloOrganizzativo) {
+        this.ruoloOrganizzativo = ruoloOrganizzativo;
+    }
 
     public String toString() { return super.toString() + " Ruolo: " + ruoloOrganizzativo; }
 }
