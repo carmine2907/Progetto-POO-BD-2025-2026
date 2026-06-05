@@ -20,7 +20,7 @@ public class LoginGUI {
 
     public LoginGUI(SistemaController controller, Home chiamante) {
         this.controller = controller;
-        this.frameChiamante = frameChiamante;
+        this.frameChiamante = chiamante;
 
         frameHome = new JFrame("Accesso al Sistema");
         frameHome.setContentPane(mainPanel);

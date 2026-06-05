@@ -43,10 +43,10 @@ public class UtenteImplementazionePostgresDao implements UtenteDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new Utente(
-                            rs.getString("nome"),
-                            rs.getString("cognome"),
                             rs.getString("login"),
-                            rs.getString("password")
+                            rs.getString("password"),
+                            rs.getString("nome"),
+                            rs.getString("cognome")
                     );
                 }
             }
