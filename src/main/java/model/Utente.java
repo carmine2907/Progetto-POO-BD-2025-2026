@@ -1,7 +1,7 @@
 package model;//package model;
 
 
-public class Utente
+public class  Utente
 {
     private String idUtente;
 
