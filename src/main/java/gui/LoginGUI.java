@@ -1,6 +1,5 @@
 package gui;
 
-import com.sun.security.auth.module.JndiLoginModule;
 import controller.SistemaController;
 
 import javax.swing.*;
@@ -14,13 +13,14 @@ public class LoginGUI {
     private JLabel JtestoUser;
     private JLabel JtestoPass;
     private JButton JButton;
+    private JButton registratiBottone;
     private static JFrame frameHome;
     private SistemaController controller;
     private Home frameChiamante;
 
     public LoginGUI(SistemaController controller, Home chiamante) {
         this.controller = controller;
-        this.frameChiamante = chiamante;
+        this.frameChiamante = frameChiamante;
 
         frameHome = new JFrame("Accesso al Sistema");
         frameHome.setContentPane(mainPanel);

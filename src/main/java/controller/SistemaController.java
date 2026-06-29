@@ -105,13 +105,11 @@ public class SistemaController {
         if (!campo.isDisponibile()) {
 
             throw new IllegalStateException(
-                    "Il campo '" + campo.getNome()
-                            + "' non è disponibile.");
+                    "Il campo '" + campo.getNome() + "' non è disponibile.");
         }
 
         // Creazione partita
-        Partita nuovaPartita =
-                new Partita(idPartita, data, ora, campo);
+        Partita nuovaPartita = new Partita(idPartita, data, ora, campo);
 
         // Campo occupato
         campo.setDisponibile(false);
@@ -194,8 +192,7 @@ public class SistemaController {
         // Controllo reale sul database se lo username esiste già
         if (utenteDAO.cercaPerUsername(login) != null) {
 
-            throw new UtenteGiaEsistenteException(
-                    "Username già esistente.");
+            throw new UtenteGiaEsistenteException("Username già esistente.");
         }
 
         // Creazione utente

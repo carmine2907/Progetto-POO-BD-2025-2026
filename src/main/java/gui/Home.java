@@ -45,6 +45,7 @@ public class Home
     public void aggiornaDopoLogin()
     {
         jButtonLogin.setVisible(false);
+
     }
 
 }

@@ -17,32 +17,24 @@ public class ConnessioneDatabase {
 	private static final String URL =
 			"jdbc:postgresql://localhost:5432/ScuolaCalcio";
 
-	private static final String USER =
-			"postgres";
+	private static final String USER = "postgres";
 
-	private static final String PASSWORD =
-			"Mascottino#7";
+	private static final String PASSWORD = "Mascottino#7";
 
-	// costruttore privato
+	// costruttore priv
 	private ConnessioneDatabase()
 			throws SQLException {
 
-		connection =
-				DriverManager.getConnection(
-						URL,
-						USER,
-						PASSWORD
-				);
+		connection = DriverManager.getConnection(URL, USER, PASSWORD);
 	}
 
-	// metodo getInstance
+	// metodo getinstance
 	public static ConnessioneDatabase getInstance()
 			throws SQLException {
 
 		if (instance == null) {
 
-			instance =
-					new ConnessioneDatabase();
+			instance = new ConnessioneDatabase();
 		}
 
 		return instance;

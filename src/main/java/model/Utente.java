@@ -35,7 +35,7 @@ public class Utente
 
     public String getCognome() { return cognome; }
 
-    public void setCognome(String nome) { this.cognome = cognome; }
+    public void setCognome(String cognome) { this.cognome = cognome; }
 
     public String toString() { return " " +nome+ ", " +cognome; }
 
