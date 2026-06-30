@@ -3,14 +3,13 @@ package gui;
 import controller.SistemaController;
 import model.Atleta;
 import model.Squadra;
-import exceptions.AtletaGiaPresenteException;
-import exceptions.PagamentoNonValidoException;
-import exceptions.SquadraCompletaException;
+import controller.exceptions.AtletaGiaPresenteException;
+import controller.exceptions.PagamentoNonValidoException;
+import controller.exceptions.SquadraCompletaException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class AssegnaAtletaGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)

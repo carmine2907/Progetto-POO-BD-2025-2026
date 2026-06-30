@@ -16,10 +16,10 @@ import model.Partita;
 import model.Squadra;
 import model.Atleta;
 
-import exceptions.AtletaGiaPresenteException;
-import exceptions.PagamentoNonValidoException;
-import exceptions.SquadraCompletaException;
-import exceptions.UtenteGiaEsistenteException;
+import controller.exceptions.AtletaGiaPresenteException;
+import controller.exceptions.PagamentoNonValidoException;
+import controller.exceptions.SquadraCompletaException;
+import controller.exceptions.UtenteGiaEsistenteException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -180,10 +180,10 @@ public class SistemaController {
     /**
      * Registrazione nuovo utente.
      */
-    public Utente registraUtente(String nome,
-                                 String cognome,
-                                 String login,
-                                 String password)
+    public Utente registraUtente(String login,
+                                 String password,
+                                 String nome,
+                                 String cognome)
             throws Exception,
             IllegalArgumentException,
             UtenteGiaEsistenteException {
