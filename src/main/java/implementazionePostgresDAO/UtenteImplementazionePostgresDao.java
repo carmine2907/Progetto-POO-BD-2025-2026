@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+
 
 public class UtenteImplementazionePostgresDao implements UtenteDAO {
 
@@ -37,14 +37,16 @@ public class UtenteImplementazionePostgresDao implements UtenteDAO {
             System.out.println("Utente registrato correttamente.");
         } catch (SQLException e) {
             e.printStackTrace();
+            // AGGIUNGI QUESTA RIGA per impedire gli "errori silenziosi"
+            throw new RuntimeException("Errore nel Database: " + e.getMessage());
         }
     }
 
     @Override
-    public Utente cercaPerUsername(String username) {
+    public Utente cercaPerUsername(String loginUsername) {
         String sql = "SELECT id_utente, login, password, nome, cognome FROM utente WHERE login = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, username);
+            ps.setString(1, loginUsername);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     int idUtente = rs.getInt("id_utente");
@@ -103,7 +105,9 @@ public class UtenteImplementazionePostgresDao implements UtenteDAO {
             ps.setInt(1, idUtente);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String dataNascita = rs.getObject("data_nascita", String.class);
+                    // MODIFICA QUESTA RIGA COSÌ:
+                    String dataNascita = rs.getString("data_nascita");
+
                     String ruolo = rs.getString("ruolo");
                     Atleta a = new Atleta(login, password, nome, cognome, dataNascita, ruolo);
                     a.setIdUtente(String.valueOf(idUtente));

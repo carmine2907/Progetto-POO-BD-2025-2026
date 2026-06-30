@@ -45,24 +45,38 @@ public class SistemaController {
      * Esegue il login dell'utente previa verifica credenziali.
      */
     public boolean login(String login, String password) throws Exception {
-
-        if (login == null || login.trim().isEmpty()
-                || password == null || password.trim().isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "Username e password non possono essere vuoti.");
+        if (login == null || login.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username e password non possono essere vuoti.");
         }
 
-        // Recupero l'utente dal database tramite il DAO di Postgres
+        // 1. Pulizia di eventuali spazi invisibili digitati per sbaglio nella GUI
+        login = login.trim();
+        password = password.trim();
+
+        System.out.println("--- DEBUG LOGIN ---");
+        System.out.println("Cerco nel DB l'utente: '" + login + "'");
+
+        // 2. Chiamata al DAO
         Utente utenteTrovato = utenteDAO.cercaPerUsername(login);
 
-        // Controllo se l'utente esiste e se la password corrisponde
-        if (utenteTrovato != null && utenteTrovato.getPassword().equals(password)) {
-            utenteLoggato = utenteTrovato;
-            return true;
+        // 3. Verifica se l'utente esiste davvero nel DB
+        if (utenteTrovato == null) {
+            System.out.println("ERRORE: L'utente '" + login + "' NON ESISTE nel database! Il DAO ha restituito null.");
+            return false;
         }
 
-        return false;
+        System.out.println("Utente trovato! La password salvata nel DB è: '" + utenteTrovato.getPassword() + "'");
+        System.out.println("La password digitata nella GUI è: '" + password + "'");
+
+        // 4. Verifica se le password coincidono
+        if (utenteTrovato.getPassword().equals(password)) {
+            utenteLoggato = utenteTrovato;
+            System.out.println("Le password coincidono. Login Riuscito!");
+            return true;
+        } else {
+            System.out.println("ERRORE: Le password NON coincidono.");
+            return false;
+        }
     }
 
 
@@ -183,11 +197,11 @@ public class SistemaController {
             throw new IllegalArgumentException(
                     "Tutti i campi sono obbligatori.");}
 
-        // Controllo password
+        /* Controllo password
         if (password.length() < 6) {
 
             throw new IllegalArgumentException("La password deve contenere almeno 6 caratteri.");
-        }
+        }*/
 
         // Controllo reale sul database se lo username esiste già
         if (utenteDAO.cercaPerUsername(login) != null) {
