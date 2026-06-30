@@ -18,6 +18,8 @@ public class AssegnaAtletaGUI {
     private JComboBox<Squadra> cmbSquadre;
     private JButton btnConferma;
     private JButton btnAnnulla;
+    private JLabel lblAtleti;
+    private JLabel lblSelSquadra;
 
     private JFrame frame;
     private SistemaController controller;

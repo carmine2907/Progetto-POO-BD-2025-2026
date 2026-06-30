@@ -90,14 +90,11 @@ public class VisualizzaSquadraGUI {
      * Metodo di supporto per riempire la ComboBox delle Squadre.
      */
     private void caricaSquadreNellaTendina() {
-        // ATTENZIONE: Qui dovrai chiamare i metodi del tuo controller per ottenere la lista delle squadre.
-        /* Esempio di implementazione reale:
-
         List<Squadra> listaSquadre = controller.getTutteLeSquadre();
         for (Squadra s : listaSquadre) {
             cmbSquadre.addItem(s);
         }
-        */
+
     }
 
     public void mostra() {

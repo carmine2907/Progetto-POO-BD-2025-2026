@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class PianificaPartitaGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
@@ -102,14 +103,12 @@ public class PianificaPartitaGUI {
      * Assicurati che la classe Campo abbia un buon metodo toString() implementato!
      */
     private void caricaCampiNelleTendine() {
-        // ATTENZIONE: Qui dovrai chiamare i metodi del tuo controller/DAO per ottenere la lista dei campi dal DB.
-        /* Esempio di implementazione reale:
 
         List<Campo> listaCampi = controller.getTuttiICampi();
         for (Campo c : listaCampi) {
             cmbCampi.addItem(c);
         }
-        */
+
     }
 
     public void mostra() {

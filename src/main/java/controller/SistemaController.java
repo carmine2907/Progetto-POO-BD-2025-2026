@@ -4,11 +4,13 @@ import dao.AtletaDAO;
 import dao.UtenteDAO;
 import dao.SquadraDAO;
 import dao.PartitaDAO;
+import dao.CampoDAO;
 
 import implementazionePostgresDAO.AtletaImplementazionePostgresDAO;
 import implementazionePostgresDAO.UtenteImplementazionePostgresDao;
 import implementazionePostgresDAO.SquadraImplementazionePostgresDAO;
 import implementazionePostgresDAO.PartitaImplementazionePostgresDAO;
+import implementazionePostgresDAO.CampoImplementazionePostgresDAO;
 
 import model.Utente;
 import model.Campo;
@@ -23,13 +25,14 @@ import controller.exceptions.UtenteGiaEsistenteException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class SistemaController {
     private AtletaDAO atletaDAO;
     private UtenteDAO utenteDAO;
     private SquadraDAO squadraDAO;
     private PartitaDAO partitaDAO;
-
+    private CampoDAO campoDAO;
     // Mantiene la sessione attiva
     private static Utente utenteLoggato;
 
@@ -216,5 +219,15 @@ public class SistemaController {
         utenteDAO.salva(nuovoUtente);
 
         return nuovoUtente;
+    }
+    public List<Squadra> getTutteLeSquadre() {
+        // Delega il compito di interrogare il DB al DAO specifico
+        return squadraDAO.trovaTutti();
+    }
+    public List<Partita> getTutteLePartite() {
+        return partitaDAO.trovaTutti();
+    }
+    public List<Campo> getTuttiICampi() {
+        return campoDAO.trovaTutti();
     }
 }

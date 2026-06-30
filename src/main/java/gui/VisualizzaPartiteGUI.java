@@ -6,6 +6,7 @@ import model.Partita;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class VisualizzaPartiteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
@@ -63,11 +64,9 @@ public class VisualizzaPartiteGUI {
         listModel.clear();
 
         try {
-            // ATTENZIONE: Qui dovrai chiamare il metodo reale del tuo controller/DAO
-            // che restituisce tutte le partite future o quelle pertinenti all'atleta loggato.
-            // Esempio: List<Partita> partite = controller.getTutteLePartite();
+            List<Partita> partite = controller.getTutteLePartite();
 
-            /* --- STRUTTURA DA DECOMMENTARE QUANDO AVRAI IL METODO NEL CONTROLLER ---
+
             if (partite == null || partite.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Nessuna partita in programma trovata.", "Info", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -76,10 +75,10 @@ public class VisualizzaPartiteGUI {
                     listModel.addElement(p);
                 }
             }
-            */
+
 
             // Messaggio provvisorio finché non colleghi il DB
-            JOptionPane.showMessageDialog(frame, "Simulazione: Qui comparirà la lista delle partite prelevate dal DB.", "Info", JOptionPane.INFORMATION_MESSAGE);
+           // JOptionPane.showMessageDialog(frame, "Simulazione: Qui comparirà la lista delle partite prelevate dal DB.", "Info", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(frame, "Errore durante il recupero delle partite: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
