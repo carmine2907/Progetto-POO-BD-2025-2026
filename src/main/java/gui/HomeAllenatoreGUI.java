@@ -49,9 +49,8 @@ public class HomeAllenatoreGUI {
                 frame.dispose();
                 JOptionPane.showMessageDialog(null, "Logout effettuato con successo.");
 
-                // Per tornare al login:
-                // LoginGUI login = new LoginGUI(controller, new Home());
-                // login.mostra();
+                LoginGUI login = new LoginGUI(controller, new Home(controller));
+                login.mostra();
                 System.exit(0);
             }
         });

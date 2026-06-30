@@ -16,6 +16,8 @@ public class VisualizzaSquadraGUI {
     private JButton btnMostraRosa;
     private JList<Atleta> listAtleti;
     private JButton btnChiudi;
+    private JLabel lblSquadra;
+    private JLabel lblListaAtleti;
 
     private JFrame frame;
     private SistemaController controller;

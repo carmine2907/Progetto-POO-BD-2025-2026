@@ -20,6 +20,10 @@ public class PianificaPartitaGUI {
     private JComboBox<Campo> cmbCampi;
     private JButton btnConferma;
     private JButton btnAnnulla;
+    private JLabel lblPartita;
+    private JLabel lblData;
+    private JLabel lblCampo;
+    private JLabel lblOra;
 
     private JFrame frame;
     private SistemaController controller;

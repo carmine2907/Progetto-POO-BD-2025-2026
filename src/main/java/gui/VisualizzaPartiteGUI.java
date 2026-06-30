@@ -6,13 +6,14 @@ import model.Partita;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class VisualizzaPartiteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
+    private JButton chiudiButton;
     private JList<Partita> listPartite;
     private JButton btnAggiorna;
+    private JLabel lblPartite;
     private JButton btnChiudi;
 
     private JFrame frame;
