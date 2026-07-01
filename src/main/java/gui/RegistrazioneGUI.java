@@ -14,7 +14,8 @@ public class RegistrazioneGUI {
     private JPasswordField txtPassword;
     private JButton btnRegistrati;
     private JButton btnAnnulla;
-
+    private JLabel lblTokenID;
+    private JTextField txtCodiceRuolo;
     private JFrame frame;
     private SistemaController controller;
     private LoginGUI chiamante; // Riferimento alla finestra di Login
@@ -30,31 +31,31 @@ public class RegistrazioneGUI {
         frame.pack();
         frame.setLocationRelativeTo(null); // Centra la finestra
 
-        // --- AZIONE: BOTTONE REGISTRATI ---
         btnRegistrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 1. Lettura degli input
-                String nome = txtNome.getText();
-                String cognome = txtCognome.getText();
-                String username = txtUsername.getText();
-                String password = new String(txtPassword.getPassword());
+                // Lettura degli input esistenti
+                String nome = txtNome.getText().trim();
+                String cognome = txtCognome.getText().trim();
+                String username = txtUsername.getText().trim();
+                String password = new String(txtPassword.getPassword()).trim();
+
+                // NUOVO: Lettura del codice identificativo
+                String codiceRuolo = txtCodiceRuolo.getText().trim();
 
                 try {
-                    // 2. Chiamata al Controller per la logica di business
-                    controller.registraUtente(nome, cognome, username, password);
+                    // Passiamo anche il codice al metodo del controller
+                    controller.registraUtente(username, password, nome, cognome, codiceRuolo);
 
-                    // 3. Se non vengono lanciate eccezioni, la registrazione ha avuto successo
-                    JOptionPane.showMessageDialog(frame, "Registrazione completata con successo!\nOra puoi effettuare l'accesso.", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(frame,
+                            "Registrazione completata con successo!\nOra puoi effettuare l'accesso.",
+                            "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-                    // 4. Torniamo alla schermata di Login
                     chiudiETornaAlLogin();
 
                 } catch (IllegalArgumentException ex) {
-                    // Gestione errori di validazione (es. campi vuoti, password corta)
                     JOptionPane.showMessageDialog(frame, ex.getMessage(), "Attenzione", JOptionPane.WARNING_MESSAGE);
                 } catch (Exception ex) {
-                    // Gestione errori di sistema o eccezioni custom (es. UtenteGiaEsistenteException)
                     JOptionPane.showMessageDialog(frame, "Errore durante la registrazione: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -79,4 +80,7 @@ public class RegistrazioneGUI {
     public void mostra() {
         frame.setVisible(true);
     }
+
+
+
 }

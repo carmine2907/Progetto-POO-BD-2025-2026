@@ -40,4 +40,9 @@ public class Pagamento {
 
     // Il pagamento è valido solo se è esplicitamente approvato
     public boolean isValido() { return this.stato == StatoPag.APPROVATO; }
+
+    @Override
+    public String toString() {
+        return "Pagamento {" + " " + stato + " "+'}';
+    }
 }

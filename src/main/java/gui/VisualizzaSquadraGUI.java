@@ -59,8 +59,8 @@ public class VisualizzaSquadraGUI {
 
 
 
-                    List<Atleta> atleti = squadraSelezionata.getAtleti();
-
+                   // List<Atleta> atleti = squadraSelezionata.getAtleti();
+                    List<Atleta> atleti = controller.getAtletiPerSquadra(squadraSelezionata.getIdSquadra());
                     if (atleti == null || atleti.isEmpty()) {
                         JOptionPane.showMessageDialog(frame, "Nessun atleta presente in questa squadra.", "Info", JOptionPane.INFORMATION_MESSAGE);
                     } else {

@@ -65,12 +65,11 @@ public class HomeDirigenteGUI {
                 // 2. Chiude questa finestra
                 frame.dispose();
 
-                // 3. Riapre la finestra di Login (assumendo che Home abbia un costruttore vuoto o simile)
-                // Se la tua classe Home richiede parametri, adattali qui di conseguenza.
+
                 JOptionPane.showMessageDialog(null, "Logout effettuato con successo.");
                 LoginGUI login = new LoginGUI(controller, new Home(controller));
                 login.mostra();
-                System.exit(0); // Rimuovi System.exit e de-commenta le righe sopra per abilitare il loop delle finestre
+                //System.exit(0);
             }
         });
     }

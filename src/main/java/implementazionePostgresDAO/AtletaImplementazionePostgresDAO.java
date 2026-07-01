@@ -166,4 +166,44 @@ public class AtletaImplementazionePostgresDAO implements AtletaDAO {
 			e.printStackTrace();
 		}
 	}
+
+
+	@Override
+	public List<Atleta> getAtletiPerSquadra(int idSquadra) {
+		List<Atleta> lista = new ArrayList<>();
+
+		// Uniamo utente, atleta e la tabella ponte iscrizione!
+		String sql = """
+                SELECT u.id_utente, u.login, u.password, u.nome, u.cognome, 
+                       a.data_nascita, a.ruolo, a.pagamento_in_reg
+                FROM utente u
+                JOIN atleta a ON u.id_utente = a.id_atleta
+                JOIN iscrizione i ON a.id_atleta = i.id_atleta
+                WHERE i.id_squadra = ?
+                """;
+
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, idSquadra);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Atleta atleta = new Atleta(
+							rs.getString("login"),
+							rs.getString("password"),
+							rs.getString("nome"),
+							rs.getString("cognome"),
+							rs.getString("data_nascita"),
+							rs.getString("ruolo")
+					);
+					atleta.setIdUtente(String.valueOf(rs.getInt("id_utente")));
+					atleta.setPagamentoInRegola(rs.getBoolean("pagamento_in_reg"));
+
+					lista.add(atleta);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
 }

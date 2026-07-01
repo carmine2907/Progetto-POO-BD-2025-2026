@@ -62,7 +62,7 @@ public class HomeAllenatoreGUI {
 
                 LoginGUI login = new LoginGUI(controller, new Home(controller));
                 login.mostra();
-                System.exit(0);
+                //System.exit(0);
             }
         });
     }

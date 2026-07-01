@@ -37,50 +37,56 @@ public class HomeAtletaGUI {
             lblBenvenuto.setText("Benvenuto Atleta: " + SistemaController.getUtenteLoggato().getNome());
         }
 
-        // --- AZIONE: STATO PAGAMENTI ---
         btnStatoPagamenti.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // 1. Recuperiamo l'utente attualmente connesso
+                    // 1. Recuperiamo l'utente connesso e assicuriamoci che sia un Atleta
                     Utente utenteConnesso = SistemaController.getUtenteLoggato();
 
-                    // 2. Verifichiamo che sia effettivamente un Atleta
                     if (utenteConnesso instanceof Atleta) {
                         Atleta atleta = (Atleta) utenteConnesso;
+                        int idAtleta = Integer.parseInt(atleta.getIdUtente());
 
-                        // 3. Controllo dello stato del pagamento
-                        if (atleta.isPagamentoInRegola()) {
-                            // Caso di successo
-                            JOptionPane.showMessageDialog(frame,
-                                    "Il tuo pagamento è in regola.\nSei regolarmente tesserato per le attività!",
-                                    "Stato Pagamento",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            // Caso di fallimento: Lanciamo la tua eccezione personalizzata
-                            throw new PagamentoNonValidoException("La tua quota di iscrizione risulta 'IN ATTESA' o 'RIFIUTATA'. Contatta la segreteria.");
+                        // 2. Chiediamo al database lo stato REALE tramite il Controller
+                        String statoDB = controller.verificaStatoPagamento(idAtleta);
+
+                        // 3. Gestiamo i vari casi del tuo CHECK constraint
+                        switch (statoDB) {
+                            case "APPROVATO":
+                                JOptionPane.showMessageDialog(frame,
+                                        "Il tuo pagamento è in regola ('APPROVATO').\nSei regolarmente tesserato!",
+                                        "Stato Pagamento", JOptionPane.INFORMATION_MESSAGE);
+                                break;
+
+                            case "IN_ATTESA":
+                                JOptionPane.showMessageDialog(frame,
+                                        "Il tuo pagamento risulta 'IN ATTESA' di verifica da parte della segreteria.",
+                                        "Verifica in corso", JOptionPane.WARNING_MESSAGE);
+                                break;
+
+                            case "RIFIUTATO":
+                                JOptionPane.showMessageDialog(frame,
+                                        "Il tuo ultimo pagamento è stato 'RIFIUTATO'.\nContatta immediatamente la segreteria.",
+                                        "Attenzione", JOptionPane.ERROR_MESSAGE);
+                                break;
+
+                            case "NESSUN_PAGAMENTO":
+                                JOptionPane.showMessageDialog(frame,
+                                        "Non risulta alcun pagamento registrato a tuo nome.",
+                                        "Nessun dato", JOptionPane.WARNING_MESSAGE);
+                                break;
+
+                            default:
+                                JOptionPane.showMessageDialog(frame,
+                                        "Stato pagamento sconosciuto: " + statoDB,
+                                        "Errore", JOptionPane.ERROR_MESSAGE);
                         }
-                    } else {
-                        // Sicurezza aggiuntiva nel caso il bottone venga premuto da un ruolo errato
-                        JOptionPane.showMessageDialog(frame,
-                                "Questa funzione è riservata esclusivamente agli atleti.",
-                                "Accesso Negato",
-                                JOptionPane.WARNING_MESSAGE);
                     }
-
-                } catch (PagamentoNonValidoException ex) {
-                    // 4. Catturiamo la tua eccezione e mostriamo l'errore a schermo
-                    JOptionPane.showMessageDialog(frame,
-                            ex.getMessage(),
-                            "Pagamento Irregolare",
-                            JOptionPane.ERROR_MESSAGE);
-
                 } catch (Exception ex) {
-                    // Gestione di eventuali altri errori imprevisti
                     JOptionPane.showMessageDialog(frame,
-                            "Errore di sistema: " + ex.getMessage(),
-                            "Errore",
-                            JOptionPane.ERROR_MESSAGE);
+                            "Errore durante il controllo: " + ex.getMessage(),
+                            "Errore di Sistema", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -106,7 +112,7 @@ public class HomeAtletaGUI {
 
                 LoginGUI login = new LoginGUI(controller, new Home(controller));
                 login.mostra();
-                System.exit(0);
+                //System.exit(0);
             }
         });
     }

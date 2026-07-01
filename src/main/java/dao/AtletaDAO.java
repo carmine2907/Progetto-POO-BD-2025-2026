@@ -11,6 +11,6 @@ public interface AtletaDAO {
 	Atleta cercaPerId(int id);
 
 	List<Atleta> trovaTutti();
-
+	List<Atleta> getAtletiPerSquadra(int idSquadra);
 	void elimina(int id);
 }

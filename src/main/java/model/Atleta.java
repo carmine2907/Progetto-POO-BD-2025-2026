@@ -12,7 +12,7 @@ public class Atleta extends Utente
         super(login, password, nome, cognome);
         this.dataNascita = dataNascita;
         this.ruolo = ruolo;
-        this.pagamentoInReg = false;
+        this.pagamentoInReg = isPagamentoInRegola();
     }
 
     public String getDataNascita() { return dataNascita; }
@@ -40,6 +40,6 @@ public class Atleta extends Utente
     @Override
     public String toString() {
         // Esempio: "Rossi Mario - Attaccante (10/05/2010)"
-        return getCognome() + " " + getNome() + " - " + ruolo + " (" + dataNascita + ")";
+        return isPagamentoInRegola()+getCognome() + " " + getNome() + " - " + ruolo + " (" + dataNascita + ")";
     }
 }
