@@ -6,4 +6,5 @@ public interface PagamentoDAO {
     void salva(Pagamento pagamento);
     Pagamento cercaPerId(int idPagamento);
     void aggiornaStato(int idPagamento, Pagamento.StatoPag nuovoStato);
+    String getUltimoStatoPagamento(int idAtleta);
 }

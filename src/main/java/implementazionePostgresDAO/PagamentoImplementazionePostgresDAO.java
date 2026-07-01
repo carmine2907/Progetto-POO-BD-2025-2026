@@ -92,4 +92,24 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
             e.printStackTrace();
         }
     }
+    @Override
+    public String getUltimoStatoPagamento(int idAtleta) {
+        // Ordiniamo per data decrescente e prendiamo il primo (il più recente)
+        String sql = "SELECT stato FROM pagamento WHERE id_atleta = ? ORDER BY data_pagamento DESC LIMIT 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idAtleta);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("stato"); // Ritorna APPROVATO, RIFIUTATO o IN_ATTESA
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Se l'atleta non ha mai fatto pagamenti
+        return "NESSUN_PAGAMENTO";
+    }
 }
