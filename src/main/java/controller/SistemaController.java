@@ -230,4 +230,5 @@ public class SistemaController {
     public List<Campo> getTuttiICampi() {
         return campoDAO.trovaTutti();
     }
+    public List<Atleta> getTuttiGliAtleti() {return atletaDAO.trovaTutti();}
 }

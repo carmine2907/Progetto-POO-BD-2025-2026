@@ -41,7 +41,7 @@ public class VisualizzaSquadraGUI {
         // 1. Popoliamo il menu a tendina delle squadre
         caricaSquadreNellaTendina();
 
-        // --- AZIONE: BOTTONE MOSTRA ROSA ---
+
         btnMostraRosa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -52,12 +52,11 @@ public class VisualizzaSquadraGUI {
                     return;
                 }
 
-                // Svuotiamo la lista precedente
+
                 listModel.clear();
 
                 try {
-                    // ATTENZIONE: Qui dovrai recuperare la lista reale degli atleti dal Controller
-                    // Esempio: List<Atleta> atleti = controller.getAtletiPerSquadra(squadraSelezionata);
+
 
                     // --- SIMULAZIONE (da sostituire con la chiamata reale al DB) ---
                     List<Atleta> atleti = squadraSelezionata.getAtleti();
@@ -77,7 +76,7 @@ public class VisualizzaSquadraGUI {
             }
         });
 
-        // --- AZIONE: BOTTONE CHIUDI ---
+
         btnChiudi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,9 +85,9 @@ public class VisualizzaSquadraGUI {
         });
     }
 
-    /**
-     * Metodo di supporto per riempire la ComboBox delle Squadre.
-     */
+
+     //Metodo di supporto per riempire la ComboBox delle Squadre.
+
     private void caricaSquadreNellaTendina() {
         List<Squadra> listaSquadre = controller.getTutteLeSquadre();
         for (Squadra s : listaSquadre) {

@@ -15,8 +15,6 @@ public class HomeAtletaGUI {
 
     private JFrame frame;
     private SistemaController controller;
-    private JPanel mainPanel;
-    private JButton btnVisualizzaPartita;
 
     public HomeAtletaGUI(SistemaController controller) {
         this.controller = controller;

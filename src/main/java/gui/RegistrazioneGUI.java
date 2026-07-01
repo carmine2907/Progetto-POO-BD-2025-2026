@@ -72,7 +72,7 @@ public class RegistrazioneGUI {
 
     // Metodo helper per evitare di ripetere codice
     private void chiudiETornaAlLogin() {
-        frame.dispose(); // Distrugge la finestra di registrazione
+        frame.dispose();
         chiamante.mostra(); // Rende di nuovo visibile la finestra di Login
     }
 

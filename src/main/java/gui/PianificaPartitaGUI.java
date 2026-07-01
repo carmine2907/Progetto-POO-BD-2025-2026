@@ -89,7 +89,7 @@ public class PianificaPartitaGUI {
             }
         });
 
-        // --- AZIONE: BOTTONE ANNULLA ---
+
         btnAnnulla.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

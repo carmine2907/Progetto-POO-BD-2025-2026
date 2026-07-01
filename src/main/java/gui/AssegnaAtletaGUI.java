@@ -10,6 +10,7 @@ import controller.exceptions.SquadraCompletaException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class AssegnaAtletaGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
@@ -86,11 +87,7 @@ public class AssegnaAtletaGUI {
      * le classi Atleta e Squadra abbiano un buon metodo toString() implementato!
      */
     private void caricaDatiNelleTendine() {
-        // ATTENZIONE: Qui dovrai chiamare i metodi del tuo controller/DAO per ottenere le liste reali dal DB.
-        // Ad esempio: List<Atleta> atleti = controller.getTuttiAtleti();
-        // Poiché non ho i metodi del tuo controller, lascio la struttura preparata:
 
-        /* Esempio di implementazione reale:
 
         List<Atleta> listaAtleti = controller.getTuttiGliAtleti();
         for (Atleta a : listaAtleti) {
@@ -101,7 +98,7 @@ public class AssegnaAtletaGUI {
         for (Squadra s : listaSquadre) {
             cmbSquadre.addItem(s);
         }
-        */
+
     }
 
     public void mostra() {
