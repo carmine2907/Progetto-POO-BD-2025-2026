@@ -1,22 +1,9 @@
 package controller;
 
-import dao.AtletaDAO;
-import dao.UtenteDAO;
-import dao.SquadraDAO;
-import dao.PartitaDAO;
-import dao.CampoDAO;
-import dao.PagamentoDAO;
-import implementazionePostgresDAO.AtletaImplementazionePostgresDAO;
-import implementazionePostgresDAO.UtenteImplementazionePostgresDao;
-import implementazionePostgresDAO.SquadraImplementazionePostgresDAO;
-import implementazionePostgresDAO.PartitaImplementazionePostgresDAO;
-import implementazionePostgresDAO.CampoImplementazionePostgresDAO;
-import implementazionePostgresDAO.PagamentoImplementazionePostgresDAO;
-import model.Utente;
-import model.Campo;
-import model.Partita;
-import model.Squadra;
-import model.Atleta;
+import dao.*;
+
+import implementazionePostgresDAO.*;
+import model.*;
 
 import controller.exceptions.AtletaGiaPresenteException;
 import controller.exceptions.PagamentoNonValidoException;
@@ -34,6 +21,8 @@ public class SistemaController {
     private PartitaDAO partitaDAO;
     private CampoDAO campoDAO;
     private PagamentoDAO pagamentoDAO;
+    private DirigenteDAO dirigenteDAO;
+    private AllenatoreDAO allenatoreDAO;
     private static Utente utenteLoggato;
 
     public SistemaController() {
@@ -44,6 +33,8 @@ public class SistemaController {
         this.partitaDAO = new PartitaImplementazionePostgresDAO();
         this.campoDAO   = new CampoImplementazionePostgresDAO();
         this.pagamentoDAO= new PagamentoImplementazionePostgresDAO();
+        this.dirigenteDAO = new DirigenteImplementazionePostgresDAO();
+        this.allenatoreDAO = new AllenatoreImplementazionePostgresDAO();
     }
 
     /**
@@ -185,85 +176,181 @@ public class SistemaController {
     /**
      * Registrazione nuovo utente.
      */
-    public Utente registraUtente(String login,
-                                 String password,
-                                 String nome,
-                                 String cognome,
-                                 String codiceRuolo)
-            throws Exception {
+//    public Utente registraUtente(String login,
+//                                 String password,
+//                                 String nome,
+//                                 String cognome,
+//                                 String codiceRuolo,
+//                                 String dataNascita,
+//                                 String ruolo,
+//                                 String qualifica,
+//                                 String ruoloOrganizzativo)
+//            throws Exception {
+//
+//        // 1. Validazione campi obbligatori
+//        if (nome == null || nome.trim().isEmpty()
+//                || cognome == null || cognome.trim().isEmpty()
+//                || login == null || login.trim().isEmpty()
+//                || password == null || password.trim().isEmpty()
+//                || codiceRuolo == null || codiceRuolo.trim().isEmpty()) {
+//
+//            throw new IllegalArgumentException("Tutti i campi, compreso il codice ruolo, sono obbligatori.");
+//        }
+//
+//        // 2. Controllo reale sul database se lo username esiste già
+//        if (utenteDAO.cercaPerUsername(login) != null) {
+//            throw new Exception("Username già esistente.");
+//        }
+//
+//        // 3. Interpretazione del codice identificativo per stabilire il tipo di oggetto
+//        Utente nuovoUtente;
+//
+//        switch (codiceRuolo) {
+//            case "0001":
+//                // È un Atleta: usiamo valori temporanei di default per data di nascita e ruolo sul campo
+//                nuovoUtente = new Atleta(login, password, nome, cognome, dataNascita, ruolo);
+//                break;
+//
+//            case "2224":
+//                // È un Dirigente
+//                // NOTA: Se hai creato una classe specifica model.Dirigente usa quella,
+//                // altrimenti usa Utente base (il DB lo riconoscerà tramite le query di ruolo)
+//                nuovoUtente = new Dirigente(login, password, nome, cognome, ruoloOrganizzativo);
+//                break;
+//
+//            case "5557":
+//                // È un Allenatore
+//                // NOTA: Se hai creato una classe specifica model.Allenatore usa quella
+//                nuovoUtente = new Allenatore(login, password, nome, cognome, qualifica);
+//                break;
+//
+//            default:
+//                // Se il codice digitato non è tra quelli previsti, blocchiamo la registrazione
+//                throw new IllegalArgumentException("Codice Identificativo Ruolo non valido.\nContatta l'amministratore del sistema.");
+//        }
+//
+//        // 4. Salvataggio persistente nel Database
+//        // Inseriamo prima l'utente nella tabella base 'utente' per generare l'ID (SERIAL)
+//        utenteDAO.salva(nuovoUtente);
+//
+//        // 5. Gestione dell'ereditarietà per l'Atleta
+//        if (nuovoUtente instanceof Atleta) {
+//            // Recuperiamo l'ID appena generato da PostgreSQL cercando l'utente per username
+//            Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
+//            ((Atleta) nuovoUtente).setIdUtente(utenteRegistrato.getIdUtente());
+//
+//            // Salviamo i dettagli specifici dell'atleta nella tabella 'atleta'
+//            atletaDAO.salva((Atleta) nuovoUtente);
+//        }
+//
+//        return nuovoUtente;
+//    }
+
+    public Atleta registraAtleta(String login, String password, String nome, String cognome, String dataNascita, String ruolo) throws Exception {
 
         // 1. Validazione campi obbligatori
-        if (nome == null || nome.trim().isEmpty()
-                || cognome == null || cognome.trim().isEmpty()
-                || login == null || login.trim().isEmpty()
-                || password == null || password.trim().isEmpty()
-                || codiceRuolo == null || codiceRuolo.trim().isEmpty()) {
-
-            throw new IllegalArgumentException("Tutti i campi, compreso il codice ruolo, sono obbligatori.");
+        if (nome == null || nome.isEmpty() || cognome == null || cognome.isEmpty() ||
+                login == null || login.isEmpty() || password == null || password.isEmpty() ||
+                dataNascita == null || dataNascita.isEmpty() || ruolo == null) {
+            throw new IllegalArgumentException("Tutti i campi sono obbligatori.");
         }
 
-        // 2. Controllo reale sul database se lo username esiste già
+        // 2. Controllo duplicati
         if (utenteDAO.cercaPerUsername(login) != null) {
             throw new Exception("Username già esistente.");
         }
 
-        // 3. Interpretazione del codice identificativo per stabilire il tipo di oggetto
-        Utente nuovoUtente;
+        // 3. Creazione oggetto Atleta
+        Atleta nuovoAtleta = new Atleta(login, password, nome, cognome, dataNascita, ruolo);
 
-        switch (codiceRuolo) {
-            case "0001":
-                // È un Atleta: usiamo valori temporanei di default per data di nascita e ruolo sul campo
-                nuovoUtente = new Atleta(login, password, nome, cognome, "2000-01-01", "Da assegnare");
-                break;
+        // Di default, appena registrato, il pagamento non è in regola
+        nuovoAtleta.setPagamentoInRegola(false);
 
-            case "2224":
-                // È un Dirigente
-                // NOTA: Se hai creato una classe specifica model.Dirigente usa quella,
-                // altrimenti usa Utente base (il DB lo riconoscerà tramite le query di ruolo)
-                nuovoUtente = new Utente(nome, cognome, login, password);
-                break;
+        // 4. Salvataggio in DB: prima l'utente base (per ottenere l'ID)
+        utenteDAO.salva(nuovoAtleta);
 
-            case "5557":
-                // È un Allenatore
-                // NOTA: Se hai creato una classe specifica model.Allenatore usa quella
-                nuovoUtente = new Utente(nome, cognome, login, password);
-                break;
+        // 5. Recupero l'ID generato dal database e lo assegno all'atleta
+        Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
+        nuovoAtleta.setIdUtente(utenteRegistrato.getIdUtente());
 
-            default:
-                // Se il codice digitato non è tra quelli previsti, blocchiamo la registrazione
-                throw new IllegalArgumentException("Codice Identificativo Ruolo non valido.\nContatta l'amministratore del sistema.");
+        // 6. Salvataggio finale nella tabella specifica "atleta"
+        atletaDAO.salva(nuovoAtleta);
+
+        return nuovoAtleta;
+    }
+    /**
+     * Registrazione specifica per un nuovo Allenatore
+     */
+    public Allenatore registraAllenatore(String login, String password, String nome, String cognome, String qualifica) throws Exception {
+
+        // 1. Validazione campi obbligatori
+        if (nome == null || nome.isEmpty() || cognome == null || cognome.isEmpty() ||
+                login == null || login.isEmpty() || password == null || password.isEmpty() ||
+                qualifica == null || qualifica.isEmpty()) {
+            throw new IllegalArgumentException("Tutti i campi sono obbligatori.");
         }
 
-        // 4. Salvataggio persistente nel Database
-        // Inseriamo prima l'utente nella tabella base 'utente' per generare l'ID (SERIAL)
-        utenteDAO.salva(nuovoUtente);
-
-        // 5. Gestione dell'ereditarietà per l'Atleta
-        if (nuovoUtente instanceof Atleta) {
-            // Recuperiamo l'ID appena generato da PostgreSQL cercando l'utente per username
-            Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
-            ((Atleta) nuovoUtente).setIdUtente(utenteRegistrato.getIdUtente());
-
-            // Salviamo i dettagli specifici dell'atleta nella tabella 'atleta'
-            atletaDAO.salva((Atleta) nuovoUtente);
+        // 2. Controllo duplicati
+        if (utenteDAO.cercaPerUsername(login) != null) {
+            throw new Exception("Username già esistente.");
         }
 
-        return nuovoUtente;
-    }
+        // 3. Creazione oggetto Allenatore
+        Allenatore nuovoAllenatore = new Allenatore(login, password, nome, cognome, qualifica);
 
+        // 4. Salvataggio in DB: prima l'utente base (per ottenere l'ID generato col SERIAL)
+        utenteDAO.salva(nuovoAllenatore);
 
-    public List<Squadra> getTutteLeSquadre() {
-        // Delega il compito di interrogare il DB al DAO specifico
-        return squadraDAO.trovaTutti();
+        // 5. Recupero l'ID generato dal database e lo assegno all'allenatore
+        Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
+        nuovoAllenatore.setIdUtente(utenteRegistrato.getIdUtente());
+
+        // 6. Salvataggio finale nella tabella specifica (assicurati di avere questo DAO istanziato in alto!)
+        allenatoreDAO.salva(nuovoAllenatore);
+
+        return nuovoAllenatore;
     }
+    /**
+     * Registrazione specifica per un nuovo Dirigente
+     */
+    public Dirigente registraDirigente(String login, String password, String nome, String cognome, String ruoloOrganizzativo) throws Exception {
+
+        // 1. Validazione campi obbligatori
+        if (nome == null || nome.isEmpty() || cognome == null || cognome.isEmpty() ||
+                login == null || login.isEmpty() || password == null || password.isEmpty() ||
+                ruoloOrganizzativo == null || ruoloOrganizzativo.isEmpty()) {
+            throw new IllegalArgumentException("Tutti i campi sono obbligatori.");
+        }
+
+        // 2. Controllo duplicati (basato sullo username univoco ereditato da Utente)
+        if (utenteDAO.cercaPerUsername(login) != null) {
+            throw new Exception("Username già esistente.");
+        }
+
+        // 3. Creazione oggetto Dirigente
+        Dirigente nuovoDirigente = new Dirigente(login, password, nome, cognome, ruoloOrganizzativo);
+
+        // 4. Salvataggio in DB: prima l'utente base (per generare l'ID)
+        utenteDAO.salva(nuovoDirigente);
+
+        // 5. Recupero l'ID appena generato dal database e lo assegno al dirigente
+        Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
+        nuovoDirigente.setIdUtente(utenteRegistrato.getIdUtente());
+
+        // 6. Salvataggio finale nella tabella specifica (se hai implementato il relativo DAO)
+        dirigenteDAO.salva(nuovoDirigente);
+
+        return nuovoDirigente;
+    }
+    public List<Squadra> getTutteLeSquadre() { return squadraDAO.trovaTutti(); }
     public List<Partita> getTutteLePartite() {
         return partitaDAO.trovaTutti();
     }
     public List<Campo> getTuttiICampi() {
         return campoDAO.trovaTutti();
     }
-    public List<Atleta> getTuttiGliAtleti() {return atletaDAO.trovaTutti();}
-    public List<Atleta> getAtletiPerSquadra(int idSquadra) {return atletaDAO.getAtletiPerSquadra(idSquadra);}
+    public List<Atleta> getTuttiGliAtleti() { return atletaDAO.trovaTutti(); }
+    public List<Atleta> getAtletiPerSquadra(int idSquadra) { return atletaDAO.getAtletiPerSquadra(idSquadra); }
 
     public String verificaStatoPagamento(int idAtleta) {
         return pagamentoDAO.getUltimoStatoPagamento(idAtleta);}

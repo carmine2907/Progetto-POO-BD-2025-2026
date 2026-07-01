@@ -1,52 +1,63 @@
 package gui;
 
 import controller.SistemaController;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RegistrazioneGUI {
+public class RegistrazioneDirigenteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
     private JTextField txtNome;
     private JTextField txtCognome;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
+    private JComboBox<String> cmbRuoloOrganizzativo; // Menu a tendina per il ruolo
     private JButton btnRegistrati;
     private JButton btnAnnulla;
-    private JLabel lblTokenID;
-    private JTextField txtCodiceRuolo;
+    private JLabel lblRuoloOrganizzativoDirigente;
+    private JLabel lblPassword;
+    private JLabel lblUsername;
+    private JLabel lblNome;
+    private JLabel lblCognome;
+
     private JFrame frame;
     private SistemaController controller;
-    private LoginGUI chiamante; // Riferimento alla finestra di Login
+    private LoginGUI chiamante;
 
-    public RegistrazioneGUI(SistemaController controller, LoginGUI chiamante) {
+    public RegistrazioneDirigenteGUI(SistemaController controller, LoginGUI chiamante) {
         this.controller = controller;
         this.chiamante = chiamante;
 
-        // Inizializzazione del JFrame
-        frame = new JFrame("Registrazione Nuovo Utente");
+        frame = new JFrame("Registrazione Dirigente");
         frame.setContentPane(panelMain);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        frame.setLocationRelativeTo(null); // Centra la finestra
+        frame.setSize(400, 400);
+        frame.setLocationRelativeTo(null);
 
+        // Popoliamo la tendina con i classici ruoli societari
+        cmbRuoloOrganizzativo.addItem("Presidente");
+        cmbRuoloOrganizzativo.addItem("Vice Presidente");
+        cmbRuoloOrganizzativo.addItem("Direttore Sportivo");
+
+        // --- AZIONE: BOTTONE REGISTRATI ---
         btnRegistrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lettura degli input esistenti
                 String nome = txtNome.getText().trim();
                 String cognome = txtCognome.getText().trim();
                 String username = txtUsername.getText().trim();
                 String password = new String(txtPassword.getPassword()).trim();
-                String codiceRuolo = txtCodiceRuolo.getText().trim();
+                String ruoloOrganizzativo = (String) cmbRuoloOrganizzativo.getSelectedItem();
 
                 try {
-                    // Passiamo anche il codice al metodo del controller
-                    controller.registraUtente(username, password, nome, cognome, codiceRuolo, qualifica, ruoloOrganizzativo);
+                    // Chiamiamo il metodo specifico per il dirigente nel controller
+                    controller.registraDirigente(username, password, nome, cognome, ruoloOrganizzativo);
 
                     JOptionPane.showMessageDialog(frame,
-                            "Registrazione completata con successo!\nOra puoi effettuare l'accesso.",
+                            "Registrazione Dirigente completata con successo!\nOra puoi effettuare l'accesso.",
                             "Successo", JOptionPane.INFORMATION_MESSAGE);
 
                     chiudiETornaAlLogin();
@@ -63,22 +74,17 @@ public class RegistrazioneGUI {
         btnAnnulla.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // L'utente ha cambiato idea, torniamo semplicemente al login
                 chiudiETornaAlLogin();
             }
         });
     }
 
-    // Metodo helper per evitare di ripetere codice
     private void chiudiETornaAlLogin() {
         frame.dispose();
-        chiamante.mostra(); // Rende di nuovo visibile la finestra di Login
+        chiamante.mostra();
     }
 
     public void mostra() {
         frame.setVisible(true);
     }
-
-
-
 }

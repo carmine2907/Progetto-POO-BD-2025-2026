@@ -102,13 +102,11 @@ public class LoginGUI {
         btnRegistrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Nascondiamo temporaneamente la finestra di login
-                frame.setVisible(false);
+                frame.setVisible(false); // Nasconde temporaneamente il login
 
-                // Creiamo e mostriamo la schermata di registrazione, passandogli 'noi stessi' (LoginGUI.this)
-                // in modo che dopo la registrazione possa riaprire il Login
-                RegistrazioneGUI registrazione = new RegistrazioneGUI(controller, LoginGUI.this);
-                registrazione.mostra();
+                // Apre la nuova finestrella del Token
+               RegistrazioneHome tokenGUI = new RegistrazioneHome(controller, LoginGUI.this);
+                tokenGUI.mostra();
             }
         });
     }
