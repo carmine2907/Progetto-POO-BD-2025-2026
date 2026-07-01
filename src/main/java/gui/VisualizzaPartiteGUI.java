@@ -11,7 +11,6 @@ import java.util.List;
 public class VisualizzaPartiteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
-    private JButton chiudiButton;
     private JList<Partita> listPartite;
     private JButton btnAggiorna;
     private JLabel lblPartite;

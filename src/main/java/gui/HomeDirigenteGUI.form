@@ -18,17 +18,9 @@
           <text value="Benvenuto Dirigente!"/>
         </properties>
       </component>
-      <component id="25827" class="javax.swing.JButton" binding="btnAssegnaAtleta">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Assegna Atleta"/>
-        </properties>
-      </component>
       <component id="82017" class="javax.swing.JButton" binding="btnPianificaPartita">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Pianifica Partita"/>
@@ -40,6 +32,14 @@
         </constraints>
         <properties>
           <text value="Logout"/>
+        </properties>
+      </component>
+      <component id="b42ec" class="javax.swing.JButton" binding="btnVisualizzaSquadra">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Visualizza Squadra"/>
         </properties>
       </component>
     </children>

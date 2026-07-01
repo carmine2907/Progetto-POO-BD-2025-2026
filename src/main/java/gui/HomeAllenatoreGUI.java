@@ -11,6 +11,7 @@ public class HomeAllenatoreGUI {
     private JLabel lblBenvenuto;
     private JButton btnVisualizzaSquadra;
     private JButton btnLogout;
+    private JButton btnAssegnaAtleta;
 
     private JFrame frame;
     private SistemaController controller;
@@ -38,6 +39,16 @@ public class HomeAllenatoreGUI {
                 VisualizzaSquadraGUI moduloSquadra = new VisualizzaSquadraGUI(controller);
                 // Mostriamo la finestrella in sovrimpressione
                 moduloSquadra.mostra();
+            }
+        });
+
+        btnAssegnaAtleta.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Creiamo la nuova finestrella passando il controller
+                AssegnaAtletaGUI moduloAssegnazione = new AssegnaAtletaGUI(controller);
+                // Mostriamo la finestrella in sovrimpressione
+                moduloAssegnazione.mostra();
             }
         });
 

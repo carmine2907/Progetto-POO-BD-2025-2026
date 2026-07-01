@@ -9,9 +9,9 @@ public class HomeDirigenteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
     private JLabel lblBenvenuto;
-    private JButton btnAssegnaAtleta;
     private JButton btnPianificaPartita;
     private JButton btnLogout;
+    private JButton btnVisualizzaSquadra;
 
     private JFrame frame;
     private SistemaController controller;
@@ -33,15 +33,6 @@ public class HomeDirigenteGUI {
         }
 
         // --- AZIONE: ASSEGNA ATLETA (nella HomeDirigenteGUI) ---
-        btnAssegnaAtleta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Creiamo la nuova finestrella passando il controller
-                AssegnaAtletaGUI moduloAssegnazione = new AssegnaAtletaGUI(controller);
-                // Mostriamo la finestrella in sovrimpressione
-                moduloAssegnazione.mostra();
-            }
-        });
 
         // --- AZIONE: PIANIFICA PARTITA (nella HomeDirigenteGUI) ---
         btnPianificaPartita.addActionListener(new ActionListener() {
@@ -51,6 +42,16 @@ public class HomeDirigenteGUI {
                 PianificaPartitaGUI moduloPartita = new PianificaPartitaGUI(controller);
                 // Mostriamo la finestrella in sovrimpressione
                 moduloPartita.mostra();
+            }
+        });
+
+        btnVisualizzaSquadra.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Creiamo la nuova finestrella passando il controller
+                VisualizzaSquadraGUI moduloSquadra = new VisualizzaSquadraGUI(controller);
+                // Mostriamo la finestrella in sovrimpressione
+                moduloSquadra.mostra();
             }
         });
 

@@ -1,6 +1,10 @@
 package gui;
 
+import controller.Exception.PagamentoNonValidoException;
 import controller.SistemaController;
+import model.Atleta;
+import model.Utente;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +19,8 @@ public class HomeAtletaGUI {
 
     private JFrame frame;
     private SistemaController controller;
+    private JPanel mainPanel;
+    private JButton btnVisualizzaPartita;
 
     public HomeAtletaGUI(SistemaController controller) {
         this.controller = controller;
@@ -35,7 +41,47 @@ public class HomeAtletaGUI {
         btnStatoPagamenti.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Controllo stato pagamenti in corso...", "Info", JOptionPane.INFORMATION_MESSAGE);
+                try {
+                    // 1. Recuperiamo l'utente attualmente connesso
+                    Utente utenteConnesso = SistemaController.getUtenteLoggato();
+
+                    // 2. Verifichiamo che sia effettivamente un Atleta
+                    if (utenteConnesso instanceof Atleta) {
+                        Atleta atleta = (Atleta) utenteConnesso;
+
+                        // 3. Controllo dello stato del pagamento
+                        if (atleta.isPagamentoInRegola()) {
+                            // Caso di successo
+                            JOptionPane.showMessageDialog(frame,
+                                    "Il tuo pagamento è in regola.\nSei regolarmente tesserato per le attività!",
+                                    "Stato Pagamento",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            // Caso di fallimento: Lanciamo la tua eccezione personalizzata
+                            throw new PagamentoNonValidoException("La tua quota di iscrizione risulta 'IN ATTESA' o 'RIFIUTATA'. Contatta la segreteria.");
+                        }
+                    } else {
+                        // Sicurezza aggiuntiva nel caso il bottone venga premuto da un ruolo errato
+                        JOptionPane.showMessageDialog(frame,
+                                "Questa funzione è riservata esclusivamente agli atleti.",
+                                "Accesso Negato",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+
+                } catch (PagamentoNonValidoException ex) {
+                    // 4. Catturiamo la tua eccezione e mostriamo l'errore a schermo
+                    JOptionPane.showMessageDialog(frame,
+                            ex.getMessage(),
+                            "Pagamento Irregolare",
+                            JOptionPane.ERROR_MESSAGE);
+
+                } catch (Exception ex) {
+                    // Gestione di eventuali altri errori imprevisti
+                    JOptionPane.showMessageDialog(frame,
+                            "Errore di sistema: " + ex.getMessage(),
+                            "Errore",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
