@@ -40,4 +40,8 @@ public class Campo {
     }
 
     public void setDisponibile(boolean disponibile) { this.disponibile = disponibile; }
+
+    @Override
+    public String toString() {
+        return "Campo {"+ " "+ nome  + " "+ '}';}
 }

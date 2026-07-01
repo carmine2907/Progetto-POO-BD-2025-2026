@@ -27,19 +27,27 @@ public class PartitaImplementazionePostgresDAO implements PartitaDAO {
 
     @Override
     public void salva(Partita partita) {
-        String sql = "INSERT INTO partita (id_partita, data_partita, ora_partita, id_campo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO partita (id_partita, data_part, ora_part, id_campo) VALUES (?, ?, ?, ?)";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, partita.getIdPartita());
 
-            // PostgreSQL e JDBC gestiscono in modo nativo java.time usando setObject()
-            ps.setObject(2, partita.getOraPart()); // LocalDate
-            ps.setObject(3, partita.getDataPart());  // LocalTime
+            // CONVERSIONE ESPLICITA: Trasformiamo i tipi Java nei tipi esatti che vuole SQL
+            java.sql.Date sqlDate = java.sql.Date.valueOf(partita.getDataPart());
+            java.sql.Time sqlTime = java.sql.Time.valueOf(partita.getOraPart());
 
+            // Usiamo i metodi specifici (setDate e setTime) invece del generico setObject
+            ps.setDate(2, sqlDate); // Va nella colonna data_part
+            ps.setTime(3, sqlTime); // Va nella colonna ora_part
+
+            // Il campo ha l'ID che ci serve
             ps.setInt(4, partita.getCampo().getIdCampo());
 
             ps.executeUpdate();
             System.out.println("Partita inserita a sistema correttamente.");
+
         } catch (SQLException e) {
+            System.err.println("ERRORE SALVATAGGIO PARTITA: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -66,8 +74,7 @@ public class PartitaImplementazionePostgresDAO implements PartitaDAO {
                         rs.getBoolean("disponibile")
                 );
 
-                // 2. Ricostruiamo l'oggetto Partita
-                // Usiamo getObject per mappare LocalDate e LocalTime dal database
+
                 Partita partita = new Partita(
                         rs.getInt("id_partita"),
                         rs.getObject("data_part", LocalDate.class),

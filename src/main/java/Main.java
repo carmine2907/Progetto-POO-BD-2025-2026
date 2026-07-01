@@ -40,7 +40,7 @@ public class Main {
         });
     }
 
-    // Metodo statico che permette di recuperare lo stesso identico controller attivo
+
     public static SistemaController getSistemaController() {
         return sistemaController;
     }

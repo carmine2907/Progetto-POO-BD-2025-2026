@@ -58,7 +58,7 @@ public class VisualizzaSquadraGUI {
                 try {
 
 
-                    // --- SIMULAZIONE (da sostituire con la chiamata reale al DB) ---
+
                     List<Atleta> atleti = squadraSelezionata.getAtleti();
 
                     if (atleti == null || atleti.isEmpty()) {

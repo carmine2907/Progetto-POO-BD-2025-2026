@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,24 +28,34 @@ public class SquadraImplementazionePostgresDAO implements SquadraDAO {
 
     @Override
     public void assegnaAtleta(Squadra squadra, Atleta atleta) {
-        // Aggiorniamo la tabella atleta inserendo l'id della squadra
-        String sql = "UPDATE atleta SET id_squadra = ? WHERE id_atleta = ?";
+        // La query corretta inserisce un record nella tabella 'iscrizione'
+        String sql = "INSERT INTO iscrizione (data_iscrizione, stagione, valida, id_atleta, id_squadra) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, squadra.getIdSquadra());
 
-            // Dato che idUtente è salvato come String nel tuo model, lo convertiamo in int
-            ps.setInt(2, Integer.parseInt(atleta.getIdUtente()));
+            // 1. Data di iscrizione: prendiamo la data di oggi in automatico
+            ps.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
 
-            int righeAggiornate = ps.executeUpdate();
+            // 2. Stagione: puoi impostare quella corrente
+            ps.setString(2, "2026/2027");
 
-            if (righeAggiornate > 0) {
-                System.out.println("Atleta assegnato alla squadra con successo.");
-            } else {
-                System.out.println("Nessun atleta aggiornato. Verificare l'ID.");
-            }
+            // 3. Valida: impostiamo a true (oppure false se deve approvarla il dirigente)
+            ps.setBoolean(3, true);
+
+            // 4. ID dell'Atleta (che corrisponde all'ID dell'Utente)
+            ps.setInt(4, Integer.parseInt(atleta.getIdUtente()));
+
+            // 5. ID della Squadra
+            ps.setInt(5, squadra.getIdSquadra());
+
+            // Eseguiamo l'inserimento
+            ps.executeUpdate();
+            System.out.println("Atleta iscritto alla squadra con successo!");
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("ERRORE ASSEGNAZIONE ATLETA: " + e.getMessage());
+            // Lanciamo l'errore per farlo catturare alla GUI (utile per l'eccezione Unique Constraint)
+            throw new RuntimeException("Errore Database: " + e.getMessage());
         }
     }
     @Override

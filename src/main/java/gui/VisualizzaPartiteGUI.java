@@ -77,9 +77,6 @@ public class VisualizzaPartiteGUI {
             }
 
 
-            // Messaggio provvisorio finché non colleghi il DB
-           JOptionPane.showMessageDialog(frame, "Simulazione: Qui comparirà la lista delle partite prelevate dal DB.", "Info", JOptionPane.INFORMATION_MESSAGE);
-
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(frame, "Errore durante il recupero delle partite: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
         }

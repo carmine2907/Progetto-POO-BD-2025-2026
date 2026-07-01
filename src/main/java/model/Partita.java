@@ -39,4 +39,10 @@ public class Partita {
     public Campo getCampo() { return campo; }
 
     public void setCampo(Campo campo) { this.campo = campo; }
+
+    @Override
+    public String toString() {
+
+        return dataPart.toString() + " - " + oraPart.toString() + " | " + campo.getNome();
+    }
 }

@@ -37,5 +37,9 @@ public class Atleta extends Utente
         this.pagamentoInReg = stato;
     }
 
-    public String toString() { return super.toString() +dataNascita; }
+    @Override
+    public String toString() {
+        // Esempio: "Rossi Mario - Attaccante (10/05/2010)"
+        return getCognome() + " " + getNome() + " - " + ruolo + " (" + dataNascita + ")";
+    }
 }

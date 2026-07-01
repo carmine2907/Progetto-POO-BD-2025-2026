@@ -43,7 +43,6 @@ public class PianificaPartitaGUI {
         // 1. Popoliamo il menu a tendina dei campi
         caricaCampiNelleTendine();
 
-        // --- AZIONE: BOTTONE CONFERMA ---
         btnConferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,14 +76,20 @@ public class PianificaPartitaGUI {
 
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(frame, "L'ID Partita deve essere un numero intero valido.", "Errore di Formato", JOptionPane.WARNING_MESSAGE);
+
                 } catch (DateTimeParseException ex) {
                     JOptionPane.showMessageDialog(frame, "Formato Data o Ora non valido.\nUsa GG/MM/AAAA per la data e HH:mm per l'ora.", "Errore di Formato", JOptionPane.WARNING_MESSAGE);
+
                 } catch (IllegalStateException ex) {
-                    // Cattura l'eccezione lanciata se il campo non è disponibile
+                    // Cattura l'eccezione lanciata se il campo non Ã¨ disponibile a livello logico nel Java
                     JOptionPane.showMessageDialog(frame, ex.getMessage(), "Campo non disponibile", JOptionPane.WARNING_MESSAGE);
+
                 } catch (Exception ex) {
-                    // Gestione di errori generici
-                    JOptionPane.showMessageDialog(frame, "Errore di sistema: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    // 6. MODIFICA: Catturiamo l'errore del Trigger dal Database e lo mostriamo in modo chiaro!
+                    JOptionPane.showMessageDialog(frame,
+                            "Impossibile pianificare l'evento:\n" + ex.getMessage(),
+                            "Errore di Pianificazione (Database)",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

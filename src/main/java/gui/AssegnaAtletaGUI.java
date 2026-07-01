@@ -43,31 +43,44 @@ public class AssegnaAtletaGUI {
         btnConferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Recuperiamo gli oggetti selezionati nei menu a tendina
-                Atleta atletaSelezionato = (Atleta) cmbAtleti.getSelectedItem();
-                Squadra squadraSelezionata = (Squadra) cmbSquadre.getSelectedItem();
-
-                // Controllo di sicurezza se le tendine sono vuote
-                if (atletaSelezionato == null || squadraSelezionata == null) {
-                    JOptionPane.showMessageDialog(frame, "Selezionare un Atleta e una Squadra validi.", "Attenzione", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
                 try {
-                    // Chiamiamo il metodo del Controller
+                    // 1. Recupero Atleta e Squadra dalle tue JComboBox
+                    Atleta atletaSelezionato = (Atleta) cmbAtleti.getSelectedItem();
+                    Squadra squadraSelezionata = (Squadra) cmbSquadre.getSelectedItem();
+
+                    if (atletaSelezionato == null || squadraSelezionata == null) {
+                        JOptionPane.showMessageDialog(frame, "Selezionare Atleta e Squadra.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    // 2. Chiamata al Controller
                     controller.assegnaAtletaASquadra(atletaSelezionato, squadraSelezionata);
 
-                    JOptionPane.showMessageDialog(frame, "Atleta assegnato con successo alla squadra " + squadraSelezionata.getNome() + "!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Atleta assegnato con successo alla squadra!", "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
 
-                    // Chiudiamo la finestrella dopo il successo
-                    frame.dispose();
+                } catch (AtletaGiaPresenteException ex) {
+                    // Eccezione logica del tuo Controller
+                    JOptionPane.showMessageDialog(frame, "Questo atleta fa già parte di questa specifica squadra.", "Attenzione", JOptionPane.WARNING_MESSAGE);
 
-                } catch (PagamentoNonValidoException | SquadraCompletaException | AtletaGiaPresenteException customEx) {
-                    // Gestione delle tue eccezioni personalizzate
-                    JOptionPane.showMessageDialog(frame, customEx.getMessage(), "Impossibile Assegnare", JOptionPane.WARNING_MESSAGE);
+                } catch (PagamentoNonValidoException ex) {
+                    // L'atleta non ha pagato
+                    JOptionPane.showMessageDialog(frame, "Impossibile assegnare: " + ex.getMessage(), "Pagamento mancante", JOptionPane.ERROR_MESSAGE);
+
+                } catch (SquadraCompletaException ex) {
+                    // La squadra ha raggiunto il limite max_giocatori
+                    JOptionPane.showMessageDialog(frame, "Impossibile assegnare: " + ex.getMessage(), "Squadra Piena", JOptionPane.ERROR_MESSAGE);
+
                 } catch (Exception ex) {
-                    // Gestione di errori generici (es. Database o Utente non loggato)
-                    JOptionPane.showMessageDialog(frame, "Errore di sistema: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    // 3. LA MAGIA: Catturiamo l'errore del Database (Vincolo UNIQUE)
+                    if (ex.getMessage().contains("uq_iscrizione_atleta_stagione")) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Impossibile procedere: l'atleta selezionato è GIÀ ISCRITTO a una squadra per la stagione in corso!",
+                                "Atleta già tesserato",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        // Qualsiasi altro errore generico
+                        JOptionPane.showMessageDialog(frame, "Errore di sistema: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });

@@ -42,6 +42,7 @@ public class SistemaController {
         this.utenteDAO = new UtenteImplementazionePostgresDao(); //unico dao scritto male (Dao)
         this.squadraDAO = new SquadraImplementazionePostgresDAO();
         this.partitaDAO = new PartitaImplementazionePostgresDAO();
+        this.campoDAO   = new CampoImplementazionePostgresDAO();
     }
 
     /**

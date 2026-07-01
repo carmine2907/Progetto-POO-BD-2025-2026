@@ -52,6 +52,7 @@ public class Squadra  {
     public int getNumeroGiocatori() {return atleti.size();}
 
     public ArrayList<Atleta> getAtleti() { return atleti; }
-     
 
+    @Override
+    public String toString() {return "Squadra {" +" " + nome  +" "+ '}';}
 }
