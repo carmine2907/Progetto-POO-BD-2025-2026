@@ -26,54 +26,24 @@ public class DirigenteImplementazionePostgresDAO implements DirigenteDAO {
 
     @Override
     public void salva(Dirigente dirigente) {
-        String sqlUtente = "INSERT INTO utente (login, password, nome, cognome) VALUES (?, ?, ?, ?)";
-        String sqlDirigente = "INSERT INTO dirigente (id_dirigente, ruolo_organizzativo) VALUES (?, ?)";
+        // Inseriamo i dati solo nella tabella figlia 'dirigente'
+        String sql = "INSERT INTO dirigente (id_dirigente, ruolo_organizzativo) VALUES (?, ?)";
 
-        PreparedStatement psUtente = null;
-        PreparedStatement psDirigente = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // 1. L'ID è la chiave esterna che punta alla tabella utente
+            ps.setInt(1, Integer.parseInt(dirigente.getIdUtente()));
 
-        try {
-            connection.setAutoCommit(false);
+            // 2. Il ruolo dirigenziale (es. Presidente)
+            ps.setString(2, dirigente.getRuoloOrganizzativo());
 
-            psUtente = connection.prepareStatement(sqlUtente, Statement.RETURN_GENERATED_KEYS);
-            psUtente.setString(1, dirigente.getLogin());     // Oppure getUsername() se hai cambiato nome
-            psUtente.setString(2, dirigente.getPassword());
-            psUtente.setString(3, dirigente.getNome());
-            psUtente.setString(4, dirigente.getCognome());
-            psUtente.executeUpdate();
-
-            int idGenerato = -1;
-            try (ResultSet rsKeys = psUtente.getGeneratedKeys()) {
-                if (rsKeys.next()) {
-                    idGenerato = rsKeys.getInt(1);
-                    dirigente.setIdUtente(String.valueOf(idGenerato));
-                }
-            }
-
-            psDirigente = connection.prepareStatement(sqlDirigente);
-            psDirigente.setInt(1, idGenerato);
-            psDirigente.setString(2, dirigente.getRuoloOrganizzativo());
-            psDirigente.executeUpdate();
-            connection.commit();
-            System.out.println("Dirigente salvato con successo. ID: " + idGenerato);
+            ps.executeUpdate();
+            System.out.println("Dati specifici Dirigente salvati correttamente nel database.");
 
         } catch (SQLException e) {
-            try {
-
-                if (connection != null) connection.rollback();
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
+            System.err.println("ERRORE SALVATAGGIO DIRIGENTE: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            try {
-                if (psUtente != null) psUtente.close();
-                if (psDirigente != null) psDirigente.close();
-
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            // Rilanciamo l'errore per farlo gestire alla GUI
+            throw new RuntimeException(e.getMessage());
         }
     }
 

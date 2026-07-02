@@ -25,60 +25,31 @@ public class AtletaImplementazionePostgresDAO implements AtletaDAO {
 
 	@Override
 	public void salva(Atleta atleta) {
-		String sqlUtente = "INSERT INTO utente (login, password, nome, cognome) VALUES (?, ?, ?, ?)";
-		String sqlAtleta = "INSERT INTO atleta (id_atleta, data_nascita, ruolo, pagamento_in_reg) VALUES (?, ?, ?, ?)";
+		// CORREZIONE: Inseriamo SOLO nella tabella 'atleta', perché nella tabella 'utente' c'è già!
+		// (Assicurati che i nomi delle colonne corrispondano al tuo script SQL)
+		String sql = "INSERT INTO atleta (id_atleta, data_nascita, ruolo, pagamento_in_reg) VALUES (?, ?, ?, ?)";
 
-		PreparedStatement psUtente = null;
-		PreparedStatement psAtleta = null;
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			// 1. L'ID è quello che il Controller ha appena recuperato dalla tabella utente
+			ps.setInt(1, Integer.parseInt(atleta.getIdUtente()));
 
-		try {
-			connection.setAutoCommit(false);
+			// 2. Data di nascita (conversione della stringa YYYY-MM-DD in data SQL)
+			ps.setDate(2, java.sql.Date.valueOf(atleta.getDataNascita()));
 
-			// 1. Inserimento in utente
-			psUtente = connection.prepareStatement(sqlUtente, Statement.RETURN_GENERATED_KEYS);
-			psUtente.setString(1, atleta.getLogin());
-			psUtente.setString(2, atleta.getPassword());
-			psUtente.setString(3, atleta.getNome());
-			psUtente.setString(4, atleta.getCognome());
-			psUtente.executeUpdate();
+			// 3. Ruolo
+			ps.setString(3, atleta.getRuolo());
 
-			int idGenerato = -1;
-			try (ResultSet rsKeys = psUtente.getGeneratedKeys()) {
-				if (rsKeys.next()) {
-					idGenerato = rsKeys.getInt(1);
-					atleta.setIdUtente(String.valueOf(idGenerato));
-				}
-			}
+			// 4. Stato del pagamento
+			ps.setBoolean(4, atleta.isPagamentoInRegola());
 
-			// 2. Inserimento in atleta
-			psAtleta = connection.prepareStatement(sqlAtleta);
-			psAtleta.setInt(1, idGenerato);
-
-			// Trattato come STRINGA (VARCHAR)
-			psAtleta.setString(2, atleta.getDataNascita());
-
-			psAtleta.setString(3, atleta.getRuolo());
-			psAtleta.setBoolean(4, atleta.isPagamentoInRegola());
-			psAtleta.executeUpdate();
-
-			connection.commit();
-			System.out.println("Atleta salvato con successo. ID: " + idGenerato);
+			ps.executeUpdate();
+			System.out.println("Dati specifici Atleta salvati correttamente nel database.");
 
 		} catch (SQLException e) {
-			try {
-				if (connection != null) connection.rollback();
-			} catch (SQLException rollbackEx) {
-				rollbackEx.printStackTrace();
-			}
+			System.err.println("ERRORE SALVATAGGIO ATLETA: " + e.getMessage());
 			e.printStackTrace();
-		} finally {
-			try {
-				if (psUtente != null) psUtente.close();
-				if (psAtleta != null) psAtleta.close();
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			// Rilanciamo l'errore per farlo arrivare alla GUI in caso di problemi
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 

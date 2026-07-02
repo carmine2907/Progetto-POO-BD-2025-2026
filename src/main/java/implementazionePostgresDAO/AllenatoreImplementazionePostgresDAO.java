@@ -26,55 +26,24 @@ public class AllenatoreImplementazionePostgresDAO implements AllenatoreDAO {
 
     @Override
     public void salva(Allenatore allenatore) {
-        String sqlUtente = "INSERT INTO utente (login, password, nome, cognome) VALUES (?, ?, ?, ?)";
-        String sqlAllenatore = "INSERT INTO allenatore (id_allenatore, qualifica) VALUES (?, ?)";
+        // Inseriamo i dati solo nella tabella figlia 'allenatore'
+        String sql = "INSERT INTO allenatore (id_allenatore, qualifica) VALUES (?, ?)";
 
-        PreparedStatement psUtente = null;
-        PreparedStatement psAllenatore = null;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // 1. L'ID è la chiave esterna che punta alla tabella utente (recuperato dal controller)
+            ps.setInt(1, Integer.parseInt(allenatore.getIdUtente()));
 
-        try {
-            connection.setAutoCommit(false);
+            // 2. La qualifica specifica dell'allenatore (es. UEFA B)
+            ps.setString(2, allenatore.getQualifica());
 
-            psUtente = connection.prepareStatement(sqlUtente, Statement.RETURN_GENERATED_KEYS);
-            psUtente.setString(1, allenatore.getLogin()); // Usa getUsername() se hai aggiornato la classe genitore
-            psUtente.setString(2, allenatore.getPassword());
-            psUtente.setString(3, allenatore.getNome());
-            psUtente.setString(4, allenatore.getCognome());
-            psUtente.executeUpdate();
-
-            int idGenerato = -1;
-            try (ResultSet rsKeys = psUtente.getGeneratedKeys()) {
-                if (rsKeys.next()) {
-                    idGenerato = rsKeys.getInt(1);
-                    allenatore.setIdUtente(String.valueOf(idGenerato));
-                }
-            }
-
-
-            psAllenatore = connection.prepareStatement(sqlAllenatore);
-            psAllenatore.setInt(1, idGenerato);
-            psAllenatore.setString(2, allenatore.getQualifica());
-            psAllenatore.executeUpdate();
-
-            connection.commit();
-            System.out.println("Allenatore salvato con successo. ID: " + idGenerato);
+            ps.executeUpdate();
+            System.out.println("Dati specifici Allenatore salvati correttamente nel database.");
 
         } catch (SQLException e) {
-            try {
-
-                if (connection != null) connection.rollback();
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
+            System.err.println("ERRORE SALVATAGGIO ALLENATORE: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            try {
-                if (psUtente != null) psUtente.close();
-                if (psAllenatore != null) psAllenatore.close();
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            // Rilanciamo l'errore per farlo gestire alla GUI
+            throw new RuntimeException(e.getMessage());
         }
     }
 
