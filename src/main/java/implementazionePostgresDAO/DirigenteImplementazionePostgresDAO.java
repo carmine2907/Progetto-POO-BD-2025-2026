@@ -12,10 +12,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Dirigente implementazione postgres dao.
+ */
 public class DirigenteImplementazionePostgresDAO implements DirigenteDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Dirigente implementazione postgres dao.
+     */
     public DirigenteImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

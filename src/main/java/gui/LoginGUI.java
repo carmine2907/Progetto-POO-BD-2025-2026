@@ -10,6 +10,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Login gui.
+ */
 public class LoginGUI {
     private JPanel mainPanel;
     private JTextField Jlogin;
@@ -26,6 +29,12 @@ public class LoginGUI {
     private SistemaController controller;
     private Home frameChiamante;
 
+    /**
+     * Instantiates a new Login gui.
+     *
+     * @param controller the controller
+     * @param chiamante  the chiamante
+     */
     public LoginGUI(SistemaController controller, Home chiamante) {
         this.controller = controller;
         this.frameChiamante = chiamante;
@@ -111,6 +120,9 @@ public class LoginGUI {
         });
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

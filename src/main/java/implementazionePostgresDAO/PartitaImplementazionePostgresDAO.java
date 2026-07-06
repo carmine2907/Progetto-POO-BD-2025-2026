@@ -13,10 +13,16 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Partita implementazione postgres dao.
+ */
 public class PartitaImplementazionePostgresDAO implements PartitaDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Partita implementazione postgres dao.
+     */
     public PartitaImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * The type Home.
+ */
 public class Home {
     private JPanel mainPanel;
     private JButton jButtonLogin;
@@ -13,6 +16,11 @@ public class Home {
     private JFrame frameHome;
     private SistemaController controller;
 
+    /**
+     * Instantiates a new Home.
+     *
+     * @param controller the controller
+     */
     public Home(SistemaController controller) {
         this.controller = controller;
 
@@ -37,12 +45,18 @@ public class Home {
         });
     }
 
-    // Metodo chiamato dall'esterno per rendere visibile la GUI
+    /**
+     * Mostra.
+     */
+// Metodo chiamato dall'esterno per rendere visibile la GUI
     public void mostra() {
         frameHome.setVisible(true);
     }
 
-    // Metodo chiamato dalla LoginGUI per aggiornare l'interfaccia dopo l'accesso
+    /**
+     * Aggiorna dopo login.
+     */
+// Metodo chiamato dalla LoginGUI per aggiornare l'interfaccia dopo l'accesso
     public void aggiornaDopoLogin() {
         jButtonLogin.setVisible(false);
     }

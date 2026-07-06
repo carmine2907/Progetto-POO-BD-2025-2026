@@ -15,10 +15,16 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Allenamento implementazione postgres dao.
+ */
 public class AllenamentoImplementazionePostgresDAO implements AllenamentoDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Allenamento implementazione postgres dao.
+     */
     public AllenamentoImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

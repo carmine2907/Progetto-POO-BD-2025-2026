@@ -5,15 +5,17 @@ import dao.*;
 import implementazionePostgresDAO.*;
 import model.*;
 
-import controller.exceptions.AtletaGiaPresenteException;
-import controller.exceptions.PagamentoNonValidoException;
-import controller.exceptions.SquadraCompletaException;
-import controller.exceptions.UtenteGiaEsistenteException;
+import controller.Exceptions.AtletaGiaPresenteException;
+import controller.Exceptions.PagamentoNonValidoException;
+import controller.Exceptions.SquadraCompletaException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * The type Sistema controller.
+ */
 public class SistemaController {
     private AtletaDAO atletaDAO;
     private UtenteDAO utenteDAO;
@@ -25,6 +27,9 @@ public class SistemaController {
     private AllenatoreDAO allenatoreDAO;
     private static Utente utenteLoggato;
 
+    /**
+     * Instantiates a new Sistema controller.
+     */
     public SistemaController() {
         // Istanziazione delle classi di implementazione Postgres reali
         this.atletaDAO = new AtletaImplementazionePostgresDAO();
@@ -39,6 +44,11 @@ public class SistemaController {
 
     /**
      * Esegue il login dell'utente previa verifica credenziali.
+     *
+     * @param login    the login
+     * @param password the password
+     * @return the boolean
+     * @throws Exception the exception
      */
     public boolean login(String login, String password) throws Exception {
         if (login == null || login.trim().isEmpty() || password == null || password.trim().isEmpty()) {
@@ -78,6 +88,9 @@ public class SistemaController {
 
      //Logout utente.
 
+    /**
+     * Logout.
+     */
     public void logout() {
         utenteLoggato = null;
     }
@@ -85,12 +98,19 @@ public class SistemaController {
 
      //Restituisce l'utente loggato.
 
+    /**
+     * Gets utente loggato.
+     *
+     * @return the utente loggato
+     */
     public static Utente getUtenteLoggato() {
         return utenteLoggato;
     }
 
     /**
      * Verifica autenticazione.
+     *
+     * @return the boolean
      */
     public static boolean isUtenteAutenticato() {
         return utenteLoggato != null;
@@ -98,6 +118,13 @@ public class SistemaController {
 
     /**
      * Pianifica una nuova partita verificando disponibilità campo.
+     *
+     * @param idPartita the id partita
+     * @param data      the data
+     * @param ora       the ora
+     * @param campo     the campo
+     * @return the partita
+     * @throws Exception the exception
      */
     public Partita pianificaPartita(int idPartita,
                                     LocalDate data,
@@ -132,6 +159,13 @@ public class SistemaController {
 
     /**
      * Associa atleta a squadra.
+     *
+     * @param atleta  the atleta
+     * @param squadra the squadra
+     * @throws Exception                   the exception
+     * @throws SquadraCompletaException    the squadra completa exception
+     * @throws PagamentoNonValidoException the pagamento non valido exception
+     * @throws AtletaGiaPresenteException  the atleta gia presente exception
      */
     public void assegnaAtletaASquadra(Atleta atleta,
                                       Squadra squadra)
@@ -173,79 +207,19 @@ public class SistemaController {
         }
     }
 
-    /**
-     * Registrazione nuovo utente.
-     */
-//    public Utente registraUtente(String login,
-//                                 String password,
-//                                 String nome,
-//                                 String cognome,
-//                                 String codiceRuolo,
-//                                 String dataNascita,
-//                                 String ruolo,
-//                                 String qualifica,
-//                                 String ruoloOrganizzativo)
-//            throws Exception {
-//
-//        // 1. Validazione campi obbligatori
-//        if (nome == null || nome.trim().isEmpty()
-//                || cognome == null || cognome.trim().isEmpty()
-//                || login == null || login.trim().isEmpty()
-//                || password == null || password.trim().isEmpty()
-//                || codiceRuolo == null || codiceRuolo.trim().isEmpty()) {
-//
-//            throw new IllegalArgumentException("Tutti i campi, compreso il codice ruolo, sono obbligatori.");
-//        }
-//
-//        // 2. Controllo reale sul database se lo username esiste già
-//        if (utenteDAO.cercaPerUsername(login) != null) {
-//            throw new Exception("Username già esistente.");
-//        }
-//
-//        // 3. Interpretazione del codice identificativo per stabilire il tipo di oggetto
-//        Utente nuovoUtente;
-//
-//        switch (codiceRuolo) {
-//            case "0001":
-//                // È un Atleta: usiamo valori temporanei di default per data di nascita e ruolo sul campo
-//                nuovoUtente = new Atleta(login, password, nome, cognome, dataNascita, ruolo);
-//                break;
-//
-//            case "2224":
-//                // È un Dirigente
-//                // NOTA: Se hai creato una classe specifica model.Dirigente usa quella,
-//                // altrimenti usa Utente base (il DB lo riconoscerà tramite le query di ruolo)
-//                nuovoUtente = new Dirigente(login, password, nome, cognome, ruoloOrganizzativo);
-//                break;
-//
-//            case "5557":
-//                // È un Allenatore
-//                // NOTA: Se hai creato una classe specifica model.Allenatore usa quella
-//                nuovoUtente = new Allenatore(login, password, nome, cognome, qualifica);
-//                break;
-//
-//            default:
-//                // Se il codice digitato non è tra quelli previsti, blocchiamo la registrazione
-//                throw new IllegalArgumentException("Codice Identificativo Ruolo non valido.\nContatta l'amministratore del sistema.");
-//        }
-//
-//        // 4. Salvataggio persistente nel Database
-//        // Inseriamo prima l'utente nella tabella base 'utente' per generare l'ID (SERIAL)
-//        utenteDAO.salva(nuovoUtente);
-//
-//        // 5. Gestione dell'ereditarietà per l'Atleta
-//        if (nuovoUtente instanceof Atleta) {
-//            // Recuperiamo l'ID appena generato da PostgreSQL cercando l'utente per username
-//            Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
-//            ((Atleta) nuovoUtente).setIdUtente(utenteRegistrato.getIdUtente());
-//
-//            // Salviamo i dettagli specifici dell'atleta nella tabella 'atleta'
-//            atletaDAO.salva((Atleta) nuovoUtente);
-//        }
-//
-//        return nuovoUtente;
-//    }
 
+    /**
+     * Registra atleta atleta.
+     *
+     * @param login       the login
+     * @param password    the password
+     * @param nome        the nome
+     * @param cognome     the cognome
+     * @param dataNascita the data nascita
+     * @param ruolo       the ruolo
+     * @return the atleta
+     * @throws Exception the exception
+     */
     public Atleta registraAtleta(String login, String password, String nome, String cognome, String dataNascita, String ruolo) throws Exception {
 
         // 1. Validazione campi obbligatori
@@ -278,8 +252,17 @@ public class SistemaController {
 
         return nuovoAtleta;
     }
+
     /**
      * Registrazione specifica per un nuovo Allenatore
+     *
+     * @param login     the login
+     * @param password  the password
+     * @param nome      the nome
+     * @param cognome   the cognome
+     * @param qualifica the qualifica
+     * @return the allenatore
+     * @throws Exception the exception
      */
     public Allenatore registraAllenatore(String login, String password, String nome, String cognome, String qualifica) throws Exception {
 
@@ -310,8 +293,17 @@ public class SistemaController {
 
         return nuovoAllenatore;
     }
+
     /**
      * Registrazione specifica per un nuovo Dirigente
+     *
+     * @param login              the login
+     * @param password           the password
+     * @param nome               the nome
+     * @param cognome            the cognome
+     * @param ruoloOrganizzativo the ruolo organizzativo
+     * @return the dirigente
+     * @throws Exception the exception
      */
     public Dirigente registraDirigente(String login, String password, String nome, String cognome, String ruoloOrganizzativo) throws Exception {
 
@@ -342,16 +334,53 @@ public class SistemaController {
 
         return nuovoDirigente;
     }
+
+    /**
+     * Gets tutte le squadre.
+     *
+     * @return the tutte le squadre
+     */
     public List<Squadra> getTutteLeSquadre() { return squadraDAO.trovaTutti(); }
+
+    /**
+     * Gets tutte le partite.
+     *
+     * @return the tutte le partite
+     */
     public List<Partita> getTutteLePartite() {
         return partitaDAO.trovaTutti();
     }
+
+    /**
+     * Gets tutti i campi.
+     *
+     * @return the tutti i campi
+     */
     public List<Campo> getTuttiICampi() {
         return campoDAO.trovaTutti();
     }
+
+    /**
+     * Gets tutti gli atleti.
+     *
+     * @return the tutti gli atleti
+     */
     public List<Atleta> getTuttiGliAtleti() { return atletaDAO.trovaTutti(); }
+
+    /**
+     * Gets atleti per squadra.
+     *
+     * @param idSquadra the id squadra
+     * @return the atleti per squadra
+     */
     public List<Atleta> getAtletiPerSquadra(int idSquadra) { return atletaDAO.getAtletiPerSquadra(idSquadra); }
 
+    /**
+     * Verifica stato pagamento string.
+     *
+     * @param idAtleta the id atleta
+     * @return the string
+     */
     public String verificaStatoPagamento(int idAtleta) {
         return pagamentoDAO.getUltimoStatoPagamento(idAtleta);}
 }

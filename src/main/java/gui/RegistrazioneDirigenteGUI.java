@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Registrazione dirigente gui.
+ */
 public class RegistrazioneDirigenteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -26,6 +29,12 @@ public class RegistrazioneDirigenteGUI {
     private SistemaController controller;
     private LoginGUI chiamante;
 
+    /**
+     * Instantiates a new Registrazione dirigente gui.
+     *
+     * @param controller the controller
+     * @param chiamante  the chiamante
+     */
     public RegistrazioneDirigenteGUI(SistemaController controller, LoginGUI chiamante) {
         this.controller = controller;
         this.chiamante = chiamante;
@@ -84,6 +93,9 @@ public class RegistrazioneDirigenteGUI {
         chiamante.mostra();
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Home dirigente gui.
+ */
 public class HomeDirigenteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -16,6 +19,11 @@ public class HomeDirigenteGUI {
     private JFrame frame;
     private SistemaController controller;
 
+    /**
+     * Instantiates a new Home dirigente gui.
+     *
+     * @param controller the controller
+     */
     public HomeDirigenteGUI(SistemaController controller) {
         this.controller = controller;
 
@@ -74,6 +82,9 @@ public class HomeDirigenteGUI {
         });
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

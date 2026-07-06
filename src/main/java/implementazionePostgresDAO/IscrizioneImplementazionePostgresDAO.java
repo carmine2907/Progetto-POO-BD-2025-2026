@@ -10,10 +10,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 
+/**
+ * The type Iscrizione implementazione postgres dao.
+ */
 public class IscrizioneImplementazionePostgresDAO implements IscrizioneDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Iscrizione implementazione postgres dao.
+     */
     public IscrizioneImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

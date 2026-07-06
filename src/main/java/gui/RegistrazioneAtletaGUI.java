@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Registrazione atleta gui.
+ */
 public class RegistrazioneAtletaGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -28,6 +31,12 @@ public class RegistrazioneAtletaGUI {
     private SistemaController controller;
     private LoginGUI chiamante;
 
+    /**
+     * Instantiates a new Registrazione atleta gui.
+     *
+     * @param controller the controller
+     * @param chiamante  the chiamante
+     */
     public RegistrazioneAtletaGUI(SistemaController controller, LoginGUI chiamante) {
         this.controller = controller;
         this.chiamante = chiamante;
@@ -94,6 +103,9 @@ public class RegistrazioneAtletaGUI {
         chiamante.mostra();
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

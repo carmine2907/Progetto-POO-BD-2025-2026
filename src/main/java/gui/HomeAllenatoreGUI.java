@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Home allenatore gui.
+ */
 public class HomeAllenatoreGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -16,6 +19,11 @@ public class HomeAllenatoreGUI {
     private JFrame frame;
     private SistemaController controller;
 
+    /**
+     * Instantiates a new Home allenatore gui.
+     *
+     * @param controller the controller
+     */
     public HomeAllenatoreGUI(SistemaController controller) {
         this.controller = controller;
 
@@ -67,6 +75,9 @@ public class HomeAllenatoreGUI {
         });
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

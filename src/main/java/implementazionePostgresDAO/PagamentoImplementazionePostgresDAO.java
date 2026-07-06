@@ -11,10 +11,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 
+/**
+ * The type Pagamento implementazione postgres dao.
+ */
 public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Pagamento implementazione postgres dao.
+     */
     public PagamentoImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

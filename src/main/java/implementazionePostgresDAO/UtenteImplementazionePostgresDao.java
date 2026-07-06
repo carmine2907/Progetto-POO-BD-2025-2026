@@ -13,10 +13,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+/**
+ * The type Utente implementazione postgres dao.
+ */
 public class UtenteImplementazionePostgresDao implements UtenteDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Utente implementazione postgres dao.
+     */
     public UtenteImplementazionePostgresDao() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

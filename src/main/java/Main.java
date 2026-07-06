@@ -6,10 +6,18 @@ import javax.swing.SwingUtilities;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * The type Main.
+ */
 public class Main {
 
     private static SistemaController sistemaController;
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
 
         //CHIAMATA AL DATABASE
@@ -39,6 +47,11 @@ public class Main {
     }
 
 
+    /**
+     * Gets sistema controller.
+     *
+     * @return the sistema controller
+     */
     public static SistemaController getSistemaController() {
         return sistemaController;
     }

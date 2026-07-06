@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Registrazione home.
+ */
 public class RegistrazioneHome {
     private JPanel panelMain;
     private JTextField txtToken;
@@ -17,6 +20,12 @@ public class RegistrazioneHome {
     private SistemaController controller;
     private LoginGUI chiamante;
 
+    /**
+     * Instantiates a new Registrazione home.
+     *
+     * @param controller the controller
+     * @param chiamante  the chiamante
+     */
     public RegistrazioneHome(SistemaController controller, LoginGUI chiamante) {
         this.controller = controller;
         this.chiamante = chiamante;
@@ -73,6 +82,9 @@ public class RegistrazioneHome {
         });
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

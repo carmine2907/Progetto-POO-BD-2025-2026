@@ -11,11 +11,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Atleta implementazione postgres dao.
+ */
 public class AtletaImplementazionePostgresDAO implements AtletaDAO {
 
 	private Connection connection;
 
-	public AtletaImplementazionePostgresDAO() {
+    /**
+     * Instantiates a new Atleta implementazione postgres dao.
+     */
+    public AtletaImplementazionePostgresDAO() {
 		try {
 			connection = ConnessioneDatabase.getInstance().getConnection();
 		} catch (SQLException e) {

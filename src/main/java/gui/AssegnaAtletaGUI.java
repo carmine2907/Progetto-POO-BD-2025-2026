@@ -3,15 +3,18 @@ package gui;
 import controller.SistemaController;
 import model.Atleta;
 import model.Squadra;
-import controller.exceptions.AtletaGiaPresenteException;
-import controller.exceptions.PagamentoNonValidoException;
-import controller.exceptions.SquadraCompletaException;
+import controller.Exceptions.AtletaGiaPresenteException;
+import controller.Exceptions.PagamentoNonValidoException;
+import controller.Exceptions.SquadraCompletaException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * The type Assegna atleta gui.
+ */
 public class AssegnaAtletaGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -25,6 +28,11 @@ public class AssegnaAtletaGUI {
     private JFrame frame;
     private SistemaController controller;
 
+    /**
+     * Instantiates a new Assegna atleta gui.
+     *
+     * @param controller the controller
+     */
     public AssegnaAtletaGUI(SistemaController controller) {
         this.controller = controller;
 
@@ -114,6 +122,9 @@ public class AssegnaAtletaGUI {
 
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

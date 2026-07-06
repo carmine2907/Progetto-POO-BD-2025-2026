@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * The type Visualizza partite gui.
+ */
 public class VisualizzaPartiteGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -20,6 +23,11 @@ public class VisualizzaPartiteGUI {
     private SistemaController controller;
     private DefaultListModel<Partita> listModel; // Modello per gestire i dati della JList
 
+    /**
+     * Instantiates a new Visualizza partite gui.
+     *
+     * @param controller the controller
+     */
     public VisualizzaPartiteGUI(SistemaController controller) {
         this.controller = controller;
 
@@ -81,6 +89,9 @@ public class VisualizzaPartiteGUI {
         }
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

@@ -11,10 +11,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Campo implementazione postgres dao.
+ */
 public class CampoImplementazionePostgresDAO implements CampoDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Campo implementazione postgres dao.
+     */
     public CampoImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

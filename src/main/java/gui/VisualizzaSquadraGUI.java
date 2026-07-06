@@ -9,6 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * The type Visualizza squadra gui.
+ */
 public class VisualizzaSquadraGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -23,6 +26,11 @@ public class VisualizzaSquadraGUI {
     private SistemaController controller;
     private DefaultListModel<Atleta> listModel; // Modello per gestire i dati della JList
 
+    /**
+     * Instantiates a new Visualizza squadra gui.
+     *
+     * @param controller the controller
+     */
     public VisualizzaSquadraGUI(SistemaController controller) {
         this.controller = controller;
 
@@ -96,6 +104,9 @@ public class VisualizzaSquadraGUI {
 
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

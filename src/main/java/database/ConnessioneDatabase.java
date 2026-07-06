@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * The type Connessione database.
+ */
 public class ConnessioneDatabase {
 
 	// istanza singleton
@@ -28,7 +31,13 @@ public class ConnessioneDatabase {
 		connection = DriverManager.getConnection(URL, USER, PASSWORD);
 	}
 
-	// metodo getinstance
+	/**
+	 * Gets instance.
+	 *
+	 * @return the instance
+	 * @throws SQLException the sql exception
+	 */
+// metodo getinstance
 	public static ConnessioneDatabase getInstance()
 			throws SQLException {
 
@@ -40,7 +49,12 @@ public class ConnessioneDatabase {
 		return instance;
 	}
 
-	// getter connessione
+	/**
+	 * Gets connection.
+	 *
+	 * @return the connection
+	 */
+// getter connessione
 	public Connection getConnection() {
 
 		return connection;

@@ -1,6 +1,5 @@
 package gui;
 
-import controller.Exception.PagamentoNonValidoException;
 import controller.SistemaController;
 import model.Atleta;
 import model.Utente;
@@ -9,6 +8,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Home atleta gui.
+ */
 public class HomeAtletaGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -22,6 +24,11 @@ public class HomeAtletaGUI {
     private JPanel mainPanel;
     private JButton btnVisualizzaPartita;
 
+    /**
+     * Instantiates a new Home atleta gui.
+     *
+     * @param controller the controller
+     */
     public HomeAtletaGUI(SistemaController controller) {
         this.controller = controller;
 
@@ -117,6 +124,9 @@ public class HomeAtletaGUI {
         });
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

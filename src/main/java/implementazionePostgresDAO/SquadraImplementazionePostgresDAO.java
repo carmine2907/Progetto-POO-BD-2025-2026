@@ -14,10 +14,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Squadra implementazione postgres dao.
+ */
 public class SquadraImplementazionePostgresDAO implements SquadraDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Squadra implementazione postgres dao.
+     */
     public SquadraImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * The type Pianifica partita gui.
+ */
 public class PianificaPartitaGUI {
     // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
@@ -29,6 +32,11 @@ public class PianificaPartitaGUI {
     private JFrame frame;
     private SistemaController controller;
 
+    /**
+     * Instantiates a new Pianifica partita gui.
+     *
+     * @param controller the controller
+     */
     public PianificaPartitaGUI(SistemaController controller) {
         this.controller = controller;
 
@@ -116,6 +124,9 @@ public class PianificaPartitaGUI {
 
     }
 
+    /**
+     * Mostra.
+     */
     public void mostra() {
         frame.setVisible(true);
     }

@@ -12,10 +12,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Allenatore implementazione postgres dao.
+ */
 public class AllenatoreImplementazionePostgresDAO implements AllenatoreDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Allenatore implementazione postgres dao.
+     */
     public AllenatoreImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();
