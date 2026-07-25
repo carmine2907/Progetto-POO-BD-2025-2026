@@ -32,7 +32,7 @@ public class HomeAtletaGUI {
     public HomeAtletaGUI(SistemaController controller) {
         this.controller = controller;
 
-        // Inizializzazione del JFrame
+
         frame = new JFrame("Area Riservata - Atleta");
         frame.setContentPane(panelMain);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,17 +48,17 @@ public class HomeAtletaGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // 1. Recuperiamo l'utente connesso e assicuriamoci che sia un Atleta
+
                     Utente utenteConnesso = SistemaController.getUtenteLoggato();
 
                     if (utenteConnesso instanceof Atleta) {
                         Atleta atleta = (Atleta) utenteConnesso;
                         int idAtleta = Integer.parseInt(atleta.getIdUtente());
 
-                        // 2. Chiediamo al database lo stato REALE tramite il Controller
+
                         String statoDB = controller.verificaStatoPagamento(idAtleta);
 
-                        // 3. Gestiamo i vari casi del tuo CHECK constraint
+
                         switch (statoDB) {
                             case "APPROVATO":
                                 JOptionPane.showMessageDialog(frame,
@@ -98,18 +98,18 @@ public class HomeAtletaGUI {
             }
         });
 
-        // --- AZIONE: VISUALIZZA PARTITE (nella HomeAtletaGUI) ---
+
         btnVisualizzaPartite.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Creiamo la nuova finestrella passando il controller
+
                 VisualizzaPartiteGUI moduloPartite = new VisualizzaPartiteGUI(controller);
-                // Mostriamo la finestrella in sovrimpressione
+
                 moduloPartite.mostra();
             }
         });
 
-        // --- AZIONE: LOGOUT ---
+
         btnLogout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,7 +119,7 @@ public class HomeAtletaGUI {
 
                 LoginGUI login = new LoginGUI(controller, new Home(controller));
                 login.mostra();
-                //System.exit(0);
+
             }
         });
     }

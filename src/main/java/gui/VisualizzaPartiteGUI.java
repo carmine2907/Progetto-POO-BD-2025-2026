@@ -33,20 +33,18 @@ public class VisualizzaPartiteGUI {
 
         frame = new JFrame("Calendario Partite");
         frame.setContentPane(panelMain);
-        // Usiamo DISPOSE_ON_CLOSE per chiudere solo questa finestrella
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setSize(450, 400);
         frame.setLocationRelativeTo(null);
 
-        // Inizializziamo il modello per la lista delle partite
+
         listModel = new DefaultListModel<>();
         listPartite.setModel(listModel);
 
-        // Caricamento iniziale delle partite all'apertura della finestra
         caricaPartite();
 
-        // --- AZIONE: BOTTONE AGGIORNA ---
+
         btnAggiorna.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,7 +52,7 @@ public class VisualizzaPartiteGUI {
             }
         });
 
-        // --- AZIONE: BOTTONE CHIUDI ---
+
         btnChiudi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +75,7 @@ public class VisualizzaPartiteGUI {
             if (partite == null || partite.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Nessuna partita in programma trovata.", "Info", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                // Aggiungiamo le partite trovate al modello della JList
+
                 for (Partita p : partite) {
                     listModel.addElement(p);
                 }

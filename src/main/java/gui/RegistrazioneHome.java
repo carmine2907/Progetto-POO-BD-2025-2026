@@ -36,7 +36,7 @@ public class RegistrazioneHome {
         frame.pack();
         frame.setLocationRelativeTo(null);
 
-        // --- AZIONE: BOTTONE AVANTI ---
+
         btnAvanti.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,7 +63,7 @@ public class RegistrazioneHome {
                         break;
 
                     default:
-                        // Se il codice è sbagliato, mostriamo errore e riapriamo il Login
+
                         JOptionPane.showMessageDialog(null,
                                 "Codice non valido. Riprova o contatta la segreteria.",
                                 "Errore Token", JOptionPane.ERROR_MESSAGE);

@@ -42,19 +42,19 @@ public class SquadraImplementazionePostgresDAO implements SquadraDAO {
             // 1. Data di iscrizione: prendiamo la data di oggi in automatico
             ps.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
 
-            // 2. Stagione: puoi impostare quella corrente
+            // 2. Stagione: puoi impostare quella attuale
             ps.setString(2, "2026/2027");
 
-            // 3. Valida: impostiamo a true (oppure false se deve approvarla il dirigente)
+            // 3. se valida impostiamo a true oppure false se deve essere approvata dal dirigente
             ps.setBoolean(3, true);
 
-            // 4. ID dell'Atleta (che corrisponde all'ID dell'Utente)
+            // 4. ID dell'Atleta =ID dell'Utente
             ps.setInt(4, Integer.parseInt(atleta.getIdUtente()));
 
             // 5. ID della Squadra
             ps.setInt(5, squadra.getIdSquadra());
 
-            // Eseguiamo l'inserimento
+            // inseriamo
             ps.executeUpdate();
             System.out.println("Atleta iscritto alla squadra con successo!");
 

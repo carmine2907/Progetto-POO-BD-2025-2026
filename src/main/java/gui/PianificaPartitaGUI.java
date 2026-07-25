@@ -48,25 +48,24 @@ public class PianificaPartitaGUI {
         frame.setSize(450, 350);
         frame.setLocationRelativeTo(null);
 
-        // 1. Popoliamo il menu a tendina dei campi
+
         caricaCampiNelleTendine();
 
         btnConferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // 1. Recupero e validazione ID Partita
+
                     int idPartita = Integer.parseInt(txtIdPartita.getText().trim());
 
-                    // 2. Recupero e validazione Data
                     DateTimeFormatter formatData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate dataPartita = LocalDate.parse(txtData.getText().trim(), formatData);
 
-                    // 3. Recupero e validazione Ora
+
                     DateTimeFormatter formatOra = DateTimeFormatter.ofPattern("HH:mm");
                     LocalTime oraPartita = LocalTime.parse(txtOra.getText().trim(), formatOra);
 
-                    // 4. Recupero Campo selezionato
+
                     Campo campoSelezionato = (Campo) cmbCampi.getSelectedItem();
 
                     if (campoSelezionato == null) {
@@ -74,12 +73,12 @@ public class PianificaPartitaGUI {
                         return;
                     }
 
-                    // 5. Chiamata al metodo del Controller
+
                     controller.pianificaPartita(idPartita, dataPartita, oraPartita, campoSelezionato);
 
                     JOptionPane.showMessageDialog(frame, "Partita pianificata con successo nel campo: " + campoSelezionato.getNome(), "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-                    // Chiudiamo la finestrella
+
                     frame.dispose();
 
                 } catch (NumberFormatException ex) {
@@ -89,11 +88,11 @@ public class PianificaPartitaGUI {
                     JOptionPane.showMessageDialog(frame, "Formato Data o Ora non valido.\nUsa GG/MM/AAAA per la data e HH:mm per l'ora.", "Errore di Formato", JOptionPane.WARNING_MESSAGE);
 
                 } catch (IllegalStateException ex) {
-                    // Cattura l'eccezione lanciata se il campo non Ã¨ disponibile a livello logico nel Java
+
                     JOptionPane.showMessageDialog(frame, ex.getMessage(), "Campo non disponibile", JOptionPane.WARNING_MESSAGE);
 
                 } catch (Exception ex) {
-                    // 6. MODIFICA: Catturiamo l'errore del Trigger dal Database e lo mostriamo in modo chiaro!
+
                     JOptionPane.showMessageDialog(frame,
                             "Impossibile pianificare l'evento:\n" + ex.getMessage(),
                             "Errore di Pianificazione (Database)",

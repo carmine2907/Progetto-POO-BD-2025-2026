@@ -10,13 +10,13 @@ import java.awt.event.ActionListener;
  * The type Registrazione allenatore gui.
  */
 public class RegistrazioneAllenatoreGUI {
-    // Componenti grafici (da collegare nel file .form di IntelliJ)
+
     private JPanel panelMain;
     private JTextField txtNome;
     private JTextField txtCognome;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    private JComboBox<String> cmbQualifica; // Menu a tendina per la qualifica
+    private JComboBox<String> cmbQualifica;
     private JButton btnRegistrati;
     private JButton btnAnnulla;
 
@@ -41,14 +41,13 @@ public class RegistrazioneAllenatoreGUI {
         frame.setSize(400, 400);
         frame.setLocationRelativeTo(null);
 
-        // Popoliamo la tendina delle qualifiche tecniche
         cmbQualifica.addItem("UEFA Pro");
         cmbQualifica.addItem("UEFA A");
         cmbQualifica.addItem("UEFA B");
         cmbQualifica.addItem("UEFA C");
         cmbQualifica.addItem("Allenatore Dilettante");
 
-        // --- AZIONE: BOTTONE REGISTRATI ---
+
         btnRegistrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,7 +58,7 @@ public class RegistrazioneAllenatoreGUI {
                 String qualifica = (String) cmbQualifica.getSelectedItem();
 
                 try {
-                    // Chiamiamo il metodo specifico per l'allenatore nel controller
+
                     controller.registraAllenatore(username, password, nome, cognome, qualifica);
 
                     JOptionPane.showMessageDialog(frame,
@@ -76,7 +75,6 @@ public class RegistrazioneAllenatoreGUI {
             }
         });
 
-        // --- AZIONE: BOTTONE ANNULLA ---
         btnAnnulla.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

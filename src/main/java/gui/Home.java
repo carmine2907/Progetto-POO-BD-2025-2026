@@ -12,7 +12,7 @@ public class Home {
     private JPanel mainPanel;
     private JButton jButtonLogin;
 
-    // Rimosso lo 'static'. Ogni istanza di Home avrà il suo JFrame personale.
+
     private JFrame frameHome;
     private SistemaController controller;
 
@@ -31,14 +31,14 @@ public class Home {
         frameHome.pack();
         frameHome.setLocationRelativeTo(null); // Centra la finestra sullo schermo
 
-        // Azione del bottone di Login
+
         jButtonLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Nasconde la Home
+
                 frameHome.setVisible(false);
 
-                // Apre il Login passando il controller e l'istanza corrente della Home (this)
+
                 LoginGUI login = new LoginGUI(controller, Home.this);
                 login.mostra();
             }
@@ -48,7 +48,7 @@ public class Home {
     /**
      * Mostra.
      */
-// Metodo chiamato dall'esterno per rendere visibile la GUI
+
     public void mostra() {
         frameHome.setVisible(true);
     }
@@ -56,8 +56,14 @@ public class Home {
     /**
      * Aggiorna dopo login.
      */
-// Metodo chiamato dalla LoginGUI per aggiornare l'interfaccia dopo l'accesso
+
     public void aggiornaDopoLogin() {
         jButtonLogin.setVisible(false);
+
+
+        JOptionPane.showMessageDialog(
+                frameHome, "Ricordati di recuperare i token per essere parte della scuola calcio!", "Avviso Scuola Calcio",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 }

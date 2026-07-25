@@ -16,7 +16,7 @@ import java.util.List;
  * The type Assegna atleta gui.
  */
 public class AssegnaAtletaGUI {
-    // Componenti grafici (da collegare nel file .form di IntelliJ)
+
     private JPanel panelMain;
     private JComboBox<Atleta> cmbAtleti;
     private JComboBox<Squadra> cmbSquadre;
@@ -38,21 +38,19 @@ public class AssegnaAtletaGUI {
 
         frame = new JFrame("Modulo Assegnazione Atleta");
         frame.setContentPane(panelMain);
-        // Usiamo DISPOSE_ON_CLOSE altrimenti chiudendo questa finestrella si chiuderebbe tutto il programma!
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setSize(400, 300);
         frame.setLocationRelativeTo(null);
 
-        // 1. Popoliamo i menu a tendina (Combobox)
+
         caricaDatiNelleTendine();
 
-        // --- AZIONE: BOTTONE CONFERMA ---
+
         btnConferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // 1. Recupero Atleta e Squadra dalle tue JComboBox
                     Atleta atletaSelezionato = (Atleta) cmbAtleti.getSelectedItem();
                     Squadra squadraSelezionata = (Squadra) cmbSquadre.getSelectedItem();
 
@@ -61,17 +59,17 @@ public class AssegnaAtletaGUI {
                         return;
                     }
 
-                    // 2. Chiamata al Controller
+
                     controller.assegnaAtletaASquadra(atletaSelezionato, squadraSelezionata);
 
                     JOptionPane.showMessageDialog(frame, "Atleta assegnato con successo alla squadra!", "Operazione completata", JOptionPane.INFORMATION_MESSAGE);
 
                 } catch (AtletaGiaPresenteException ex) {
-                    // Eccezione logica del tuo Controller
+
                     JOptionPane.showMessageDialog(frame, "Questo atleta fa già parte di questa specifica squadra.", "Attenzione", JOptionPane.WARNING_MESSAGE);
 
                 } catch (PagamentoNonValidoException ex) {
-                    // L'atleta non ha pagato
+
                     JOptionPane.showMessageDialog(frame, "Impossibile assegnare: " + ex.getMessage(), "Pagamento mancante", JOptionPane.ERROR_MESSAGE);
 
                 } catch (SquadraCompletaException ex) {
@@ -79,21 +77,21 @@ public class AssegnaAtletaGUI {
                     JOptionPane.showMessageDialog(frame, "Impossibile assegnare: " + ex.getMessage(), "Squadra Piena", JOptionPane.ERROR_MESSAGE);
 
                 } catch (Exception ex) {
-                    // 3. LA MAGIA: Catturiamo l'errore del Database (Vincolo UNIQUE)
+
                     if (ex.getMessage().contains("uq_iscrizione_atleta_stagione")) {
                         JOptionPane.showMessageDialog(frame,
                                 "Impossibile procedere: l'atleta selezionato è GIÀ ISCRITTO a una squadra per la stagione in corso!",
                                 "Atleta già tesserato",
                                 JOptionPane.ERROR_MESSAGE);
                     } else {
-                        // Qualsiasi altro errore generico
+
                         JOptionPane.showMessageDialog(frame, "Errore di sistema: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
         });
 
-        // --- AZIONE: BOTTONE ANNULLA ---
+
         btnAnnulla.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

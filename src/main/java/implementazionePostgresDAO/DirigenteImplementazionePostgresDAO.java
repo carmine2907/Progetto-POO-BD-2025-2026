@@ -32,14 +32,14 @@ public class DirigenteImplementazionePostgresDAO implements DirigenteDAO {
 
     @Override
     public void salva(Dirigente dirigente) {
-        // Inseriamo i dati solo nella tabella figlia 'dirigente'
+        // Inseriamo i dati solo nella tabella dirigente
         String sql = "INSERT INTO dirigente (id_dirigente, ruolo_organizzativo) VALUES (?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            // 1. L'ID è la chiave esterna che punta alla tabella utente
+            // 1. L'ID è la FK che punta alla tabella utente
             ps.setInt(1, Integer.parseInt(dirigente.getIdUtente()));
 
-            // 2. Il ruolo dirigenziale (es. Presidente)
+            // 2. Il ruolo dirigenziale tipo Presidente
             ps.setString(2, dirigente.getRuoloOrganizzativo());
 
             ps.executeUpdate();

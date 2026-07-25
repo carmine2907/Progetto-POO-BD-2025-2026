@@ -38,11 +38,11 @@ public class PartitaImplementazionePostgresDAO implements PartitaDAO {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, partita.getIdPartita());
 
-            // CONVERSIONE ESPLICITA: Trasformiamo i tipi Java nei tipi esatti che vuole SQL
+
             java.sql.Date sqlDate = java.sql.Date.valueOf(partita.getDataPart());
             java.sql.Time sqlTime = java.sql.Time.valueOf(partita.getOraPart());
 
-            // Usiamo i metodi specifici (setDate e setTime) invece del generico setObject
+
             ps.setDate(2, sqlDate); // Va nella colonna data_part
             ps.setTime(3, sqlTime); // Va nella colonna ora_part
 
@@ -72,7 +72,7 @@ public class PartitaImplementazionePostgresDAO implements PartitaDAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                // 1. Ricostruiamo l'oggetto Campo
+
                 Campo campo = new Campo(
                         rs.getInt("id_campo"),
                         rs.getString("nome"),

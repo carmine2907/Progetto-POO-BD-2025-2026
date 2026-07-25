@@ -43,7 +43,7 @@ public class UtenteImplementazionePostgresDao implements UtenteDAO {
             System.out.println("Utente registrato correttamente.");
         } catch (SQLException e) {
             e.printStackTrace();
-            // AGGIUNGI QUESTA RIGA per impedire gli "errori silenziosi"
+
             throw new RuntimeException("Errore nel Database: " + e.getMessage());
         }
     }
@@ -85,7 +85,7 @@ public class UtenteImplementazionePostgresDao implements UtenteDAO {
         return null;
     }
 
-    // --- METODI PRIVATI DI APPOGGIO PER IL POLIMORFISMO ---
+
 
     private Dirigente cercaDirigente(int idUtente, String login, String password, String nome, String cognome) {
         String sql = "SELECT ruolo_organizzativo FROM dirigente WHERE id_dirigente = ?";
@@ -111,7 +111,7 @@ public class UtenteImplementazionePostgresDao implements UtenteDAO {
             ps.setInt(1, idUtente);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    // MODIFICA QUESTA RIGA COSÌ:
+
                     String dataNascita = rs.getString("data_nascita");
 
                     String ruolo = rs.getString("ruolo");

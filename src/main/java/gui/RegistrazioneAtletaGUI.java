@@ -16,8 +16,8 @@ public class RegistrazioneAtletaGUI {
     private JTextField txtCognome;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    private JTextField txtDataNascita; // Nuovo campo per la data
-    private JComboBox<String> cmbRuolo; // Menu a tendina per il ruolo (più sicuro del testo libero)
+    private JTextField txtDataNascita;
+    private JComboBox<String> cmbRuolo;
     private JButton btnRegistrati;
     private JButton btnAnnulla;
     private JLabel lblNome;
@@ -45,17 +45,16 @@ public class RegistrazioneAtletaGUI {
         frame.setContentPane(panelMain);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        // Un po' più grande per contenere i nuovi campi
         frame.setSize(400, 450);
         frame.setLocationRelativeTo(null);
 
-        // Popoliamo la tendina dei ruoli (puoi personalizzarli nel file .form o qui)
+
         cmbRuolo.addItem("Portiere");
         cmbRuolo.addItem("Difensore");
         cmbRuolo.addItem("Centrocampista");
         cmbRuolo.addItem("Attaccante");
 
-        // --- AZIONE: BOTTONE REGISTRATI ---
+
         btnRegistrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,16 +62,16 @@ public class RegistrazioneAtletaGUI {
                 String cognome = txtCognome.getText().trim();
                 String username = txtUsername.getText().trim();
                 String password = new String(txtPassword.getPassword()).trim();
-                String dataNascita = txtDataNascita.getText().trim(); // Formato consigliato: YYYY-MM-DD
+                String dataNascita = txtDataNascita.getText().trim(); // Formato consigliato: AAAA-MM-GG
                 String ruolo = (String) cmbRuolo.getSelectedItem();
 
                 try {
-                    // Validazione locale base per la data
+
                     if (dataNascita.isEmpty()) {
                         throw new IllegalArgumentException("La data di nascita è obbligatoria.");
                     }
 
-                    // Chiamiamo il metodo specifico per l'atleta nel controller
+
                     controller.registraAtleta(username, password, nome, cognome, dataNascita, ruolo);
 
                     JOptionPane.showMessageDialog(frame,
@@ -82,14 +81,14 @@ public class RegistrazioneAtletaGUI {
                     chiudiETornaAlLogin();
 
                 } catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Attenzione data non valida!!", JOptionPane.WARNING_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(frame, "Errore durante la registrazione: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        // --- AZIONE: BOTTONE ANNULLA ---
+
         btnAnnulla.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

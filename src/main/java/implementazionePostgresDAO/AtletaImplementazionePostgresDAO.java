@@ -31,15 +31,14 @@ public class AtletaImplementazionePostgresDAO implements AtletaDAO {
 
 	@Override
 	public void salva(Atleta atleta) {
-		// CORREZIONE: Inseriamo SOLO nella tabella 'atleta', perché nella tabella 'utente' c'è già!
-		// (Assicurati che i nomi delle colonne corrispondano al tuo script SQL)
+
 		String sql = "INSERT INTO atleta (id_atleta, data_nascita, ruolo, pagamento_in_reg) VALUES (?, ?, ?, ?)";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			// 1. L'ID è quello che il Controller ha appena recuperato dalla tabella utente
 			ps.setInt(1, Integer.parseInt(atleta.getIdUtente()));
 
-			// 2. Data di nascita (conversione della stringa YYYY-MM-DD in data SQL)
+			// 2. Data di nascita (conversione della stringa AAAA-MM-GG !!!!
 			ps.setDate(2, java.sql.Date.valueOf(atleta.getDataNascita()));
 
 			// 3. Ruolo

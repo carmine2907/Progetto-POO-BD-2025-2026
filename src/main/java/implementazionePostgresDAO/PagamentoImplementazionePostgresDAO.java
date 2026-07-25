@@ -100,7 +100,7 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
     }
     @Override
     public String getUltimoStatoPagamento(int idAtleta) {
-        // Ordiniamo per data decrescente e prendiamo il primo (il più recente)
+
         String sql = "SELECT stato FROM pagamento WHERE id_atleta = ? ORDER BY data_pagamento DESC LIMIT 1";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {

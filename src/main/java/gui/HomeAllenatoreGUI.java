@@ -27,7 +27,7 @@ public class HomeAllenatoreGUI {
     public HomeAllenatoreGUI(SistemaController controller) {
         this.controller = controller;
 
-        // Inizializzazione del JFrame
+
         frame = new JFrame("Area Riservata - Allenatore");
         frame.setContentPane(panelMain);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,13 +39,13 @@ public class HomeAllenatoreGUI {
             lblBenvenuto.setText("Benvenuto Mister: " + SistemaController.getUtenteLoggato().getNome());
         }
 
-        // --- AZIONE: VISUALIZZA SQUADRA (nella HomeAllenatoreGUI) ---
+
         btnVisualizzaSquadra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Creiamo la nuova finestrella passando il controller
+
                 VisualizzaSquadraGUI moduloSquadra = new VisualizzaSquadraGUI(controller);
-                // Mostriamo la finestrella in sovrimpressione
+
                 moduloSquadra.mostra();
             }
         });
@@ -53,14 +53,12 @@ public class HomeAllenatoreGUI {
         btnAssegnaAtleta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Creiamo la nuova finestrella passando il controller
                 AssegnaAtletaGUI moduloAssegnazione = new AssegnaAtletaGUI(controller);
-                // Mostriamo la finestrella in sovrimpressione
                 moduloAssegnazione.mostra();
             }
         });
 
-        // --- AZIONE: LOGOUT ---
+
         btnLogout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,7 +68,7 @@ public class HomeAllenatoreGUI {
 
                 LoginGUI login = new LoginGUI(controller, new Home(controller));
                 login.mostra();
-                //System.exit(0);
+
             }
         });
     }

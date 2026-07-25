@@ -20,11 +20,11 @@ public class LoginGUI {
     private JLabel JtestoUser;
     private JLabel JtestoPass;
 
-    // Nomi aggiornati per maggiore chiarezza. Assicurati che nel .form abbiano questo "field name"
+
     private JButton btnLogin;
     private JButton btnRegistrati;
 
-    // Rimosso 'static' dal JFrame per evitare conflitti se si aprono più finestre
+
     private JFrame frame;
     private SistemaController controller;
     private Home frameChiamante;
@@ -45,7 +45,7 @@ public class LoginGUI {
         frame.pack();
         frame.setLocationRelativeTo(null);
 
-        // --- AZIONE PER IL BOTTONE DI LOGIN ---
+
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,14 +56,14 @@ public class LoginGUI {
                     boolean successo = controller.login(login, password);
 
                     if (successo) {
-                        // Recuperiamo l'oggetto polimorfico dell'utente appena loggato
+                        // applico una sorta di polimorfismo per il login
                         Utente loggato = SistemaController.getUtenteLoggato();
 
-                        // --- INIZIO SMISTAMENTO PER RUOLO ---
+
                         if (loggato instanceof Atleta) {
                             JOptionPane.showMessageDialog(frame, "Benvenuto Atleta " + loggato.getNome() + "!");
 
-                            // Apre la dashboard specifica per l'Atleta
+
                             HomeAtletaGUI homeAtleta = new HomeAtletaGUI(controller);
                             homeAtleta.mostra();
                         }
@@ -89,9 +89,9 @@ public class LoginGUI {
                             chiamante.aggiornaDopoLogin();
                             chiamante.mostra();
                         }
-                        // --- FINE SMISTAMENTO ---
 
-                        // In ogni caso, il login ha avuto successo, quindi chiudiamo questa finestra
+
+
                         frame.dispose();
                     }
                     else {
@@ -107,13 +107,13 @@ public class LoginGUI {
             }
         });
 
-        // --- AZIONE PER IL BOTTONE REGISTRATI ---
+
         btnRegistrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setVisible(false); // Nasconde temporaneamente il login
 
-                // Apre la nuova finestrella del Token
+                // Apre la  finestrella del Token
                RegistrazioneHome tokenGUI = new RegistrazioneHome(controller, LoginGUI.this);
                 tokenGUI.mostra();
             }

@@ -11,6 +11,7 @@ import controller.Exceptions.SquadraCompletaException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 /**
@@ -55,17 +56,16 @@ public class SistemaController {
             throw new IllegalArgumentException("Username e password non possono essere vuoti.");
         }
 
-        // 1. Pulizia di eventuali spazi invisibili digitati per sbaglio nella GUI
+
         login = login.trim();
         password = password.trim();
 
         System.out.println("--- DEBUG LOGIN ---");
         System.out.println("Cerco nel DB l'utente: '" + login + "'");
 
-        // 2. Chiamata al DAO
+
         Utente utenteTrovato = utenteDAO.cercaPerUsername(login);
 
-        // 3. Verifica se l'utente esiste davvero nel DB
         if (utenteTrovato == null) {
             System.out.println("ERRORE: L'utente '" + login + "' NON ESISTE nel database! Il DAO ha restituito null.");
             return false;
@@ -74,7 +74,6 @@ public class SistemaController {
         System.out.println("Utente trovato! La password salvata nel DB è: '" + utenteTrovato.getPassword() + "'");
         System.out.println("La password digitata nella GUI è: '" + password + "'");
 
-        // 4. Verifica se le password coincidono
         if (utenteTrovato.getPassword().equals(password)) {
             utenteLoggato = utenteTrovato;
             System.out.println("Le password coincidono. Login Riuscito!");
@@ -96,7 +95,7 @@ public class SistemaController {
     }
 
 
-     //Restituisce l'utente loggato.
+
 
     /**
      * Gets utente loggato.
@@ -126,32 +125,25 @@ public class SistemaController {
      * @return the partita
      * @throws Exception the exception
      */
-    public Partita pianificaPartita(int idPartita,
-                                    LocalDate data,
-                                    LocalTime ora,
-                                    Campo campo)
+    public Partita pianificaPartita(int idPartita, LocalDate data, LocalTime ora, Campo campo)
             throws Exception {
 
         if (!isUtenteAutenticato()) {
 
-            throw new Exception(
-                    "Operazione consentita solo ad utenti autenticati.");
+            throw new Exception("Operazione consentita solo ad utenti autenticati.");
         }
 
-        // Controllo disponibilità campo
         if (!campo.isDisponibile()) {
 
             throw new IllegalStateException(
                     "Il campo '" + campo.getNome() + "' non è disponibile.");
         }
 
-        // Creazione partita
+
         Partita nuovaPartita = new Partita(idPartita, data, ora, campo);
 
-        // Campo occupato
         campo.setDisponibile(false);
 
-        // Salvataggio persistente nel database della partita pianificata
         partitaDAO.salva(nuovaPartita);
 
         return nuovaPartita;
@@ -167,42 +159,39 @@ public class SistemaController {
      * @throws PagamentoNonValidoException the pagamento non valido exception
      * @throws AtletaGiaPresenteException  the atleta gia presente exception
      */
-    public void assegnaAtletaASquadra(Atleta atleta,
-                                      Squadra squadra)
+    public void assegnaAtletaASquadra(Atleta atleta, Squadra squadra)
             throws Exception,
             SquadraCompletaException,
             PagamentoNonValidoException,
             AtletaGiaPresenteException {
 
-        // Controllo login
         if (!isUtenteAutenticato()) {
 
             throw new Exception("Effettuare il login prima dell'operazione.");
         }
 
-        // Controllo pagamento
+
         if (!atleta.isPagamentoInRegola()) {
 
             throw new PagamentoNonValidoException("Pagamento non effettuato.");
         }
 
-        // Controllo squadra piena
+
         if (squadra.isCompleta()) {
 
             throw new SquadraCompletaException("La squadra " + squadra.getNome() + " è completa.");
         }
 
-        // Controllo atleta già presente
         if (squadra.getAtleti().contains(atleta)) {
 
             throw new AtletaGiaPresenteException("Atleta già presente nella squadra.");
         }
 
-        // Inserimento atleta in memoria
+
         boolean successo = squadra.addAtleta(atleta);
 
         if (successo) {
-            // Chiamata al DAO per aggiornare il database con il legame corretto
+
             squadraDAO.assegnaAtleta(squadra, atleta);
         }
     }
@@ -222,37 +211,38 @@ public class SistemaController {
      */
     public Atleta registraAtleta(String login, String password, String nome, String cognome, String dataNascita, String ruolo) throws Exception {
 
-        // 1. Validazione campi obbligatori
         if (nome == null || nome.isEmpty() || cognome == null || cognome.isEmpty() ||
                 login == null || login.isEmpty() || password == null || password.isEmpty() ||
                 dataNascita == null || dataNascita.isEmpty() || ruolo == null) {
             throw new IllegalArgumentException("Tutti i campi sono obbligatori.");
         }
 
-        // 2. Controllo duplicati
+
+        try {
+            // Tenta di fare il parsing nel formato standard YYYY-MM-DD
+            LocalDate.parse(dataNascita);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("La data di nascita deve essere nel formato AAAA-MM-GG (es. 2006-07-29).");
+        }
+
+
         if (utenteDAO.cercaPerUsername(login) != null) {
             throw new Exception("Username già esistente.");
         }
 
-        // 3. Creazione oggetto Atleta
-        Atleta nuovoAtleta = new Atleta(login, password, nome, cognome, dataNascita, ruolo);
 
-        // Di default, appena registrato, il pagamento non è in regola
+        Atleta nuovoAtleta = new Atleta(login, password, nome, cognome, dataNascita, ruolo);
         nuovoAtleta.setPagamentoInRegola(false);
 
-        // 4. Salvataggio in DB: prima l'utente base (per ottenere l'ID)
         utenteDAO.salva(nuovoAtleta);
 
-        // 5. Recupero l'ID generato dal database e lo assegno all'atleta
         Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
         nuovoAtleta.setIdUtente(utenteRegistrato.getIdUtente());
 
-        // 6. Salvataggio finale nella tabella specifica "atleta"
         atletaDAO.salva(nuovoAtleta);
 
         return nuovoAtleta;
     }
-
     /**
      * Registrazione specifica per un nuovo Allenatore
      *
@@ -266,29 +256,29 @@ public class SistemaController {
      */
     public Allenatore registraAllenatore(String login, String password, String nome, String cognome, String qualifica) throws Exception {
 
-        // 1. Validazione campi obbligatori
+
         if (nome == null || nome.isEmpty() || cognome == null || cognome.isEmpty() ||
                 login == null || login.isEmpty() || password == null || password.isEmpty() ||
                 qualifica == null || qualifica.isEmpty()) {
             throw new IllegalArgumentException("Tutti i campi sono obbligatori.");
         }
 
-        // 2. Controllo duplicati
+
         if (utenteDAO.cercaPerUsername(login) != null) {
             throw new Exception("Username già esistente.");
         }
 
-        // 3. Creazione oggetto Allenatore
+
         Allenatore nuovoAllenatore = new Allenatore(login, password, nome, cognome, qualifica);
 
-        // 4. Salvataggio in DB: prima l'utente base (per ottenere l'ID generato col SERIAL)
+
         utenteDAO.salva(nuovoAllenatore);
 
-        // 5. Recupero l'ID generato dal database e lo assegno all'allenatore
+
         Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
         nuovoAllenatore.setIdUtente(utenteRegistrato.getIdUtente());
 
-        // 6. Salvataggio finale nella tabella specifica (assicurati di avere questo DAO istanziato in alto!)
+
         allenatoreDAO.salva(nuovoAllenatore);
 
         return nuovoAllenatore;
@@ -307,29 +297,29 @@ public class SistemaController {
      */
     public Dirigente registraDirigente(String login, String password, String nome, String cognome, String ruoloOrganizzativo) throws Exception {
 
-        // 1. Validazione campi obbligatori
+
         if (nome == null || nome.isEmpty() || cognome == null || cognome.isEmpty() ||
                 login == null || login.isEmpty() || password == null || password.isEmpty() ||
                 ruoloOrganizzativo == null || ruoloOrganizzativo.isEmpty()) {
             throw new IllegalArgumentException("Tutti i campi sono obbligatori.");
         }
 
-        // 2. Controllo duplicati (basato sullo username univoco ereditato da Utente)
+
         if (utenteDAO.cercaPerUsername(login) != null) {
             throw new Exception("Username già esistente.");
         }
 
-        // 3. Creazione oggetto Dirigente
+
         Dirigente nuovoDirigente = new Dirigente(login, password, nome, cognome, ruoloOrganizzativo);
 
-        // 4. Salvataggio in DB: prima l'utente base (per generare l'ID)
+
         utenteDAO.salva(nuovoDirigente);
 
-        // 5. Recupero l'ID appena generato dal database e lo assegno al dirigente
+
         Utente utenteRegistrato = utenteDAO.cercaPerUsername(login);
         nuovoDirigente.setIdUtente(utenteRegistrato.getIdUtente());
 
-        // 6. Salvataggio finale nella tabella specifica (se hai implementato il relativo DAO)
+
         dirigenteDAO.salva(nuovoDirigente);
 
         return nuovoDirigente;

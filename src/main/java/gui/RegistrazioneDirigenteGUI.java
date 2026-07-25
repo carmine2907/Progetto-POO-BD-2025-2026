@@ -10,13 +10,12 @@ import java.awt.event.ActionListener;
  * The type Registrazione dirigente gui.
  */
 public class RegistrazioneDirigenteGUI {
-    // Componenti grafici (da collegare nel file .form di IntelliJ)
     private JPanel panelMain;
     private JTextField txtNome;
     private JTextField txtCognome;
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    private JComboBox<String> cmbRuoloOrganizzativo; // Menu a tendina per il ruolo
+    private JComboBox<String> cmbRuoloOrganizzativo;
     private JButton btnRegistrati;
     private JButton btnAnnulla;
     private JLabel lblRuoloOrganizzativoDirigente;
@@ -46,12 +45,12 @@ public class RegistrazioneDirigenteGUI {
         frame.setSize(400, 400);
         frame.setLocationRelativeTo(null);
 
-        // Popoliamo la tendina con i classici ruoli societari
+
         cmbRuoloOrganizzativo.addItem("Presidente");
         cmbRuoloOrganizzativo.addItem("Vice Presidente");
         cmbRuoloOrganizzativo.addItem("Direttore Sportivo");
 
-        // --- AZIONE: BOTTONE REGISTRATI ---
+
         btnRegistrati.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,7 +61,7 @@ public class RegistrazioneDirigenteGUI {
                 String ruoloOrganizzativo = (String) cmbRuoloOrganizzativo.getSelectedItem();
 
                 try {
-                    // Chiamiamo il metodo specifico per il dirigente nel controller
+
                     controller.registraDirigente(username, password, nome, cognome, ruoloOrganizzativo);
 
                     JOptionPane.showMessageDialog(frame,
@@ -79,7 +78,7 @@ public class RegistrazioneDirigenteGUI {
             }
         });
 
-        // --- AZIONE: BOTTONE ANNULLA ---
+
         btnAnnulla.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
