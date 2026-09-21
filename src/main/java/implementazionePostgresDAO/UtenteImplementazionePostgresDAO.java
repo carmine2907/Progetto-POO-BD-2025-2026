@@ -27,7 +27,7 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
     @Override
     public void salva(Utente utente) {
-        String query = "INSERT INTO Utente (Id_Utente, Nome, Cognome, Username, Password) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Utente ( username,  password,  id_utente,  nome, cognome) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, utente.getId_utente());
@@ -43,12 +43,12 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
     }
 
     @Override
-    public Utente cercaPerId(String idUtente) {
+    public Utente cercaPerId(String id_utente) {
         String query = "SELECT * FROM Utente WHERE Id_Utente = ?";
         Utente utente = null;
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, idUtente);
+            pstmt.setString(1, id_utente);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
