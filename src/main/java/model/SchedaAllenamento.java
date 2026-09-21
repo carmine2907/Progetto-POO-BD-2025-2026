@@ -1,7 +1,7 @@
 package model;
 
 public class SchedaAllenamento {
-    private String id_Scheda;
+    private String id_scheda;
     private String descrizione;
 
     private Istruttore creatore;
