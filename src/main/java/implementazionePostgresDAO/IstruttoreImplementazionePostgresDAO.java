@@ -1,10 +1,9 @@
 package implementazionePostgresDAO;
 
-import dao.IscrittoDAO;
+import dao.IstruttoreDAO;
 import database.ConnessioneDatabase;
-import model.Iscritto;
-import model.Pagamento;
-import model.Partecipa;
+import model.Corso;
+import model.Istruttore;
 import model.SchedaAllenamento;
 
 import java.sql.Connection;
@@ -15,11 +14,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
+public class IstruttoreImplementazionePostgresDAO implements IstruttoreDAO {
 
     private Connection connection;
 
-    public IscrittoImplementazionePostgresDAO() {
+    public IstruttoreImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();
         } catch (SQLException e) {
@@ -28,36 +27,35 @@ public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
     }
 
     @Override
-    public void salva(Iscritto iscritto) {
+    public void salva(Istruttore istruttore) {
         String insertUtente = "INSERT INTO Utente (Id_Utente, Nome, Cognome, Username, Password) VALUES (?, ?, ?, ?, ?)";
-        String insertIscritto = "INSERT INTO Iscritto (Id_Iscritto) VALUES (?)";
+        String insertIstruttore = "INSERT INTO Istruttore (Id_Istruttore) VALUES (?)";
 
         try {
+            // Disabilitiamo l'autocommit per la transazione
             connection.setAutoCommit(false);
 
+            // 1. Salviamo i dati anagrafici nella superclasse Utente
             try (PreparedStatement pstmtUtente = connection.prepareStatement(insertUtente)) {
-                pstmtUtente.setString(1, iscritto.getId_utente());
-                pstmtUtente.setString(2, iscritto.getNome());
-                pstmtUtente.setString(3, iscritto.getCognome());
-                pstmtUtente.setString(4, iscritto.getUsername());
-                pstmtUtente.setString(5, iscritto.getPassword());
+                pstmtUtente.setString(1, istruttore.getId_utente());
+                pstmtUtente.setString(2, istruttore.getNome());
+                pstmtUtente.setString(3, istruttore.getCognome());
+                pstmtUtente.setString(4, istruttore.getUsername());
+                pstmtUtente.setString(5, istruttore.getPassword());
                 pstmtUtente.executeUpdate();
             }
 
-            try (PreparedStatement pstmtIscritto = connection.prepareStatement(insertIscritto)) {
-                pstmtIscritto.setString(1, iscritto.getId_utente());
-                pstmtIscritto.executeUpdate();
+            try (PreparedStatement pstmtIstruttore = connection.prepareStatement(insertIstruttore)) {
+                pstmtIstruttore.setString(1, istruttore.getId_utente());
+                pstmtIstruttore.executeUpdate();
             }
 
             connection.commit();
 
-            // Nota: Il salvataggio delle liste (Pagamenti, Partecipazioni, Scheda)
-            // NON avviene qui. Se l'oggetto iscritto ha dei pagamenti nuovi,
-            // dovrai chiamare PagamentoDAO.salva(pagamento) iterando la lista nel Controller.
-
         } catch (SQLException e) {
-            System.err.println("Errore durante il salvataggio dell'iscritto: " + e.getMessage());
+            System.err.println("Errore durante il salvataggio dell'istruttore: " + e.getMessage());
             try {
+                // In caso di errore, si fa il rollback per evitare dati parziali
                 connection.rollback();
             } catch (SQLException rollbackEx) {
                 System.err.println("Errore durante il rollback: " + rollbackEx.getMessage());
@@ -72,26 +70,25 @@ public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
     }
 
     @Override
-    public Iscritto cercaPerUsername(String username) {
+    public Istruttore cercaPerUsername(String username) {
         String query = "SELECT u.Id_Utente, u.Nome, u.Cognome, u.Username, u.Password " +
-                "FROM Iscritto i JOIN Utente u ON i.Id_Iscritto = u.Id_Utente " +
+                "FROM Istruttore i JOIN Utente u ON i.Id_Istruttore = u.Id_Utente " +
                 "WHERE u.Username = ?";
-        Iscritto iscritto = null;
+        Istruttore istruttore = null;
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, username);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    iscritto = new Iscritto(
+                    istruttore = new Istruttore(
                             rs.getString("Id_Utente"),
                             rs.getString("Nome"),
                             rs.getString("Cognome"),
                             rs.getString("Username"),
                             rs.getString("Password"),
-                            new ArrayList<Pagamento>(),
-                            null,
-                            new ArrayList<Partecipa>()
+                            new ArrayList<Corso>(),            // Lista corsi vuota
+                            new ArrayList<SchedaAllenamento>() // Lista schede vuota
                     );
                 }
             }
@@ -99,53 +96,54 @@ public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
             System.err.println("Errore durante la ricerca per Username: " + e.getMessage());
         }
 
-        return iscritto;
+        return istruttore;
     }
 
     @Override
-    public List<Iscritto> trovaTutti() {
+    public List<Istruttore> trovaTutti() {
         String query = "SELECT u.Id_Utente, u.Nome, u.Cognome, u.Username, u.Password " +
-                "FROM Iscritto i JOIN Utente u ON i.Id_Iscritto = u.Id_Utente";
-        List<Iscritto> listaIscritti = new ArrayList<>();
+                "FROM Istruttore i JOIN Utente u ON i.Id_Istruttore = u.Id_Utente";
+        List<Istruttore> listaIstruttori = new ArrayList<>();
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                Iscritto iscritto = new Iscritto(
+                Istruttore istruttore = new Istruttore(
                         rs.getString("Id_Utente"),
                         rs.getString("Nome"),
                         rs.getString("Cognome"),
                         rs.getString("Username"),
                         rs.getString("Password"),
-                        new ArrayList<Pagamento>(),
-                        null,
-                        new ArrayList<Partecipa>()
+                        new ArrayList<Corso>(),
+                        new ArrayList<SchedaAllenamento>()
                 );
-                listaIscritti.add(iscritto);
+                listaIstruttori.add(istruttore);
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante il recupero di tutti gli iscritti: " + e.getMessage());
+            System.err.println("Errore durante il recupero di tutti gli istruttori: " + e.getMessage());
         }
 
-        return listaIscritti;
+        return listaIstruttori;
     }
 
     @Override
-    public void aggiornaIscritto(Iscritto iscritto) {
+    public void aggiornaIstruttore(Istruttore istruttore) {
         String query = "UPDATE Utente SET Nome = ?, Cognome = ?, Username = ?, Password = ? WHERE Id_Utente = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, iscritto.getId_utente());
-            pstmt.setString(2, iscritto.getNome());
-            pstmt.setString(3, iscritto.getCognome());
-            pstmt.setString(4, iscritto.getUsername());
-            pstmt.setString(5, iscritto.getPassword());
+            pstmt.setString(1, istruttore.getId_utente());
+            pstmt.setString(2, istruttore.getNome());
+            pstmt.setString(3, istruttore.getCognome());
+            pstmt.setString(4, istruttore.getUsername());
+            pstmt.setString(5, istruttore.getPassword());
 
-            pstmt.executeUpdate();
+            int righeModificate = pstmt.executeUpdate();
+            if(righeModificate == 0) {
+                System.out.println("Nessun istruttore aggiornato. L'ID potrebbe non esistere.");
+            }
         } catch (SQLException e) {
-            System.err.println("Errore durante l'aggiornamento: " + e.getMessage());
+            System.err.println("Errore durante l'aggiornamento dell'istruttore: " + e.getMessage());
         }
     }
-
 }
