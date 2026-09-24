@@ -25,7 +25,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
             e.printStackTrace();
         }
     }
-
+    // merda
     @Override
     public void salva(Corso corso) {
         String query = "INSERT INTO Corso (Id_Corso, NomeCorso, Capienza, Id_Istruttore) VALUES (?, ?, ?, ?)";

@@ -27,7 +27,7 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
             e.printStackTrace();
         }
     }
-
+// merda
     @Override
     public void salva(MembroVip membroVip) {
         // Pattern Table-per-Subclass: Inserimento in Utente -> Iscritto -> MembroVip

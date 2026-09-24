@@ -23,7 +23,7 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
             e.printStackTrace();
         }
     }
-
+    // merda
     @Override
     public void salva(ServizioWellness servizioWellness) {
         String query = "INSERT INTO ServizioWellness (Id_ServizioWellness, NomeServizio, Disponibile) VALUES (?, ?, ?)";
