@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
-
+// Mario Doccia
     private Connection connection;
 
     public PagamentoImplementazionePostgresDAO() {
