@@ -125,8 +125,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
         } catch (SQLException e) {
             System.err.println("Errore durante l'aggiornamento del corso: " + e.getMessage());
         }
-    }
-
+    }h
     private Corso mappaCorso(ResultSet rs) throws SQLException {
         String idCorso = rs.getString("Id_Corso");
         String nomeCorso = rs.getString("NomeCorso");

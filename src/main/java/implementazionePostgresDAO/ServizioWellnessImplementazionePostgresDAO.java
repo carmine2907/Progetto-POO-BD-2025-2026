@@ -97,6 +97,6 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
         String nomeServizio = rs.getString("NomeServizio");
         boolean disponibile = rs.getBoolean("Disponibile");
 
-        return new ServizioWellness(idServizio, nomeServizio, disponibile);
+        return new ServizioWellness(idServizio, nomeServizio, disponibile, cazzo);
     }
 }

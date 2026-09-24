@@ -7,7 +7,7 @@ import model.Pagamento;
 import model.Partecipa;
 import model.SchedaAllenamento;
 import model.ServizioWellness;
-
+h
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
             e.printStackTrace();
         }
     }
-// merda
+    // merda
     @Override
     public void salva(MembroVip membroVip) {
         // Pattern Table-per-Subclass: Inserimento in Utente -> Iscritto -> MembroVip
