@@ -8,8 +8,8 @@ public class Iscritto extends Utente {
     private List<Partecipa> partecipazioni;
 
 
-    public Iscritto(String id_Utente, String nome, String cognome, String username, String password, List<Pagamento> pagamenti, SchedaAllenamento schedaAllenamento, List<Partecipa> partecipazioni) {
-        super(id_Utente, nome, cognome, username, password);
+    public Iscritto(String id_utente, String nome, String cognome, String username, String password, List<Pagamento> pagamenti, SchedaAllenamento schedaAllenamento, List<Partecipa> partecipazioni) {
+        super(username, password,  id_utente ,nome,  cognome);
         this.pagamenti = pagamenti;
         this.schedaAllenamento = schedaAllenamento;
         this.partecipazioni = partecipazioni;
