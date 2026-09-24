@@ -26,7 +26,7 @@ public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
             e.printStackTrace();
         }
     }
-// porca troia
+
     @Override
     public void salva(Iscritto iscritto) {
         String insertUtente = "INSERT INTO Utente (Id_Utente, Nome, Cognome, Username, Password) VALUES (?, ?, ?, ?, ?)";
