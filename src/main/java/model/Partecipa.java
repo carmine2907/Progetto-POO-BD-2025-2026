@@ -9,7 +9,7 @@ public class Partecipa  {
 
 
 
-    public Partecipa(String id_Corso, String id_Utente, Corso corso, Iscritto iscritto) {
+    public Partecipa(String id_Corso, String id_utente, Corso corso, Iscritto iscritto) {
         this.id_Corso = id_Corso;
         this.id_utente = id_utente;
         this.corso = corso;

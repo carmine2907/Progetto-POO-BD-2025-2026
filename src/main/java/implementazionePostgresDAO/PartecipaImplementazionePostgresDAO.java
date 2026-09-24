@@ -51,7 +51,7 @@ public class PartecipaImplementazionePostgresDAO implements PartecipaDAO {
                     // Il costruttore richiede (String, String, Corso, Iscritto)
                     partecipa = new Partecipa(
                             rs.getString("Id_Corso"),
-                            rs.getString("Id_utente"),
+                            rs.getString("Id_Iscritto"),
                             null,
                             null
                     );

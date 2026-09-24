@@ -8,8 +8,8 @@ public class Istruttore extends Utente {
 
 
 
-    public Istruttore(String id_Utente, String nome, String cognome, String username, String password, List<Corso> corsiGestiti, List<SchedaAllenamento> schedeCreate) {
-        super(id_Utente, nome, cognome, username, password);
+    public Istruttore(String id_utente, String nome, String cognome, String username, String password, List<Corso> corsiGestiti, List<SchedaAllenamento> schedeCreate) {
+        super(username,  password,  id_utente,  nome,  cognome);
         this.corsiGestiti = corsiGestiti;
         this.schedeCreate = schedeCreate;
     }

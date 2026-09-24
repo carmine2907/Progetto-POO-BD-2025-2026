@@ -1,24 +1,23 @@
 package implementazionePostgresDAO;
-
 import dao.MembroVipDAO;
 import database.ConnessioneDatabase;
 import model.MembroVip;
-import model.Pagamento;
-import model.Partecipa;
 import model.SchedaAllenamento;
-import model.ServizioWellness;
-h
+
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Types;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
-
+    // Variabile per mantenere la connessione al database
     private Connection connection;
+
 
     public MembroVipImplementazionePostgresDAO() {
         try {
@@ -27,127 +26,171 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
             e.printStackTrace();
         }
     }
-    // merda
+
     @Override
     public void salva(MembroVip membroVip) {
-        // Pattern Table-per-Subclass: Inserimento in Utente -> Iscritto -> MembroVip
-        String queryUtente = "INSERT INTO Utente (Id_Utente, Nome, Cognome, Username, Password) VALUES (?, ?, ?, ?, ?)";
-        String queryIscritto = "INSERT INTO Iscritto (Id_Utente) VALUES (?)";
-        String queryMembroVip = "INSERT INTO MembroVip (Id_Utente) VALUES (?)";
+        // Query di inserimento. Assumiamo che ci sia una tabella 'membro_vip' (o 'utente') con queste colonne
+        String query = "INSERT INTO membro_vip (id_utente, nome, cognome, username, password, id_scheda_allenamento) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try {
-            // Inserimento nella tabella base (Utente)
-            try (PreparedStatement pstmtUtente = connection.prepareStatement(queryUtente)) {
-                pstmtUtente.setString(1, membroVip.getId_utente());
-                pstmtUtente.setString(2, membroVip.getNome());
-                pstmtUtente.setString(3, membroVip.getCognome());
-                pstmtUtente.setString(4, membroVip.getUsername());
-                pstmtUtente.setString(5, membroVip.getPassword());
-                pstmtUtente.executeUpdate();
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            // Impostiamo i parametri base ereditati dalla classe Iscritto
+            stmt.setString(1, membroVip.getId_utente());
+            stmt.setString(2, membroVip.getNome());
+            stmt.setString(3, membroVip.getCognome());
+            stmt.setString(4, membroVip.getUsername());
+            stmt.setString(5, membroVip.getPassword());
+
+            // Gestione sicura della chiave esterna per SchedaAllenamento
+            // (Verifichiamo che non sia null per evitare NullPointerException)
+            // L'oggetto SchedaAllenamento è una proprietà della superclasse ereditata da MembroVip[cite: 4]
+            if (membroVip.getSchedaAllenamento() != null) {
+                // Assumiamo che SchedaAllenamento abbia un metodo getId_Scheda()
+                stmt.setString(6, membroVip.getSchedaAllenamento().getId_Scheda());
+            } else {
+                stmt.setNull(6, Types.VARCHAR);
             }
 
-            // Inserimento nella tabella figlia (Iscritto)
-            try (PreparedStatement pstmtIscritto = connection.prepareStatement(queryIscritto)) {
-                pstmtIscritto.setString(1, membroVip.getId_utente());
-                pstmtIscritto.executeUpdate();
-            }
-
-            // Inserimento nella tabella nipote (MembroVip)
-            try (PreparedStatement pstmtVip = connection.prepareStatement(queryMembroVip)) {
-                pstmtVip.setString(1, membroVip.getId_utente());
-                pstmtVip.executeUpdate();
-            }
+            // Eseguiamo l'inserimento
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Errore durante il salvataggio del Membro Vip: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public MembroVip cercaPerUsername(String username) {
-        // Recuperiamo i dati dalla tabella Utente, sapendo che l'utente è un MembroVip
-        String query = "SELECT u.Id_Utente, u.Nome, u.Cognome, u.Username, u.Password " +
-                "FROM MembroVip mv " +
-                "JOIN Utente u ON mv.Id_Utente = u.Id_Utente " +
-                "WHERE u.Username = ?";
-        MembroVip membroVip = null;
+        // Query per trovare un membro in base all'username
+        String query = "SELECT * FROM membro_vip WHERE username = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, username);
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            // Sostituiamo il punto interrogativo con l'username passato al metodo
+            stmt.setString(1, username);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Se troviamo una corrispondenza nel database
                 if (rs.next()) {
-                    membroVip = mappaMembroVip(rs);
+
+                    // 1. Estrazione esplicita di tutti i campi base
+                    String idUtenteEstratto = rs.getString("id_utente");
+                    String nomeEstratto = rs.getString("nome");
+                    String cognomeEstratto = rs.getString("cognome");
+                    String usernameEstratto = rs.getString("username");
+                    String passwordEstratta = rs.getString("password");
+                    String idSchedaEstratta = rs.getString("id_scheda_allenamento");
+
+                    // 2. Creazione dell'oggetto dipendente "SchedaAllenamento" (Proxy)
+                    SchedaAllenamento scheda = null;
+                    if (idSchedaEstratta != null) {
+                        scheda = new SchedaAllenamento(idSchedaEstratta,null,null,null);
+                        scheda.setId_Scheda(idSchedaEstratta);
+                    }
+
+                    // 3. Istanziazione dell'oggetto MembroVip[cite: 4]
+                    // Passiamo le stringhe estratte e creiamo nuove ArrayList vuote per tutte le liste dipendenti
+                    MembroVip membroTrovato = new MembroVip(
+                            idUtenteEstratto,
+                            nomeEstratto,
+                            cognomeEstratto,
+                            usernameEstratto,
+                            passwordEstratta,
+                            new ArrayList<>(), // pagamenti vuoti
+                            scheda,            // scheda allenamento instanziata sopra
+                            new ArrayList<>(), // partecipazioni vuote
+                            new ArrayList<>()  // serviziPrenotati vuoti[cite: 4]
+                    );
+
+                    return membroTrovato;
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante la ricerca del Membro Vip per Username: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        return membroVip;
+        // Se non troviamo nessuno, restituiamo null
+        return null;
     }
 
     @Override
     public List<MembroVip> trovaTutti() {
-        String query = "SELECT u.Id_Utente, u.Nome, u.Cognome, u.Username, u.Password " +
-                "FROM MembroVip mv " +
-                "JOIN Utente u ON mv.Id_Utente = u.Id_Utente";
-        List<MembroVip> listaMembriVip = new ArrayList<>();
+        // Inizializziamo la lista che conterrà tutti i risultati[cite: 3]
+        List<MembroVip> membri = new ArrayList<>();
+        String query = "SELECT * FROM membro_vip";
 
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
 
+            // Scorriamo tutte le righe della tabella
             while (rs.next()) {
-                listaMembriVip.add(mappaMembroVip(rs));
+
+                // RIPETIZIONE DELLA LOGICA DI ESTRAZIONE PER OGNI RIGA
+                String idUtenteEstratto = rs.getString("id_utente");
+                String nomeEstratto = rs.getString("nome");
+                String cognomeEstratto = rs.getString("cognome");
+                String usernameEstratto = rs.getString("username");
+                String passwordEstratta = rs.getString("password");
+                String idSchedaEstratta = rs.getString("id_scheda_allenamento");
+
+                SchedaAllenamento scheda = null;
+                if (idSchedaEstratta != null) {
+                    scheda = new SchedaAllenamento(idSchedaEstratta,null,null,null);
+                    scheda.setId_Scheda(idSchedaEstratta);
+                }
+
+                // Creazione dell'oggetto per la riga corrente
+                MembroVip membroCorrente = new MembroVip(
+                        idUtenteEstratto,
+                        nomeEstratto,
+                        cognomeEstratto,
+                        usernameEstratto,
+                        passwordEstratta,
+                        new ArrayList<>(),
+                        scheda,
+                        new ArrayList<>(),
+                        new ArrayList<>()
+                );
+
+                // Aggiungiamo l'oggetto appena creato alla lista
+                membri.add(membroCorrente);
             }
+
         } catch (SQLException e) {
-            System.err.println("Errore durante il recupero di tutti i Membri Vip: " + e.getMessage());
+            e.printStackTrace();
         }
 
-        return listaMembriVip;
+        return membri;
     }
 
     @Override
     public void aggiornaMembro(MembroVip membroVip) {
-        // L'aggiornamento dei dati anagrafici va fatto sulla tabella base Utente
-        String query = "UPDATE Utente SET Nome = ?, Cognome = ?, Username = ?, Password = ? WHERE Id_Utente = ?";
+        // Query di aggiornamento usando id_utente come chiave di ricerca (WHERE)[cite: 3]
+        String query = "UPDATE membro_vip SET nome = ?, cognome = ?, username = ?, password = ?, id_scheda_allenamento = ? WHERE id_utente = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, membroVip.getNome());
-            pstmt.setString(2, membroVip.getCognome());
-            pstmt.setString(3, membroVip.getUsername());
-            pstmt.setString(4, membroVip.getPassword());
-            pstmt.setString(5, membroVip.getId_utente());
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            pstmt.executeUpdate();
+            // Impostiamo i nuovi valori presi dall'oggetto
+            stmt.setString(1, membroVip.getNome());
+            stmt.setString(2, membroVip.getCognome());
+            stmt.setString(3, membroVip.getUsername());
+            stmt.setString(4, membroVip.getPassword());
+
+            // Aggiorniamo la chiave esterna della scheda allenamento
+            if (membroVip.getSchedaAllenamento() != null) {
+                stmt.setString(5, membroVip.getSchedaAllenamento().getId_Scheda());
+            } else {
+                stmt.setNull(5, Types.VARCHAR);
+            }
+
+            // Usiamo l'ID dell'utente per specificare quale riga modificare
+            stmt.setString(6, membroVip.getId_utente());
+
+            // Eseguiamo l'aggiornamento
+            stmt.executeUpdate();
+
         } catch (SQLException e) {
-            System.err.println("Errore durante l'aggiornamento del Membro Vip: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Metodo di supporto per convertire il ResultSet nell'oggetto MembroVip
-     * rispettando tutti i parametri richiesti dal costruttore della classe.
-     */
-    private MembroVip mappaMembroVip(ResultSet rs) throws SQLException {
-        String idUtente = rs.getString("Id_Utente");
-        String nome = rs.getString("Nome");
-        String cognome = rs.getString("Cognome");
-        String username = rs.getString("Username");
-        String password = rs.getString("Password");
 
-        // Richiamiamo il costruttore di MembroVip passando le liste vuote e la scheda nulla.
-        // Parametri: id_Utente, nome, cognome, username, password, pagamenti, schedaAllenamento, partecipazioni, serviziPrenotati
-        return new MembroVip(
-                idUtente,
-                nome,
-                cognome,
-                username,
-                password,
-                new ArrayList<Pagamento>(),
-                null,
-                new ArrayList<Partecipa>(),
-                new ArrayList<ServizioWellness>()
-        );
-    }
 }

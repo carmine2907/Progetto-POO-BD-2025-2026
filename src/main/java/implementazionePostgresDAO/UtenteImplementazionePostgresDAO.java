@@ -30,11 +30,12 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
         String query = "INSERT INTO Utente ( username,  password,  id_utente,  nome, cognome) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, utente.getId_utente());
-            pstmt.setString(2, utente.getNome());
-            pstmt.setString(3, utente.getCognome());
-            pstmt.setString(4, utente.getUsername());
-            pstmt.setString(5, utente.getPassword());
+            pstmt.setString(1, utente.getUsername());
+            pstmt.setString(2, utente.getPassword());
+            pstmt.setString(3, utente.getId_utente());
+            pstmt.setString(4, utente.getNome());
+            pstmt.setString(5, utente.getCognome());
+
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
