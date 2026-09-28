@@ -1,0 +1,554 @@
+Index: src/main/java/implementazionePostgresDAO/ServizioWellnessImplementazionePostgresDAO.java
+===================================================================
+diff --git a/src/main/java/implementazionePostgresDAO/ServizioWellnessImplementazionePostgresDAO.java b/src/main/java/implementazionePostgresDAO/ServizioWellnessImplementazionePostgresDAO.java
+deleted file mode 100644
+--- a/src/main/java/implementazionePostgresDAO/ServizioWellnessImplementazionePostgresDAO.java	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,102 +0,0 @@
+-package implementazionePostgresDAO;
+-
+-import dao.ServizioWellnessDAO;
+-import database.ConnessioneDatabase;
+-import model.ServizioWellness;
+-
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.ResultSet;
+-import java.sql.SQLException;
+-import java.sql.Statement;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class ServizioWellnessImplementazionePostgresDAO implements ServizioWellnessDAO {
+-
+-    private Connection connection;
+-
+-    public ServizioWellnessImplementazionePostgresDAO() {
+-        try {
+-            connection = ConnessioneDatabase.getInstance().getConnection();
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    public void salva(ServizioWellness servizioWellness) {
+-        String query = "INSERT INTO ServizioWellness (Id_ServizioWellness, NomeServizio, Disponibile) VALUES (?, ?, ?)";
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, servizioWellness.getId_ServizioWellness());
+-            pstmt.setString(2, servizioWellness.getNomeServizio());
+-            pstmt.setBoolean(3, servizioWellness.getDisponibile());
+-
+-            pstmt.executeUpdate();
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante il salvataggio del servizio wellness: " + e.getMessage());
+-        }
+-    }
+-
+-    @Override
+-    public ServizioWellness cercaPerId(String id_ServizioWellness) {
+-        String query = "SELECT * FROM ServizioWellness WHERE Id_ServizioWellness = ?";
+-        ServizioWellness servizio = null;
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, id_ServizioWellness);
+-
+-            try (ResultSet rs = pstmt.executeQuery()) {
+-                if (rs.next()) {
+-                    servizio = mappaServizioWellness(rs);
+-                }
+-            }
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante la ricerca del servizio wellness per ID: " + e.getMessage());
+-        }
+-
+-        return servizio;
+-    }
+-
+-    @Override
+-    public List<ServizioWellness> trovaTutti() {
+-        String query = "SELECT * FROM ServizioWellness";
+-        List<ServizioWellness> listaServizi = new ArrayList<>();
+-
+-        try (Statement stmt = connection.createStatement();
+-             ResultSet rs = stmt.executeQuery(query)) {
+-
+-            while (rs.next()) {
+-                listaServizi.add(mappaServizioWellness(rs));
+-            }
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante il recupero di tutti i servizi wellness: " + e.getMessage());
+-        }
+-
+-        return listaServizi;
+-    }
+-
+-    @Override
+-    public void aggiornaServizioWellness(ServizioWellness servizioWellness) {
+-        String query = "UPDATE ServizioWellness SET NomeServizio = ?, Disponibile = ? WHERE Id_ServizioWellness = ?";
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, servizioWellness.getNomeServizio());
+-            pstmt.setBoolean(2, servizioWellness.getDisponibile());
+-            pstmt.setString(3, servizioWellness.getId_ServizioWellness());
+-
+-            pstmt.executeUpdate();
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante l'aggiornamento del servizio wellness: " + e.getMessage());
+-        }
+-    }
+-
+-    private ServizioWellness mappaServizioWellness(ResultSet rs) throws SQLException {
+-        String idServizio = rs.getString("Id_ServizioWellness");
+-        String nomeServizio = rs.getString("NomeServizio");
+-        boolean disponibile = rs.getBoolean("Disponibile");
+-
+-        return new ServizioWellness(idServizio, nomeServizio, disponibile);
+-    }
+-}
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+deleted file mode 100644
+--- a/.idea/vcs.xml	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="VcsDirectoryMappings">
+-    <mapping directory="" vcs="Git" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: src/main/java/implementazionePostgresDAO/CorsoImplementazionePostgresDAO.java
+===================================================================
+diff --git a/src/main/java/implementazionePostgresDAO/CorsoImplementazionePostgresDAO.java b/src/main/java/implementazionePostgresDAO/CorsoImplementazionePostgresDAO.java
+deleted file mode 100644
+--- a/src/main/java/implementazionePostgresDAO/CorsoImplementazionePostgresDAO.java	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,144 +0,0 @@
+-package implementazionePostgresDAO;
+-
+-import dao.CorsoDAO;
+-import database.ConnessioneDatabase;
+-import model.Corso;
+-import model.Istruttore;
+-import model.Partecipa;
+-
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.ResultSet;
+-import java.sql.SQLException;
+-import java.sql.Statement;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class CorsoImplementazionePostgresDAO implements CorsoDAO {
+-
+-    private Connection connection;
+-
+-    public CorsoImplementazionePostgresDAO() {
+-        try {
+-            connection = ConnessioneDatabase.getInstance().getConnection();
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    public void salva(Corso corso) {
+-        String query = "INSERT INTO Corso (Id_Corso, NomeCorso, Capienza, Id_Istruttore) VALUES (?, ?, ?, ?)";
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, corso.getId_Corso());
+-            pstmt.setString(2, corso.getNomeCorso());
+-            pstmt.setInt(3, corso.getCapienza());
+-
+-            if (corso.getIstruttoreGestore() != null) {
+-                pstmt.setString(4, corso.getIstruttoreGestore().getId_utente());
+-            } else {
+-                pstmt.setNull(4, java.sql.Types.VARCHAR);
+-            }
+-
+-            pstmt.executeUpdate();
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante il salvataggio del corso: " + e.getMessage());
+-        }
+-    }
+-
+-    @Override
+-    public Corso cercaPerNomeCorso(String nomeCorso) {
+-        String query = "SELECT * FROM Corso WHERE NomeCorso = ?";
+-        Corso corso = null;
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, nomeCorso);
+-
+-            try (ResultSet rs = pstmt.executeQuery()) {
+-                if (rs.next()) {
+-                    corso = mappaCorso(rs);
+-                }
+-            }
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante la ricerca del corso per nome: " + e.getMessage());
+-        }
+-
+-        return corso;
+-    }
+-
+-    @Override
+-    public Corso cercaPerId_Corso(String id_Corso) {
+-        String query = "SELECT * FROM Corso WHERE Id_Corso = ?";
+-        Corso corso = null;
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, id_Corso);
+-
+-            try (ResultSet rs = pstmt.executeQuery()) {
+-                if (rs.next()) {
+-                    corso = mappaCorso(rs);
+-                }
+-            }
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante la ricerca del corso per ID: " + e.getMessage());
+-        }
+-
+-        return corso;
+-    }
+-
+-    @Override
+-    public List<Corso> trovaTutti() {
+-        String query = "SELECT * FROM Corso";
+-        List<Corso> listaCorsi = new ArrayList<>();
+-
+-        try (Statement stmt = connection.createStatement();
+-             ResultSet rs = stmt.executeQuery(query)) {
+-
+-            while (rs.next()) {
+-                listaCorsi.add(mappaCorso(rs));
+-            }
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante il recupero di tutti i corsi: " + e.getMessage());
+-        }
+-
+-        return listaCorsi;
+-    }
+-
+-    @Override
+-    public void aggiornaCorso(Corso corso) {
+-        String query = "UPDATE Corso SET NomeCorso = ?, Capienza = ?, Id_Istruttore = ? WHERE Id_Corso = ?";
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, corso.getNomeCorso());
+-            pstmt.setInt(2, corso.getCapienza());
+-
+-            if (corso.getIstruttoreGestore() != null) {
+-                pstmt.setString(3, corso.getIstruttoreGestore().getId_utente());
+-            } else {
+-                pstmt.setNull(3, java.sql.Types.VARCHAR);
+-            }
+-
+-            pstmt.setString(4, corso.getId_Corso());
+-
+-            pstmt.executeUpdate();
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante l'aggiornamento del corso: " + e.getMessage());
+-        }
+-    }
+-
+-    private Corso mappaCorso(ResultSet rs) throws SQLException {
+-        String idCorso = rs.getString("Id_Corso");
+-        String nomeCorso = rs.getString("NomeCorso");
+-        int capienza = rs.getInt("Capienza");
+-        String idIstruttore = rs.getString("Id_Istruttore");
+-
+-        Istruttore istruttore = null;
+-        if (idIstruttore != null) {
+-            istruttore = new Istruttore();
+-            istruttore.setId_utente(idIstruttore);
+-        }
+-
+-        return new Corso(idCorso, nomeCorso, capienza, istruttore, new ArrayList<Partecipa>());
+-    }
+-}
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+deleted file mode 100644
+--- a/.idea/jarRepositories.xml	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,20 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="RemoteRepositoriesConfiguration">
+-    <remote-repository>
+-      <option name="id" value="central" />
+-      <option name="name" value="Central Repository" />
+-      <option name="url" value="https://repo.maven.apache.org/maven2" />
+-    </remote-repository>
+-    <remote-repository>
+-      <option name="id" value="central" />
+-      <option name="name" value="Maven Central repository" />
+-      <option name="url" value="https://repo1.maven.org/maven2" />
+-    </remote-repository>
+-    <remote-repository>
+-      <option name="id" value="jboss.community" />
+-      <option name="name" value="JBoss Community repository" />
+-      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+-    </remote-repository>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+deleted file mode 100644
+--- a/.idea/misc.xml	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,12 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ExternalStorageConfigurationManager" enabled="true" />
+-  <component name="MavenProjectsManager">
+-    <option name="originalFiles">
+-      <list>
+-        <option value="$PROJECT_DIR$/pom.xml" />
+-      </list>
+-    </option>
+-  </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-25" project-jdk-type="JavaSDK" />
+-</project>
+\ No newline at end of file
+Index: src/main/java/implementazionePostgresDAO/MembroVipImplementazionePostgresDAO.java
+===================================================================
+diff --git a/src/main/java/implementazionePostgresDAO/MembroVipImplementazionePostgresDAO.java b/src/main/java/implementazionePostgresDAO/MembroVipImplementazionePostgresDAO.java
+deleted file mode 100644
+--- a/src/main/java/implementazionePostgresDAO/MembroVipImplementazionePostgresDAO.java	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,153 +0,0 @@
+-package implementazionePostgresDAO;
+-
+-import dao.MembroVipDAO;
+-import database.ConnessioneDatabase;
+-import model.MembroVip;
+-import model.Pagamento;
+-import model.Partecipa;
+-import model.SchedaAllenamento;
+-import model.ServizioWellness;
+-
+-import java.sql.Connection;
+-import java.sql.PreparedStatement;
+-import java.sql.ResultSet;
+-import java.sql.SQLException;
+-import java.sql.Statement;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
+-
+-    private Connection connection;
+-
+-    public MembroVipImplementazionePostgresDAO() {
+-        try {
+-            connection = ConnessioneDatabase.getInstance().getConnection();
+-        } catch (SQLException e) {
+-            e.printStackTrace();
+-        }
+-    }
+-
+-    @Override
+-    public void salva(MembroVip membroVip) {
+-        // Pattern Table-per-Subclass: Inserimento in Utente -> Iscritto -> MembroVip
+-        String queryUtente = "INSERT INTO Utente (Id_Utente, Nome, Cognome, Username, Password) VALUES (?, ?, ?, ?, ?)";
+-        String queryIscritto = "INSERT INTO Iscritto (Id_Utente) VALUES (?)";
+-        String queryMembroVip = "INSERT INTO MembroVip (Id_Utente) VALUES (?)";
+-
+-        try {
+-            // Inserimento nella tabella base (Utente)
+-            try (PreparedStatement pstmtUtente = connection.prepareStatement(queryUtente)) {
+-                pstmtUtente.setString(1, membroVip.getId_utente());
+-                pstmtUtente.setString(2, membroVip.getNome());
+-                pstmtUtente.setString(3, membroVip.getCognome());
+-                pstmtUtente.setString(4, membroVip.getUsername());
+-                pstmtUtente.setString(5, membroVip.getPassword());
+-                pstmtUtente.executeUpdate();
+-            }
+-
+-            // Inserimento nella tabella figlia (Iscritto)
+-            try (PreparedStatement pstmtIscritto = connection.prepareStatement(queryIscritto)) {
+-                pstmtIscritto.setString(1, membroVip.getId_utente());
+-                pstmtIscritto.executeUpdate();
+-            }
+-
+-            // Inserimento nella tabella nipote (MembroVip)
+-            try (PreparedStatement pstmtVip = connection.prepareStatement(queryMembroVip)) {
+-                pstmtVip.setString(1, membroVip.getId_utente());
+-                pstmtVip.executeUpdate();
+-            }
+-
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante il salvataggio del Membro Vip: " + e.getMessage());
+-        }
+-    }
+-
+-    @Override
+-    public MembroVip cercaPerUsername(String username) {
+-        // Recuperiamo i dati dalla tabella Utente, sapendo che l'utente è un MembroVip
+-        String query = "SELECT u.Id_Utente, u.Nome, u.Cognome, u.Username, u.Password " +
+-                "FROM MembroVip mv " +
+-                "JOIN Utente u ON mv.Id_Utente = u.Id_Utente " +
+-                "WHERE u.Username = ?";
+-        MembroVip membroVip = null;
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, username);
+-
+-            try (ResultSet rs = pstmt.executeQuery()) {
+-                if (rs.next()) {
+-                    membroVip = mappaMembroVip(rs);
+-                }
+-            }
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante la ricerca del Membro Vip per Username: " + e.getMessage());
+-        }
+-
+-        return membroVip;
+-    }
+-
+-    @Override
+-    public List<MembroVip> trovaTutti() {
+-        String query = "SELECT u.Id_Utente, u.Nome, u.Cognome, u.Username, u.Password " +
+-                "FROM MembroVip mv " +
+-                "JOIN Utente u ON mv.Id_Utente = u.Id_Utente";
+-        List<MembroVip> listaMembriVip = new ArrayList<>();
+-
+-        try (Statement stmt = connection.createStatement();
+-             ResultSet rs = stmt.executeQuery(query)) {
+-
+-            while (rs.next()) {
+-                listaMembriVip.add(mappaMembroVip(rs));
+-            }
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante il recupero di tutti i Membri Vip: " + e.getMessage());
+-        }
+-
+-        return listaMembriVip;
+-    }
+-
+-    @Override
+-    public void aggiornaMembro(MembroVip membroVip) {
+-        // L'aggiornamento dei dati anagrafici va fatto sulla tabella base Utente
+-        String query = "UPDATE Utente SET Nome = ?, Cognome = ?, Username = ?, Password = ? WHERE Id_Utente = ?";
+-
+-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+-            pstmt.setString(1, membroVip.getNome());
+-            pstmt.setString(2, membroVip.getCognome());
+-            pstmt.setString(3, membroVip.getUsername());
+-            pstmt.setString(4, membroVip.getPassword());
+-            pstmt.setString(5, membroVip.getId_utente());
+-
+-            pstmt.executeUpdate();
+-        } catch (SQLException e) {
+-            System.err.println("Errore durante l'aggiornamento del Membro Vip: " + e.getMessage());
+-        }
+-    }
+-
+-    /**
+-     * Metodo di supporto per convertire il ResultSet nell'oggetto MembroVip
+-     * rispettando tutti i parametri richiesti dal costruttore della classe.
+-     */
+-    private MembroVip mappaMembroVip(ResultSet rs) throws SQLException {
+-        String idUtente = rs.getString("Id_Utente");
+-        String nome = rs.getString("Nome");
+-        String cognome = rs.getString("Cognome");
+-        String username = rs.getString("Username");
+-        String password = rs.getString("Password");
+-
+-        // Richiamiamo il costruttore di MembroVip passando le liste vuote e la scheda nulla.
+-        // Parametri: id_Utente, nome, cognome, username, password, pagamenti, schedaAllenamento, partecipazioni, serviziPrenotati
+-        return new MembroVip(
+-                idUtente,
+-                nome,
+-                cognome,
+-                username,
+-                password,
+-                new ArrayList<Pagamento>(),
+-                null,
+-                new ArrayList<Partecipa>(),
+-                new ArrayList<ServizioWellness>()
+-        );
+-    }
+-}
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,10 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Ignored default folder with query files
+-/queries/
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+deleted file mode 100644
+--- a/.idea/encodings.xml	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,7 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="Encoding">
+-    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+-    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+deleted file mode 100644
+--- a/.idea/compiler.xml	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
++++ /dev/null	(revision 9f8bc715c0b3aab27d869b702116ae3746af0a49)
+@@ -1,13 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="CompilerConfiguration">
+-    <annotationProcessing>
+-      <profile name="Maven default annotation processors profile" enabled="true">
+-        <sourceOutputDir name="target/generated-sources/annotations" />
+-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+-        <outputRelativeToContentRoot value="true" />
+-        <module name="Applicativo" />
+-      </profile>
+-    </annotationProcessing>
+-  </component>
+-</project>
+\ No newline at end of file

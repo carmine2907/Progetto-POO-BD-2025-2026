@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class SchedaAllenamento {
     private String id_scheda;
     private String descrizione;

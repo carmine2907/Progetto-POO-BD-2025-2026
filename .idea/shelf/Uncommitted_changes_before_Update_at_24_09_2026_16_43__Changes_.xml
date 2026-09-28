@@ -1,0 +1,82 @@
+<changelist name="Uncommitted_changes_before_Update_at_24_09_2026_16_43_[Changes]" date="1790260985919" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_09_2026_16_43_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 24/09/2026 16:43 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/VerticalInfo.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/Main.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/MembroVip.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/LayoutState.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/dao/UtenteDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/Iscritto.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/Corso.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/GridConstraints.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/Util.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/AbstractLayout.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/database/ConnessioneDatabase.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/implementazionePostgresDAO/UtenteImplementazionePostgresDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/Home.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/DimensionInfo.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/HorizontalInfo.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/SupportCode.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/Utente.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/Pagamento.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/ServizioWellness.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/SupportCode$TextWithMnemonic.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/controller/Controller.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/Partecipa.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/Spacer.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/intellij/uiDesigner/core/GridLayoutManager.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/Istruttore.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/SchedaAllenamento.class" />
+  </binary>
+</changelist>
