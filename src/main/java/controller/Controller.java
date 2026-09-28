@@ -107,12 +107,50 @@ public class Controller {
 
     }
 
-    public Boolean haCapienzaMassima(int capienza ,int capienzaMax){
-        if(capienza<=capienzaMax){
-            return false;
-        }
-        else{
-            return true;
-        }
+    public boolean isCorsoAlCompleto(Corso corso ) {
+        PartecipaDAO partecipaDAO = new PartecipaImplementazionePostgresDAO();
+
+        // 1. Conto quanti iscritti ci sono attualmente nel database
+        int iscrittiAttuali = corsoDAO.contaIscrittiAlCorso(corso.getId_Corso());
+
+        // 2. Confronto con la capienza massima del corso
+        return iscrittiAttuali >= corso.getCapienza();
     }
+
+    public SchedaAllenamento visualizzaSchedaPersonale(Iscritto utenteLoggato) {
+
+        SchedaAllenamentoDAO schedaDAO = new implementazionePostgresDAO.SchedaAllenamentoImplementazionePostgresDAO();
+
+        return schedaDAO.cercaPerid_Iscritto(utenteLoggato.getId_utente());
+    }
+
+    public boolean prenotaCorso(Iscritto iscritto, Corso corso) throws Exception{
+// metodo da capire
+        // 1. Controllo se il corso è già al completo (usando il metodo discusso prima)
+        if (isCorsoAlCompleto(corso)) {
+            return false; // al posto di false fare una exception che controlli se il corso è al completo
+        }
+
+        // (Opzionale) Qui potresti aggiungere un controllo per verificare
+        // se l'iscritto ha già prenotato questo stesso corso in precedenza per evitare duplicati.
+        Partecipa nuovaPartecipazione = new Partecipa(corso.getId_Corso(),iscritto.getId_utente(),corso,iscritto);
+        // 2. Salvo nel Database
+        PartecipaImplementazionePostgresDAO partecipaDAO = new PartecipaImplementazionePostgresDAO();
+        partecipaDAO.salva(nuovaPartecipazione);
+
+        // 3. Aggiorno l'oggetto in memoria (se necessario per la sessione corrente)
+        // Ipotizzando che Partecipa abbia un costruttore (Iscritto, Corso)
+        if(iscritto.getPartecipazioni()!=null){
+            iscritto.getPartecipazioni().add(nuovaPartecipazione);
+        }
+
+
+        return true; // Prenotazione effettuata con successo
+    }
+public void StampaRicevuta(Pagamento ricevutapag){
+        System.out.println("hai pagato con successo:  "+"id_pagamento: "+ricevutapag.getId_Pagamento()+"euro: "+ricevutapag.getImporto());}
+
+
+
+
 }

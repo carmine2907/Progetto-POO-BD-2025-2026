@@ -98,12 +98,12 @@ public class PartecipaImplementazionePostgresDAO implements PartecipaDAO {
     }
 
     @Override
-    public List<Partecipa> trovaPartecipazioniPerIscritto(String idIscritto) {
+    public List<Partecipa> trovaPartecipazioniPerIscritto(String id_Iscritto) {
         String query = "SELECT * FROM Partecipa WHERE Id_Iscritto = ?";
         List<Partecipa> listaPartecipazioni = new ArrayList<>();
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, idIscritto);
+            pstmt.setString(1, id_Iscritto);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {

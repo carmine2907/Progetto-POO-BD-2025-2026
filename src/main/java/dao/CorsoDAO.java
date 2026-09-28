@@ -10,5 +10,5 @@ public interface CorsoDAO {
     Corso cercaPerId_Corso(String id_Corso);
     List<Corso> trovaTutti();
     void aggiornaCorso(Corso corso);
-
+    public int contaIscrittiAlCorso(String id_Corso);
 }

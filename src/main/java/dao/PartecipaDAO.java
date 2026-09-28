@@ -11,4 +11,5 @@ public interface PartecipaDAO {
     void aggiornaPartecipazione(Partecipa partecipa );
     List<Partecipa> trovaPartecipazioniPerCorso(String idCorso);
     List<Partecipa> trovaPartecipazioniPerIscritto(String idIscritto);
+
 }

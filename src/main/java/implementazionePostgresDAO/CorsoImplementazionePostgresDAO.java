@@ -224,4 +224,23 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
             e.printStackTrace();
         }
     }
+
+    public int contaIscrittiAlCorso(String id_Corso) {
+        String query = "SELECT COUNT(*) AS numero_iscritti FROM Partecipa WHERE Id_Corso = ?";
+        int conteggio = 0;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, id_Corso);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    conteggio = rs.getInt("numero_iscritti");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nel conteggio degli iscritti: " + e.getMessage());
+        }
+        return conteggio;
+    }
+
+
 }
