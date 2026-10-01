@@ -150,7 +150,73 @@ public class Controller {
 public void StampaRicevuta(Pagamento ricevutapag){
         System.out.println("hai pagato con successo:  "+"id_pagamento: "+ricevutapag.getId_Pagamento()+"euro: "+ricevutapag.getImporto());}
 
+    public Pagamento pagaAbbonamento( String id_pagamento) throws Exception {
 
+        // 1. Evitiamo di inserire pagamenti doppi con lo stesso ID
+        if (pagamentoDAO.cercaPerId_Pagamento(id_pagamento) != null) {
+            throw new Exception("Esiste già un pagamento registrato con questo ID!");
+        }
 
+        double importoCorretto;
 
+        // 2. Determino l'importo PRIMA di creare l'oggetto
+        if (utenteLoggato instanceof MembroVip) {
+            importoCorretto = 70.0;
+        } else if (utenteLoggato instanceof Iscritto) {
+            importoCorretto = 50.0;
+        } else {
+            throw new Exception("Questo tipo di utente non può effettuare abbonamenti.");
+        }
+
+        // 3. Creo l'oggetto con l'importo corretto
+        Pagamento pagamento = new Pagamento(id_pagamento, importoCorretto, (Iscritto) utenteLoggato);
+
+        // 4. Salvo nel database
+        pagamentoDAO.salva(pagamento);
+
+        // 5. Aggiorno la lista dell'utente in memoria
+        if (utenteLoggato instanceof Iscritto) {
+            ((Iscritto) utenteLoggato).getPagamenti().add(pagamento);
+        }
+
+        return pagamento;
+    }
+    // metodo utile per la creaione di bottone per la gui
+    public void AccessoAreaWellness(){
+        if(!(utenteLoggato instanceof MembroVip)){
+
+        }
+    }
+    public ServizioWellness GetInfoServizi(ServizioWellness servizioWellness){
+servizioWellness.getId_ServizioWellness();
+servizioWellness.getNomeServizio();
+servizioWellness.getDisponibile();
+return servizioWellness;
+    }
+
+    public class ServizioController {
+
+        // Nota: Uso MembroVip perché il tuo DAO carica e salva un MembroVip, non un Iscritto generico
+        public boolean prenotaServizi(MembroVip utenteLoggato, List<ServizioWellness> serviziSelezionati) {
+
+            ServizioWellnessDAO servizioDAO = new implementazionePostgresDAO.ServizioWellnessImplementazionePostgresDAO();
+
+            for (ServizioWellness servizio : serviziSelezionati) {
+
+                // 1. Modifico lo stato dell'oggetto in memoria
+                servizio.setDisponibile(false); // Il servizio non è più disponibile per altri
+                servizio.setMembroPrenotante(utenteLoggato); // Assegno l'utente come proprietario
+
+                // 2. Richiamo il tuo metodo per aggiornare il database
+                servizioDAO.aggiornaServizioWellness(servizio);
+
+                // 3. Aggiorno la lista interna del membro vip
+                if (utenteLoggato.getServiziPrenotati() != null) {
+                    utenteLoggato.getServiziPrenotati().add(servizio);
+                }
+            }
+
+            return true;
+        }
+    }
 }
