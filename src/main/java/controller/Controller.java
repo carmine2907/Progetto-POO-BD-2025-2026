@@ -1,4 +1,6 @@
 package controller;
+import controller.Exception.CorsoGiaEsistenteException;
+import controller.Exception.SchedaGiaEsistenteException;
 import dao.*;
 import implementazionePostgresDAO.*;
 import model.*;
@@ -37,8 +39,6 @@ public class Controller {
         Utente u = utenteDAO.cercaPerUsername(username);
 
         if (u != null && u.getPassword().equals(password)) {
-            // Per avere l'oggetto specializzato, potresti dover interrogare i DAO specifici
-            // In un'app reale si verifica in quale tabella figlia si trova l'utente
             Istruttore istruttore = istruttoreDAO.cercaPerUsername(username);
             if(istruttore != null) {
                 this.utenteLoggato = istruttore;
@@ -71,8 +71,8 @@ public class Controller {
     public Corso CreaCorso  (String id_Corso, String nomeCorso, int capienza, Istruttore istruttoreGestore, ArrayList<Partecipa> partecipazione) throws Exception{
          capienza=0;
         if(corsoDAO.cercaPerNomeCorso(nomeCorso)!=null && corsoDAO.cercaPerId_Corso(id_Corso)!=null){
-          //checked exception da fare
-            throw new Exception("Corso già esistente ");
+
+            throw new CorsoGiaEsistenteException("Corso già esistente ");
         }
         Corso corsoCreato = new Corso(id_Corso,nomeCorso,capienza, istruttoreGestore,partecipazione) ;
         corsoDAO.salva(corsoCreato);
@@ -81,7 +81,7 @@ public class Controller {
     public SchedaAllenamento CreaScheda(String id_scheda,String descrizione ,Istruttore istruttoreCreatore,Iscritto iscrittoPropietario,String id_iscritto)throws Exception{
        if(schedaAllenamentoDAO.cercaPerId_Scheda(id_scheda)!=null && schedaAllenamentoDAO.cercaPerid_Iscritto(id_iscritto)!=null){
           // checked
-           throw new Exception("scheda già esistente!!! ");
+           throw new SchedaGiaEsistenteException("scheda già esistente!!! ");
        }
 
         SchedaAllenamento schedaCreata= new SchedaAllenamento(id_scheda,descrizione,istruttoreCreatore,iscrittoPropietario);
@@ -93,10 +93,12 @@ public class Controller {
         //creare una exception che sia in grado di controllare se l'utente abbia premuto il bottone di pagamento
         //if()
         //creare un exception per quando un utente ha già una scheda  già assegnata
-  //     if()
+
         // 1. Crea la nuova istanza della scheda
         SchedaAllenamento nuovaScheda = new SchedaAllenamento(id_scheda, descrizione, istruttoreCreatore, iscrittoPropietario);
-
+if(nuovaScheda!= null){
+    throw new  SchedaGiaEsistenteException("scheda gia assegnata !!");
+}
         // 2. Aggiorna le liste degli oggetti in memoria
         istruttoreCreatore.getSchedeCreate().add(nuovaScheda);
         iscrittoPropietario.setSchedaAllenamento(nuovaScheda);
@@ -162,39 +164,40 @@ public void StampaRicevuta(Pagamento ricevutapag){
         // 2. Determino l'importo PRIMA di creare l'oggetto
         if (utenteLoggato instanceof MembroVip) {
             importoCorretto = 70.0;
-        } else if (utenteLoggato instanceof Iscritto) {
-            importoCorretto = 50.0;
         } else {
-            throw new Exception("Questo tipo di utente non può effettuare abbonamenti.");
+            importoCorretto = 50.0;
+
+            // 3. Creo l'oggetto con l'importo corretto
+            Pagamento pagamento = new Pagamento(id_pagamento, importoCorretto, (Iscritto) utenteLoggato);
+
+            // 4. Salvo nel database
+            pagamentoDAO.salva(pagamento);
+
+            // 5. Aggiorno la lista dell'utente in memoria
+            if (utenteLoggato instanceof Iscritto) {
+                ((Iscritto) utenteLoggato).getPagamenti().add(pagamento);
+            }
+
+            return pagamento;
         }
-
-        // 3. Creo l'oggetto con l'importo corretto
-        Pagamento pagamento = new Pagamento(id_pagamento, importoCorretto, (Iscritto) utenteLoggato);
-
-        // 4. Salvo nel database
-        pagamentoDAO.salva(pagamento);
-
-        // 5. Aggiorno la lista dell'utente in memoria
-        if (utenteLoggato instanceof Iscritto) {
-            ((Iscritto) utenteLoggato).getPagamenti().add(pagamento);
-        }
-
-        return pagamento;
+        return null;
     }
-    // metodo utile per la creaione di bottone per la gui
+
+    // metodo utile per la creazione del bottone per la gui
     public void AccessoAreaWellness(){
         if(!(utenteLoggato instanceof MembroVip)){
 
         }
     }
+
     public ServizioWellness GetInfoServizi(ServizioWellness servizioWellness){
-servizioWellness.getId_ServizioWellness();
-servizioWellness.getNomeServizio();
-servizioWellness.getDisponibile();
-return servizioWellness;
+  servizioWellness.getId_ServizioWellness();
+     servizioWellness.getNomeServizio();
+          servizioWellness.getDisponibile();
+
+          return servizioWellness;
     }
 
-    public class ServizioController {
 
         // Nota: Uso MembroVip perché il tuo DAO carica e salva un MembroVip, non un Iscritto generico
         public boolean prenotaServizi(MembroVip utenteLoggato, List<ServizioWellness> serviziSelezionati) {
@@ -219,4 +222,4 @@ return servizioWellness;
             return true;
         }
     }
-}
+
