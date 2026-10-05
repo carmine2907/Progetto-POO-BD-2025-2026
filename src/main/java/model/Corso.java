@@ -34,4 +34,9 @@ public class Corso {
 
     public List<Partecipa> getPartecipazioni() { return partecipazioni; }
     public void setPartecipazioni(List<Partecipa> partecipazioni) { this.partecipazioni = partecipazioni; }
+
+    @Override
+    public String toString() {
+        return "Corso{" + "nomeCorso='" + nomeCorso + '\'' + '}';
+    }
 }

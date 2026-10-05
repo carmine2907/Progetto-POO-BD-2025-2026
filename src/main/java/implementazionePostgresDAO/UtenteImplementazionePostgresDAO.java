@@ -27,14 +27,14 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
     @Override
     public void salva(Utente utente) {
-        String query = "INSERT INTO Utente ( username,  password,  id_utente,  nome, cognome) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Utente ( id_utente,nome,cognome,username,password) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, utente.getUsername());
-            pstmt.setString(2, utente.getPassword());
-            pstmt.setString(3, utente.getId_utente());
-            pstmt.setString(4, utente.getNome());
-            pstmt.setString(5, utente.getCognome());
+            pstmt.setString(1, utente.getId_utente());
+            pstmt.setString(2, utente.getNome());
+            pstmt.setString(3, utente.getCognome());
+            pstmt.setString(4, utente.getUsername());
+            pstmt.setString(5, utente.getPassword());
 
 
             pstmt.executeUpdate();

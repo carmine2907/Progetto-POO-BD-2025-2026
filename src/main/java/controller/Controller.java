@@ -4,7 +4,7 @@ import controller.Exception.SchedaGiaEsistenteException;
 import dao.*;
 import implementazionePostgresDAO.*;
 import model.*;
-
+import controller.Exception.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,25 +38,31 @@ public class Controller {
     public boolean accedi(String username, String password) throws Exception {
         Utente u = utenteDAO.cercaPerUsername(username);
 
-        if (u != null && u.getPassword().equals(password)) {
-            Istruttore istruttore = istruttoreDAO.cercaPerUsername(username);
-            if(istruttore != null) {
-                this.utenteLoggato = istruttore;
-                return true;
-            }
+        if (u == null) {
 
-            MembroVip vip = membroVipDAO.cercaPerUsername(username);
-            if(vip != null) {
-                this.utenteLoggato = vip;
-                return true;
-            }
-
-            Iscritto iscritto = iscrittoDAO.cercaPerUsername(username);
-            if(iscritto != null) {
-                this.utenteLoggato = iscritto;
-                return true;
-            }
+            throw new Exception("Credenziali errate!");
         }
+
+        Istruttore istruttore = istruttoreDAO.cercaPerUsername(username);
+        if(istruttore != null) {
+
+            this.utenteLoggato = istruttore;
+            return true;
+        }
+
+        MembroVip vip = membroVipDAO.cercaPerUsername(username);
+        if(vip != null) {
+            this.utenteLoggato = vip;
+            return true;
+        }
+
+        Iscritto iscritto = iscrittoDAO.cercaPerUsername(username);
+        if(iscritto != null) {
+
+            this.utenteLoggato = iscritto;
+            return true;
+        }
+
         throw new Exception("Credenziali errate!");
     }
 
@@ -149,14 +155,26 @@ if(nuovaScheda!= null){
 
         return true; // Prenotazione effettuata con successo
     }
-public void StampaRicevuta(Pagamento ricevutapag){
-        System.out.println("hai pagato con successo:  "+"id_pagamento: "+ricevutapag.getId_Pagamento()+"euro: "+ricevutapag.getImporto());}
+ public String StampaRicevuta(Pagamento ricevutapag){
 
-    public Pagamento pagaAbbonamento( String id_pagamento) throws Exception {
+        return "pagamento riuscito\n  "+"idpagamento: "+ricevutapag.getId_Pagamento()+"\n euro: "+ricevutapag.getImporto();
+
+    }
+
+    public Pagamento pagaAbbonamento( String id_pagamento) throws PagamentoGiaEffettuatoException {
 
         // 1. Evitiamo di inserire pagamenti doppi con lo stesso ID
         if (pagamentoDAO.cercaPerId_Pagamento(id_pagamento) != null) {
-            throw new Exception("Esiste già un pagamento registrato con questo ID!");
+            throw new PagamentoGiaEffettuatoException("Esiste già un pagamento registrato con questo ID!");
+        }
+
+        if (utenteLoggato instanceof Iscritto) {
+            Iscritto iscritto = (Iscritto) utenteLoggato;
+
+
+            if (iscritto.getPagamenti() != null && !iscritto.getPagamenti().isEmpty()) {
+                throw new PagamentoGiaEffettuatoException("Hai già effettuato il pagamento del tuo abbonamento!");
+            }
         }
 
         double importoCorretto;
@@ -183,10 +201,13 @@ public void StampaRicevuta(Pagamento ricevutapag){
         return null;
     }
 
-    // metodo utile per la creazione del bottone per la gui
-    public void AccessoAreaWellness(){
-        if(!(utenteLoggato instanceof MembroVip)){
 
+    public boolean AccessoAreaWellness() throws Exception {
+
+        if (this.utenteLoggato instanceof MembroVip) {
+            return true;
+        } else {
+            throw new Exception("Accesso Negato: L'Area  è riservata esclusivamente ai Membri VIP. ");
         }
     }
 
@@ -221,5 +242,10 @@ public void StampaRicevuta(Pagamento ricevutapag){
 
             return true;
         }
+
+    public List<Corso> ottieniTuttiICorsi() {
+        return corsoDAO.trovaTutti();
+    }
+
     }
 

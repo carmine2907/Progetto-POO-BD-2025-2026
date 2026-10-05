@@ -81,7 +81,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
                     // Estraiamo il valore della colonna 'id_corso' dal database
                     String idCorsoEstratto = rs.getString("id_corso");
                     // Estraiamo il valore della colonna 'nome_corso' dal database
-                    String nomeCorsoEstratto = rs.getString("nome_corso");
+                    String nomeCorsoEstratto = rs.getString("NomeCorso");
                     // Estraiamo il valore della colonna 'capienza' dal database
                     int capienzaEstratta = rs.getInt("capienza");
                     // Estraiamo l'ID dell'istruttore dalla chiave esterna (se presente)
@@ -130,7 +130,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
 
                     // Estraiamo singolarmente ogni colonna della riga corrente
                     String idCorsoEstratto = rs.getString("id_corso");
-                    String nomeCorsoEstratto = rs.getString("nome_corso");
+                    String nomeCorsoEstratto = rs.getString("NomeCorso");
                     int capienzaEstratta = rs.getInt("capienza");
                     String idIstruttoreEstratto = rs.getString("id_istruttore");
 
@@ -168,7 +168,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
                 // RIPETIAMO LA LOGICA DI ESTRAZIONE PER OGNI SINGOLA RIGA TROVATA:
 
                 String idCorsoEstratto = rs.getString("id_corso");
-                String nomeCorsoEstratto = rs.getString("nome_corso");
+                String nomeCorsoEstratto = rs.getString("NomeCorso");
                 int capienzaEstratta = rs.getInt("capienza");
                 String idIstruttoreEstratto = rs.getString("id_istruttore");
 

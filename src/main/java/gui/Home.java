@@ -2,12 +2,13 @@ package gui;
 
 import controller.Controller;
 import model.*;
-
+import dao.*;
+import implementazionePostgresDAO.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Home {
+public class Home extends JFrame{
     private JPanel mainPanel;
     private JTextField Jtext;
     private JPasswordField JpasswordField;
@@ -17,7 +18,7 @@ public class Home {
     private static JFrame frameHome;
     private Controller controller;
 
-    public Home() {
+    public Home () {
         controller = new Controller();
         frameHome = new JFrame("Home");
         frameHome.setContentPane(this.mainPanel);
@@ -45,10 +46,7 @@ public class Home {
                     if (successo) {
                         Utente utenteLoggato = controller.getUtenteLoggato();
 
-                        JOptionPane.showMessageDialog(null,
-                                "Accesso effettuato con successo!",
-                                "Login Completato",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Accesso effettuato con successo!", "Login Completato", JOptionPane.INFORMATION_MESSAGE);
 
                         frameHome.dispose();
 
@@ -57,7 +55,7 @@ public class Home {
                             // (Opzionale) Se ti servono metodi specifici dell'istruttore, fai il cast:
                             Istruttore istruttore = (Istruttore) utenteLoggato;
 
-                            IstruttoreGUI istruttoreGUI = new IstruttoreGUI(controller);
+                            IstruttoreGUI istruttoreGUI = new IstruttoreGUI();
                             istruttoreGUI.setVisible(true);
 
                         } else if (utenteLoggato instanceof MembroVip || utenteLoggato instanceof Iscritto) {
