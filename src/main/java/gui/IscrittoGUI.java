@@ -148,7 +148,28 @@ public class IscrittoGUI extends JFrame {
         JAreaWellness.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(mainPanel, "Accesso all'Area Wellness in via di sviluppo.");
+                try {
+                    // 1. Chiediamo al controller se l'utente ha i permessi
+                    boolean accessoConsentito = controller.AccessoAreaWellness();
+
+                    // 2. Se non viene lanciata nessuna eccezione, l'accesso è consentito
+                    if (accessoConsentito) {
+                        JOptionPane.showMessageDialog(mainPanel,
+                                "Verifica completata. Benvenuto nell'Area Wellness VIP!",
+                                "Accesso Consentito",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                        AreaWellnessGUI areaWellnessGUI = new AreaWellnessGUI(controller);
+                        areaWellnessGUI.setVisible(true);
+                        dispose();
+                    }
+                } catch (Exception ex) {
+                    // 3. Se l'utente è un normale Iscritto, catturiamo l'eccezione e mostriamo l'errore
+                    JOptionPane.showMessageDialog(mainPanel,
+                            ex.getMessage(),
+                            "Accesso Negato",
+                            JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
     }
