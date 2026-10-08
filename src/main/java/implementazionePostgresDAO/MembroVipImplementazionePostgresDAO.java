@@ -30,7 +30,7 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
     @Override
     public void salva(MembroVip membroVip) {
         // Query di inserimento. Assumiamo che ci sia una tabella 'membro_vip' (o 'utente') con queste colonne
-        String query = "INSERT INTO membro_vip (id_utente, nome, cognome, username, password, id_scheda_allenamento) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO MembroVip (id_utente, nome, cognome, username, password, id_scheda_allenamento) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -59,20 +59,16 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
         }
     }
 
-    @Override
     public MembroVip cercaPerUsername(String username) {
-        // Query per trovare un membro in base all'username
-        String query = "SELECT * FROM membro_vip WHERE username = ?";
+        // Query corretta: Unisce MembroVip a Utente (per l'username/dati base)
+        // e a SchedaAllenamento (tramite l'ID) tramite LEFT JOIN nel caso non abbia una scheda.
+        String query = "SELECT " + "u.Id_Utente AS id_utente, " + "u.Nome AS nome, " + "u.Cognome AS cognome, " + "u.Username AS username, " + "u.Password AS password, " + "sa.Id_Scheda AS id_scheda_allenamento " + "FROM MembroVip mv " + "JOIN Utente u ON mv.Id_MembroVip = u.Id_Utente " + "LEFT JOIN SchedaAllenamento sa ON mv.Id_MembroVip = sa.Id_Iscritto " + "WHERE u.Username = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            // Sostituiamo il punto interrogativo con l'username passato al metodo
             stmt.setString(1, username);
 
             try (ResultSet rs = stmt.executeQuery()) {
-                // Se troviamo una corrispondenza nel database
                 if (rs.next()) {
-
-                    // 1. Estrazione esplicita di tutti i campi base
                     String idUtenteEstratto = rs.getString("id_utente");
                     String nomeEstratto = rs.getString("nome");
                     String cognomeEstratto = rs.getString("cognome");
@@ -80,25 +76,22 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
                     String passwordEstratta = rs.getString("password");
                     String idSchedaEstratta = rs.getString("id_scheda_allenamento");
 
-                    // 2. Creazione dell'oggetto dipendente "SchedaAllenamento" (Proxy)
                     SchedaAllenamento scheda = null;
                     if (idSchedaEstratta != null) {
-                        scheda = new SchedaAllenamento(idSchedaEstratta,null,null,null);
+                        scheda = new SchedaAllenamento(idSchedaEstratta, null, null, null);
                         scheda.setId_Scheda(idSchedaEstratta);
                     }
 
-                    // 3. Istanziazione dell'oggetto MembroVip[cite: 4]
-                    // Passiamo le stringhe estratte e creiamo nuove ArrayList vuote per tutte le liste dipendenti
                     MembroVip membroTrovato = new MembroVip(
                             idUtenteEstratto,
                             nomeEstratto,
                             cognomeEstratto,
                             usernameEstratto,
                             passwordEstratta,
-                            new ArrayList<>(), // pagamenti vuoti
-                            scheda,            // scheda allenamento instanziata sopra
-                            new ArrayList<>(), // partecipazioni vuote
-                            new ArrayList<>()  // serviziPrenotati vuoti[cite: 4]
+                            new ArrayList<>(),
+                            scheda,
+                            new ArrayList<>(),
+                            new ArrayList<>()
                     );
 
                     return membroTrovato;
@@ -107,15 +100,14 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // Se non troviamo nessuno, restituiamo null
         return null;
     }
 
     @Override
     public List<MembroVip> trovaTutti() {
-        // Inizializziamo la lista che conterrà tutti i risultati[cite: 3]
+        // Inizializziamo la lista che conterrà tutti i
         List<MembroVip> membri = new ArrayList<>();
-        String query = "SELECT * FROM membro_vip";
+        String query = "SELECT * FROM MembroVip";
 
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -164,7 +156,7 @@ public class MembroVipImplementazionePostgresDAO implements MembroVipDAO {
     @Override
     public void aggiornaMembro(MembroVip membroVip) {
         // Query di aggiornamento usando id_utente come chiave di ricerca (WHERE)[cite: 3]
-        String query = "UPDATE membro_vip SET nome = ?, cognome = ?, username = ?, password = ?, id_scheda_allenamento = ? WHERE id_utente = ?";
+        String query = "UPDATE MembroVip SET nome = ?, cognome = ?, username = ?, password = ?, id_scheda_allenamento = ? WHERE id_utente = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 

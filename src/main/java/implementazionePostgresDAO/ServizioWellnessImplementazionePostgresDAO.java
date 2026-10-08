@@ -37,7 +37,7 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
     @Override
     public void salva(ServizioWellness servizioWellness) {
         // Prepariamo la query SQL di inserimento per il servizio wellness
-        String query = "INSERT INTO servizio_wellness (id_serviziowellness, nome_servizio, disponibile, id_membro_prenotante) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO servizio_wellness (Id_ServizioWellness, nome_servizio, disponibile, id_membro_prenotante) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -169,7 +169,7 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
     @Override
     public void aggiornaServizioWellness(ServizioWellness servizioWellness) {
         // Query per aggiornare i campi di un servizio esistente[cite: 6]
-        String query = "UPDATE servizio_wellness SET nome_servizio = ?, disponibile = ?, id_membro_prenotante = ? WHERE id_serviziowellness = ?";
+        String query = "UPDATE ServizioWellness SET NomeServizio = ?, Disponibile = ? WHERE Id_ServizioWellness = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -183,17 +183,17 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
                 stmt.setNull(2, Types.BOOLEAN);
             }
 
-            // Aggiorniamo la chiave esterna del membro (potrebbe essere stata assegnata o rimossa)[cite: 5]
+            // Aggiorniamo la chiave esterna del membro (potrebbe essere stata assegnata o rimossa)
             if (servizioWellness.getMembroPrenotante() != null) {
                 stmt.setString(3, servizioWellness.getMembroPrenotante().getId_utente());
             } else {
                 stmt.setNull(3, Types.VARCHAR); // Se il membro prenotante è null, rimuoviamo l'associazione nel DB
             }
 
-            // Specifichiamo l'ID del servizio da modificare (la clausola WHERE)[cite: 5]
-            stmt.setString(4, servizioWellness.getId_ServizioWellness());
+            // Specifichiamo l'ID del servizio da modificare
+            stmt.setString(3, servizioWellness.getId_ServizioWellness());
 
-            // Eseguiamo l'aggiornamento
+
             stmt.executeUpdate();
 
         } catch (SQLException e) {

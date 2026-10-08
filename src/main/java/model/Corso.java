@@ -37,6 +37,6 @@ public class Corso {
 
     @Override
     public String toString() {
-        return "Corso{" + "nomeCorso='" + nomeCorso + '\'' + '}';
+        return "Corso" + "nomeCorso='" + nomeCorso ;
     }
 }

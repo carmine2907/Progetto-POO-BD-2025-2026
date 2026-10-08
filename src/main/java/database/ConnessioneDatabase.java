@@ -51,7 +51,5 @@ public class ConnessioneDatabase {
 	 */
 
 	public Connection getConnection() {
-
-		return connection;
-	}
+		return connection;}
 }

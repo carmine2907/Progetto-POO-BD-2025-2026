@@ -54,11 +54,11 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     utente = new Utente(
-                            rs.getString("Id_Utente"),
-                            rs.getString("Nome"),
-                            rs.getString("Cognome"),
-                            rs.getString("Username"),
-                            rs.getString("Password")
+                            rs.getString("id_utente"),
+                            rs.getString("nome"),
+                            rs.getString("cognome"),
+                            rs.getString("username"),
+                            rs.getString("password")
                     );
                 }
             }
@@ -80,11 +80,11 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     utente = new Utente(
-                            rs.getString("Id_Utente"),
-                            rs.getString("Nome"),
-                            rs.getString("Cognome"),
-                            rs.getString("Username"),
-                            rs.getString("Password")
+                            rs.getString("id_utente"),
+                            rs.getString("nome"),
+                            rs.getString("cognome"),
+                            rs.getString("username"),
+                            rs.getString("password")
                     );
                 }
             }
@@ -105,11 +105,11 @@ public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
             while (rs.next()) {
                 Utente utente = new Utente(
-                        rs.getString("Id_Utente"),
-                        rs.getString("Nome"),
-                        rs.getString("Cognome"),
-                        rs.getString("Username"),
-                        rs.getString("Password")
+                        rs.getString("id_utente"),
+                        rs.getString("nome"),
+                        rs.getString("cognome"),
+                        rs.getString("username"),
+                        rs.getString("password")
                 );
                 listaUtenti.add(utente);
             }

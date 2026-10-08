@@ -9,7 +9,7 @@ public class Istruttore extends Utente {
 
 
     public Istruttore(String id_utente, String nome, String cognome, String username, String password, List<Corso> corsiGestiti, List<SchedaAllenamento> schedeCreate) {
-        super(username,  password,  id_utente,  nome,  cognome);
+        super(id_utente,  password, username,  nome,  cognome);
         this.corsiGestiti = corsiGestiti;
         this.schedeCreate = schedeCreate;
     }
@@ -19,4 +19,5 @@ public class Istruttore extends Utente {
 
     public List<SchedaAllenamento> getSchedeCreate() { return schedeCreate; }
     public void setSchedeCreate(List<SchedaAllenamento> schedeCreate) { this.schedeCreate = schedeCreate; }
+
 }

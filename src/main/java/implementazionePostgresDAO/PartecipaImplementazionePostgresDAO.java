@@ -25,8 +25,8 @@ public class PartecipaImplementazionePostgresDAO implements PartecipaDAO {
 
     @Override
     public void salva(Partecipa partecipa) {
-        String query = "INSERT INTO Partecipa (Id_Corso, Id_Iscritto) VALUES (?, ?)";
-
+       // String query = "INSERT INTO Partecipa (Id_Corso, Id_Iscritto) VALUES (?, ?)";
+        String query = "INSERT INTO Partecipa (Id_Corso, Id_Iscritto) VALUES (?, ?) ON CONFLICT DO NOTHING";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, partecipa.getId_Corso());
             pstmt.setString(2, partecipa.getId_utente());

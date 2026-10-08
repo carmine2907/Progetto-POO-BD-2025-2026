@@ -55,7 +55,7 @@ public class Home extends JFrame{
                             // (Opzionale) Se ti servono metodi specifici dell'istruttore, fai il cast:
                             Istruttore istruttore = (Istruttore) utenteLoggato;
 
-                            IstruttoreGUI istruttoreGUI = new IstruttoreGUI();
+                            IstruttoreGUI istruttoreGUI = new IstruttoreGUI(controller);
                             istruttoreGUI.setVisible(true);
 
                         } else if (utenteLoggato instanceof MembroVip || utenteLoggato instanceof Iscritto) {

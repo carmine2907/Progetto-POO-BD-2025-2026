@@ -84,11 +84,11 @@ public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     iscritto = new Iscritto(
-                            rs.getString("Id_Utente"),
-                            rs.getString("Nome"),
-                            rs.getString("Cognome"),
-                            rs.getString("Username"),
-                            rs.getString("Password"),
+                            rs.getString("id_utente"),
+                            rs.getString("nome"),
+                            rs.getString("cognome"),
+                            rs.getString("username"),
+                            rs.getString("password"),
                             new ArrayList<Pagamento>(),
                             null,
                             new ArrayList<Partecipa>()
@@ -113,11 +113,11 @@ public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
 
             while (rs.next()) {
                 Iscritto iscritto = new Iscritto(
-                        rs.getString("Id_Utente"),
-                        rs.getString("Nome"),
-                        rs.getString("Cognome"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
+                        rs.getString("id_utente"),
+                        rs.getString("nome"),
+                        rs.getString("cognome"),
+                        rs.getString("username"),
+                        rs.getString("password"),
                         new ArrayList<Pagamento>(),
                         null,
                         new ArrayList<Partecipa>()

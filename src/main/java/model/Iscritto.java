@@ -9,7 +9,7 @@ public class Iscritto extends Utente {
 
 
     public Iscritto(String id_utente, String nome, String cognome, String username, String password, List<Pagamento> pagamenti, SchedaAllenamento schedaAllenamento, List<Partecipa> partecipazioni) {
-        super(username, password,  id_utente ,nome,  cognome);
+        super(id_utente, nome, cognome, username,password);
         this.pagamenti = pagamenti;
         this.schedaAllenamento = schedaAllenamento;
         this.partecipazioni = partecipazioni;
@@ -23,4 +23,5 @@ public class Iscritto extends Utente {
 
     public List<Partecipa> getPartecipazioni() { return partecipazioni; }
     public void setPartecipazioni(List<Partecipa> partecipazioni) { this.partecipazioni = partecipazioni; }
+
 }

@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,22 +26,29 @@ public class SchedaAllenamentoImplementazionePostgresDAO implements SchedaAllena
     }
 
     @Override
-    public void salva(SchedaAllenamento schedaAllenamento) {
+    public void salva(SchedaAllenamento scheda) {
         String query = "INSERT INTO SchedaAllenamento (Id_Scheda, Descrizione, Id_Istruttore, Id_Iscritto) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, schedaAllenamento.getId_Scheda());
-            pstmt.setString(2, schedaAllenamento.getDescrizione());
+            pstmt.setString(1, scheda.getId_Scheda());
+            pstmt.setString(2, scheda.getDescrizione());
 
-            // Estraiamo gli ID dagli oggetti annidati.
-            // N.B. Assicurati che i metodi getter di Istruttore e Iscritto si chiamino effettivamente così
-            pstmt.setString(3, schedaAllenamento.getCreatore().getId_utente());
-            pstmt.setString(4, schedaAllenamento.getProprietario().getId_utente());
+            if (scheda.getCreatore() != null) {
+                pstmt.setString(3, scheda.getCreatore().getId_utente());
+            } else {
+                pstmt.setNull(3, Types.VARCHAR);
+            }
+
+            if (scheda.getProprietario() != null) {
+                pstmt.setString(4, scheda.getProprietario().getId_utente());
+            } else {
+                pstmt.setNull(4, Types.VARCHAR);
+            }
 
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Errore durante il salvataggio della scheda di allenamento: " + e.getMessage());
+            System.err.println("Errore durante il salvataggio: " + e.getMessage());
         }
     }
 
@@ -54,17 +62,16 @@ public class SchedaAllenamentoImplementazionePostgresDAO implements SchedaAllena
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    // Restituiamo la scheda con null per gli oggetti complessi (o potresti caricarli qui con altri DAO)
                     scheda = new SchedaAllenamento(
-                            rs.getString("Id_Scheda"),
-                            rs.getString("Descrizione"),
+                            rs.getString("id_scheda"),
+                            rs.getString("descrizione"),
                             null,
                             null
                     );
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante la ricerca della scheda per ID: " + e.getMessage());
+            System.err.println("Errore ricerca ID Scheda: " + e.getMessage());
         }
 
         return scheda;
@@ -89,7 +96,7 @@ public class SchedaAllenamentoImplementazionePostgresDAO implements SchedaAllena
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante la ricerca della scheda per iscritto: " + e.getMessage());
+            System.err.println("Errore ricerca ID Iscritto: " + e.getMessage());
         }
 
         return scheda;
@@ -98,7 +105,7 @@ public class SchedaAllenamentoImplementazionePostgresDAO implements SchedaAllena
     @Override
     public List<SchedaAllenamento> trovaTutti() {
         String query = "SELECT * FROM SchedaAllenamento";
-        List<SchedaAllenamento> listaSchede = new ArrayList<>();
+        List<SchedaAllenamento> lista = new ArrayList<>();
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -110,31 +117,39 @@ public class SchedaAllenamentoImplementazionePostgresDAO implements SchedaAllena
                         null,
                         null
                 );
-                listaSchede.add(scheda);
+                lista.add(scheda);
             }
         } catch (SQLException e) {
-            System.err.println("Errore durante l'estrazione di tutte le schede: " + e.getMessage());
+            System.err.println("Errore estrazione schede: " + e.getMessage());
         }
 
-        return listaSchede;
+        return lista;
     }
 
     @Override
-    public void aggiornaScheda(SchedaAllenamento schedaAllenamento) {
+    public void aggiornaScheda(SchedaAllenamento scheda) {
         String query = "UPDATE SchedaAllenamento SET Descrizione = ?, Id_Istruttore = ?, Id_Iscritto = ? WHERE Id_Scheda = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, schedaAllenamento.getDescrizione());
+            pstmt.setString(1, scheda.getDescrizione());
 
-            // Anche qui estraiamo le chiavi esterne dagli oggetti del model
-            pstmt.setString(2, schedaAllenamento.getCreatore().getId_utente());
-            pstmt.setString(3, schedaAllenamento.getProprietario().getId_utente());
-            pstmt.setString(4, schedaAllenamento.getId_Scheda());
+            if (scheda.getCreatore() != null) {
+                pstmt.setString(2, scheda.getCreatore().getId_utente());
+            } else {
+                pstmt.setNull(2, Types.VARCHAR);
+            }
 
+            if (scheda.getProprietario() != null) {
+                pstmt.setString(3, scheda.getProprietario().getId_utente());
+            } else {
+                pstmt.setNull(3, Types.VARCHAR);
+            }
+
+            pstmt.setString(4, scheda.getId_Scheda());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("Errore durante l'aggiornamento della scheda: " + e.getMessage());
+            System.err.println("Errore aggiornamento scheda: " + e.getMessage());
         }
     }
 }

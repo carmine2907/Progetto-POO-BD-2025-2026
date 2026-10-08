@@ -10,11 +10,11 @@ public class Utente {
     private String nome,cognome;
 
     public Utente( String id_utente, String nome, String cognome, String username,String password) {
-        this.username = username;
-        this.password = password;
         this.id_utente = id_utente;
         this.nome = nome;
         this.cognome = cognome;
+        this.username= username;
+        this.password=password;
     }
 
     public String getUsername() {
@@ -55,5 +55,12 @@ public class Utente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "username='" + username + '\'' +
+                '}';
     }
 }

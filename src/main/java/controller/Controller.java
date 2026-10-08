@@ -96,14 +96,10 @@ public class Controller {
     }
 
     public void AssegnaScheda(String id_scheda,String descrizione ,Istruttore istruttoreCreatore,Iscritto iscrittoPropietario,String id_iscritto) throws Exception{
-        //creare una exception che sia in grado di controllare se l'utente abbia premuto il bottone di pagamento
-        //if()
-        //creare un exception per quando un utente ha già una scheda  già assegnata
-
         // 1. Crea la nuova istanza della scheda
         SchedaAllenamento nuovaScheda = new SchedaAllenamento(id_scheda, descrizione, istruttoreCreatore, iscrittoPropietario);
 if(nuovaScheda!= null){
-    throw new  SchedaGiaEsistenteException("scheda gia assegnata !!");
+    throw new  SchedaGiaAssegnataException("scheda gia assegnata !");
 }
         // 2. Aggiorna le liste degli oggetti in memoria
         istruttoreCreatore.getSchedeCreate().add(nuovaScheda);
@@ -132,28 +128,33 @@ if(nuovaScheda!= null){
         return schedaDAO.cercaPerid_Iscritto(utenteLoggato.getId_utente());
     }
 
-    public boolean prenotaCorso(Iscritto iscritto, Corso corso) throws Exception{
+    public boolean prenotaCorso(Iscritto iscritto, Corso corso) throws CorsoGiaEsistenteException,CorsoGiaPrenotatoException,CorsoAlCompletoException{
 // metodo da capire
-        // 1. Controllo se il corso è già al completo (usando il metodo discusso prima)
+        // 1. Controllo se il corso è già al completo
         if (isCorsoAlCompleto(corso)) {
-            return false; // al posto di false fare una exception che controlli se il corso è al completo
+            throw new CorsoAlCompletoException("il corso ha raggiunto la capienza massima !!");
+        }
+        // 2. Controllo se l'iscritto ha già prenotato questo corso
+        if (iscritto.getPartecipazioni() != null) {
+            for (Partecipa partecipazione : iscritto.getPartecipazioni()) {
+                // Controlliamo se l'ID del corso nella partecipazione è uguale a quello del corso selezionato
+                if (partecipazione.getId_Corso().equals(corso.getId_Corso())) {
+                    // Lancia la tua eccezione personalizzata
+                    throw new CorsoGiaPrenotatoException("Hai già effettuato la prenotazione per il corso: " + corso.getNomeCorso());
+                }
+            }
         }
 
-        // (Opzionale) Qui potresti aggiungere un controllo per verificare
-        // se l'iscritto ha già prenotato questo stesso corso in precedenza per evitare duplicati.
-        Partecipa nuovaPartecipazione = new Partecipa(corso.getId_Corso(),iscritto.getId_utente(),corso,iscritto);
-        // 2. Salvo nel Database
+
+        Partecipa nuovaPartecipazione = new Partecipa(corso.getId_Corso(), iscritto.getId_utente(), corso, iscritto);
         PartecipaImplementazionePostgresDAO partecipaDAO = new PartecipaImplementazionePostgresDAO();
         partecipaDAO.salva(nuovaPartecipazione);
 
-        // 3. Aggiorno l'oggetto in memoria (se necessario per la sessione corrente)
-        // Ipotizzando che Partecipa abbia un costruttore (Iscritto, Corso)
-        if(iscritto.getPartecipazioni()!=null){
+        if(iscritto.getPartecipazioni() != null){
             iscritto.getPartecipazioni().add(nuovaPartecipazione);
         }
 
-
-        return true; // Prenotazione effettuata con successo
+        return true;
     }
  public String StampaRicevuta(Pagamento ricevutapag){
 
@@ -170,8 +171,6 @@ if(nuovaScheda!= null){
 
         if (utenteLoggato instanceof Iscritto) {
             Iscritto iscritto = (Iscritto) utenteLoggato;
-
-
             if (iscritto.getPagamenti() != null && !iscritto.getPagamenti().isEmpty()) {
                 throw new PagamentoGiaEffettuatoException("Hai già effettuato il pagamento del tuo abbonamento!");
             }
@@ -182,23 +181,27 @@ if(nuovaScheda!= null){
         // 2. Determino l'importo PRIMA di creare l'oggetto
         if (utenteLoggato instanceof MembroVip) {
             importoCorretto = 70.0;
+            System.out.println("Mario Doccia");
         } else {
             importoCorretto = 50.0;
-
-            // 3. Creo l'oggetto con l'importo corretto
-            Pagamento pagamento = new Pagamento(id_pagamento, importoCorretto, (Iscritto) utenteLoggato);
-
-            // 4. Salvo nel database
-            pagamentoDAO.salva(pagamento);
-
-            // 5. Aggiorno la lista dell'utente in memoria
-            if (utenteLoggato instanceof Iscritto) {
-                ((Iscritto) utenteLoggato).getPagamenti().add(pagamento);
-            }
-
-            return pagamento;
+            System.out.println("Dario Moccia");
         }
-        return null;
+         if (utenteDAO.cercaPerId(((Iscritto) utenteLoggato).getId_utente()) == null) {
+             iscrittoDAO.salva((Iscritto) utenteLoggato);
+         }
+
+
+        Pagamento pagamento = new Pagamento(id_pagamento, importoCorretto, (Iscritto) utenteLoggato);
+
+        // 4. Salvo nel database (ora funzionerà perché l'iscritto esiste nel DB)
+        pagamentoDAO.salva(pagamento);
+
+        // 5. Aggiorno la lista dell'utente in memoria
+        if (utenteLoggato instanceof Iscritto) {
+            ((Iscritto) utenteLoggato).getPagamenti().add(pagamento);
+        }
+
+        return pagamento;
     }
 
 
@@ -245,6 +248,10 @@ if(nuovaScheda!= null){
 
     public List<Corso> ottieniTuttiICorsi() {
         return corsoDAO.trovaTutti();
+    }
+
+    public List<Iscritto> ottieniTuttiGliIscritti() {
+        return iscrittoDAO.trovaTutti();
     }
 
     }

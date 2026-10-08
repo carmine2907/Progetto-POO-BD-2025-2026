@@ -90,11 +90,19 @@ public class IscrittoGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Iscritto utenteLoggato = (Iscritto) controller.getUtenteLoggato();
+
+                // 1. Controlliamo se l'utente in memoria ha un ID valido
+                System.out.println("DEBUG GUI: Ricerca scheda per ID Utente: '" + utenteLoggato.getId_utente() + "'");
+
                 SchedaAllenamento scheda = controller.visualizzaSchedaPersonale(utenteLoggato);
 
                 if (scheda != null) {
+                    // 2. Controlliamo se il DAO ha estratto la descrizione
+                    System.out.println("DEBUG GUI: Scheda trovata! Descrizione estratta: '" + scheda.getDescrizione() + "'");
                     JtextVisualizzaS.setText(scheda.getDescrizione());
                 } else {
+                    // 3. Confermiamo che il DAO ha restituito il vuoto
+                    System.out.println("DEBUG GUI: ERRORE - Il metodo del DAO ha restituito null.");
                     JtextVisualizzaS.setText("Nessuna scheda attualmente assegnata.");
                 }
             }
@@ -119,7 +127,6 @@ public class IscrittoGUI extends JFrame {
             }
         });
 
-
         JPrenota.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -128,22 +135,24 @@ public class IscrittoGUI extends JFrame {
                 if (corsoSelezionato != null) {
                     try {
                         Iscritto utenteLoggato = (Iscritto) controller.getUtenteLoggato();
-                        boolean successo = controller.prenotaCorso(utenteLoggato, corsoSelezionato);
 
-                        if (successo) {
-                            JOptionPane.showMessageDialog(mainPanel, "Iscrizione al corso confermata.");
-                        } else {
-                            JOptionPane.showMessageDialog(mainPanel, "Il corso selezionato è al completo.", "Posti esauriti", JOptionPane.WARNING_MESSAGE);
-                        }
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                        // Richiamiamo il controller. Se qualcosa va storto, salterà direttamente ai "catch"
+                        controller.prenotaCorso(utenteLoggato, corsoSelezionato);
+                        JOptionPane.showMessageDialog(mainPanel, "Iscrizione al corso confermata con successo!");
+
+                    } catch (CorsoAlCompletoException ex) {
+                        // Catturiamo l'eccezione del corso pieno
+                        JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Posti Esauriti", JOptionPane.WARNING_MESSAGE);
+
+                    } catch (CorsoGiaPrenotatoException ex) {
+                        // Catturiamo l'eccezione della prenotazione duplicata
+                        JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Prenotazione Duplicata", JOptionPane.WARNING_MESSAGE);
                     }
                 } else {
                     JOptionPane.showMessageDialog(mainPanel, "Seleziona un corso dalla lista prima di prenotare.");
                 }
             }
         });
-
 
         JAreaWellness.addActionListener(new ActionListener() {
             @Override
@@ -154,21 +163,16 @@ public class IscrittoGUI extends JFrame {
 
                     // 2. Se non viene lanciata nessuna eccezione, l'accesso è consentito
                     if (accessoConsentito) {
-                        JOptionPane.showMessageDialog(mainPanel,
-                                "Verifica completata. Benvenuto nell'Area Wellness VIP!",
-                                "Accesso Consentito",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(mainPanel, "Verifica completata. Benvenuto nell'Area Wellness VIP!", "Accesso Consentito", JOptionPane.INFORMATION_MESSAGE);
 
-                        AreaWellnessGUI areaWellnessGUI = new AreaWellnessGUI(controller);
+                        AreaWellnessGUI areaWellnessGUI = new AreaWellnessGUI(controller,IscrittoGUI.this);
                         areaWellnessGUI.setVisible(true);
-                        dispose();
+                        setVisible(false);
+
                     }
                 } catch (Exception ex) {
-                    // 3. Se l'utente è un normale Iscritto, catturiamo l'eccezione e mostriamo l'errore
-                    JOptionPane.showMessageDialog(mainPanel,
-                            ex.getMessage(),
-                            "Accesso Negato",
-                            JOptionPane.WARNING_MESSAGE);
+
+                    JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Errore!", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
