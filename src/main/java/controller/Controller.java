@@ -76,7 +76,7 @@ public class Controller {
 
     public Corso CreaCorso  (String id_Corso, String nomeCorso, int capienza, Istruttore istruttoreGestore, ArrayList<Partecipa> partecipazione) throws Exception{
          capienza=0;
-        if(corsoDAO.cercaPerNomeCorso(nomeCorso)!=null && corsoDAO.cercaPerId_Corso(id_Corso)!=null){
+        if(corsoDAO.cercaPerNomeCorso(nomeCorso)!=null || corsoDAO.cercaPerId_Corso(id_Corso)!=null){
 
             throw new CorsoGiaEsistenteException("Corso già esistente ");
         }
