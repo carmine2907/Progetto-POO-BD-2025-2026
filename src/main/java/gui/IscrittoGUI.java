@@ -91,18 +91,18 @@ public class IscrittoGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Iscritto utenteLoggato = (Iscritto) controller.getUtenteLoggato();
 
-                // 1. Controlliamo se l'utente in memoria ha un ID valido
-                System.out.println("DEBUG GUI: Ricerca scheda per ID Utente: '" + utenteLoggato.getId_utente() + "'");
+
+
 
                 SchedaAllenamento scheda = controller.visualizzaSchedaPersonale(utenteLoggato);
 
                 if (scheda != null) {
-                    // 2. Controlliamo se il DAO ha estratto la descrizione
-                    System.out.println("DEBUG GUI: Scheda trovata! Descrizione estratta: '" + scheda.getDescrizione() + "'");
+
+                   // System.out.println("DEBUG GUI: Scheda trovata! Descrizione estratta: '" + scheda.getDescrizione() + "'");
                     JtextVisualizzaS.setText(scheda.getDescrizione());
                 } else {
                     // 3. Confermiamo che il DAO ha restituito il vuoto
-                    System.out.println("DEBUG GUI: ERRORE - Il metodo del DAO ha restituito null.");
+                   // System.out.println("DEBUG GUI: ERRORE - Il metodo del DAO ha restituito null.");
                     JtextVisualizzaS.setText("Nessuna scheda attualmente assegnata.");
                 }
             }
@@ -142,14 +142,12 @@ public class IscrittoGUI extends JFrame {
 
                     } catch (CorsoAlCompletoException ex) {
                         // Catturiamo l'eccezione del corso pieno
-                        JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Posti Esauriti", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Errore", JOptionPane.WARNING_MESSAGE);
 
                     } catch (CorsoGiaPrenotatoException ex) {
                         // Catturiamo l'eccezione della prenotazione duplicata
                         JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Prenotazione Duplicata", JOptionPane.WARNING_MESSAGE);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(mainPanel, "Seleziona un corso dalla lista prima di prenotare.");
                 }
             }
         });
@@ -158,10 +156,10 @@ public class IscrittoGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    // 1. Chiediamo al controller se l'utente ha i permessi
+
                     boolean accessoConsentito = controller.AccessoAreaWellness();
 
-                    // 2. Se non viene lanciata nessuna eccezione, l'accesso è consentito
+
                     if (accessoConsentito) {
                         JOptionPane.showMessageDialog(mainPanel, "Verifica completata. Benvenuto nell'Area Wellness VIP!", "Accesso Consentito", JOptionPane.INFORMATION_MESSAGE);
 
@@ -170,7 +168,7 @@ public class IscrittoGUI extends JFrame {
                         setVisible(false);
 
                     }
-                } catch (Exception ex) {
+                } catch (AccessoAreaWellnessException ex) {
 
                     JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Errore!", JOptionPane.WARNING_MESSAGE);
                 }

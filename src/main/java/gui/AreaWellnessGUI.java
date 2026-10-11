@@ -45,31 +45,30 @@ public class AreaWellnessGUI extends JFrame {
         JConferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 1. Creo la lista degli oggetti ServizioWellness in base alle caselle spuntate
                 List<ServizioWellness> serviziSelezionati = new ArrayList<>();
 
-                // Sostituisci gli ID fittizi ("ID_SAUNA", ecc.) con quelli reali del tuo database PostgreSQL
+
                 if (saunaCheckBox.isSelected()) {
-                    serviziSelezionati.add(new ServizioWellness("ID_SAUNA", "Sauna", true, null));
+                    serviziSelezionati.add(new ServizioWellness("SAUNA", "Sauna", true, null));
                 }
                 if (fisioterapiaCheckBox.isSelected()) {
-                    serviziSelezionati.add(new ServizioWellness("ID_FISIO", "Fisioterapia", true, null));
+                    serviziSelezionati.add(new ServizioWellness("FISIO", "Fisioterapia", true, null));
                 }
                 if (nutrizionistaCheckBox.isSelected()) {
-                    serviziSelezionati.add(new ServizioWellness("ID_NUTRI", "Nutrizionista", true, null));
+                    serviziSelezionati.add(new ServizioWellness("NUTRI", "Nutrizionista", true, null));
                 }
 
-                // 2. Controllo che almeno un servizio sia stato selezionato
+
                 if (serviziSelezionati.isEmpty()) {
                     JOptionPane.showMessageDialog(mainPanel, "Seleziona almeno un servizio prima di confermare.", "Attenzione", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
                 try {
-                    // 3. Eseguo il cast dell'utente loggato a MembroVip (il blocco di accesso l'abbiamo già fatto nell'IscrittoGUI)
+
                     MembroVip membroVip = (MembroVip) controller.getUtenteLoggato();
 
-                    // 4. Richiamo il metodo del controller per l'aggiornamento sul database
+
                     boolean successo = controller.prenotaServizi(membroVip, serviziSelezionati);
 
                     if (successo) {
@@ -77,7 +76,7 @@ public class AreaWellnessGUI extends JFrame {
 
                         if (saunaCheckBox.isSelected()) {
                             saunaCheckBox.setEnabled(false);
-                            saunaCheckBox.setSelected(false); // Opzionale: rimuove visivamente la spunta
+                            saunaCheckBox.setSelected(false);
                         }
                         if (fisioterapiaCheckBox.isSelected()) {
                             fisioterapiaCheckBox.setEnabled(false);

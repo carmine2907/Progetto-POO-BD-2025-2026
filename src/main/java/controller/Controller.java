@@ -74,8 +74,8 @@ public class Controller {
         return this.utenteLoggato;
     }
 
-    public Corso CreaCorso  (String id_Corso, String nomeCorso, int capienza, Istruttore istruttoreGestore, ArrayList<Partecipa> partecipazione) throws Exception{
-         capienza=0;
+    public Corso CreaCorso  (String id_Corso, String nomeCorso, int capienza, Istruttore istruttoreGestore, ArrayList<Partecipa> partecipazione) throws CorsoGiaEsistenteException{
+
         if(corsoDAO.cercaPerNomeCorso(nomeCorso)!=null || corsoDAO.cercaPerId_Corso(id_Corso)!=null){
 
             throw new CorsoGiaEsistenteException("Corso già esistente ");
@@ -84,6 +84,7 @@ public class Controller {
         corsoDAO.salva(corsoCreato);
         return corsoCreato;
     }
+
     public SchedaAllenamento CreaScheda(String id_scheda,String descrizione ,Istruttore istruttoreCreatore,Iscritto iscrittoPropietario,String id_iscritto)throws Exception{
        if(schedaAllenamentoDAO.cercaPerId_Scheda(id_scheda)!=null && schedaAllenamentoDAO.cercaPerid_Iscritto(id_iscritto)!=null){
           // checked
@@ -96,12 +97,12 @@ public class Controller {
     }
 
     public void AssegnaScheda(String id_scheda,String descrizione ,Istruttore istruttoreCreatore,Iscritto iscrittoPropietario,String id_iscritto) throws Exception{
-        // 1. Crea la nuova istanza della scheda
+
         SchedaAllenamento nuovaScheda = new SchedaAllenamento(id_scheda, descrizione, istruttoreCreatore, iscrittoPropietario);
 if(nuovaScheda!= null){
     throw new  SchedaGiaAssegnataException("scheda gia assegnata !");
 }
-        // 2. Aggiorna le liste degli oggetti in memoria
+
         istruttoreCreatore.getSchedeCreate().add(nuovaScheda);
         iscrittoPropietario.setSchedaAllenamento(nuovaScheda);
 
@@ -114,7 +115,7 @@ if(nuovaScheda!= null){
     public boolean isCorsoAlCompleto(Corso corso ) {
         PartecipaDAO partecipaDAO = new PartecipaImplementazionePostgresDAO();
 
-        // 1. Conto quanti iscritti ci sono attualmente nel database
+
         int iscrittiAttuali = corsoDAO.contaIscrittiAlCorso(corso.getId_Corso());
 
         // 2. Confronto con la capienza massima del corso
@@ -124,7 +125,6 @@ if(nuovaScheda!= null){
     public SchedaAllenamento visualizzaSchedaPersonale(Iscritto utenteLoggato) {
 
         SchedaAllenamentoDAO schedaDAO = new implementazionePostgresDAO.SchedaAllenamentoImplementazionePostgresDAO();
-
         return schedaDAO.cercaPerid_Iscritto(utenteLoggato.getId_utente());
     }
 
@@ -139,7 +139,6 @@ if(nuovaScheda!= null){
             for (Partecipa partecipazione : iscritto.getPartecipazioni()) {
                 // Controlliamo se l'ID del corso nella partecipazione è uguale a quello del corso selezionato
                 if (partecipazione.getId_Corso().equals(corso.getId_Corso())) {
-                    // Lancia la tua eccezione personalizzata
                     throw new CorsoGiaPrenotatoException("Hai già effettuato la prenotazione per il corso: " + corso.getNomeCorso());
                 }
             }
@@ -158,13 +157,12 @@ if(nuovaScheda!= null){
     }
  public String StampaRicevuta(Pagamento ricevutapag){
 
-        return "pagamento riuscito\n  "+"idpagamento: "+ricevutapag.getId_Pagamento()+"\n euro: "+ricevutapag.getImporto();
-
+        return "pagamento riuscito \n  "+"idpagamento: "+ricevutapag.getId_Pagamento()+"\n euro: "+ricevutapag.getImporto();
     }
 
     public Pagamento pagaAbbonamento( String id_pagamento) throws PagamentoGiaEffettuatoException {
 
-        // 1. Evitiamo di inserire pagamenti doppi con lo stesso ID
+
         if (pagamentoDAO.cercaPerId_Pagamento(id_pagamento) != null) {
             throw new PagamentoGiaEffettuatoException("Esiste già un pagamento registrato con questo ID!");
         }
@@ -205,12 +203,12 @@ if(nuovaScheda!= null){
     }
 
 
-    public boolean AccessoAreaWellness() throws Exception {
+    public boolean AccessoAreaWellness() throws AccessoAreaWellnessException {
 
         if (this.utenteLoggato instanceof MembroVip) {
             return true;
         } else {
-            throw new Exception("Accesso Negato: L'Area  è riservata esclusivamente ai Membri VIP. ");
+            throw new AccessoAreaWellnessException("Accesso Negato: L'Area  è riservata esclusivamente ai Membri VIP. ");
         }
     }
 
@@ -223,21 +221,20 @@ if(nuovaScheda!= null){
     }
 
 
-        // Nota: Uso MembroVip perché il tuo DAO carica e salva un MembroVip, non un Iscritto generico
-        public boolean prenotaServizi(MembroVip utenteLoggato, List<ServizioWellness> serviziSelezionati) {
 
+        public boolean prenotaServizi(MembroVip utenteLoggato, List<ServizioWellness> serviziSelezionati) {
             ServizioWellnessDAO servizioDAO = new implementazionePostgresDAO.ServizioWellnessImplementazionePostgresDAO();
 
             for (ServizioWellness servizio : serviziSelezionati) {
 
-                // 1. Modifico lo stato dell'oggetto in memoria
-                servizio.setDisponibile(false); // Il servizio non è più disponibile per altri
-                servizio.setMembroPrenotante(utenteLoggato); // Assegno l'utente come proprietario
 
-                // 2. Richiamo il tuo metodo per aggiornare il database
+                servizio.setDisponibile(false);
+                servizio.setMembroPrenotante(utenteLoggato);
+
+
                 servizioDAO.aggiornaServizioWellness(servizio);
 
-                // 3. Aggiorno la lista interna del membro vip
+
                 if (utenteLoggato.getServiziPrenotati() != null) {
                     utenteLoggato.getServiziPrenotati().add(servizio);
                 }

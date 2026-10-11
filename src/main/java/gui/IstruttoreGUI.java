@@ -18,7 +18,7 @@ public class IstruttoreGUI extends JFrame {
     private JTextField JtextNome;
     private JTextField JtextCapienza;
     private JButton JCreaCorso;
-    private JComboBox<Iscritto> JcomboBoxIscritti; // Tipizzato con Iscritto
+    private JComboBox<Iscritto> JcomboBoxIscritti;
     private JTextArea textArea1;
     private JButton JAssegna;
     private JLabel JNomeCorso;
@@ -32,7 +32,6 @@ public class IstruttoreGUI extends JFrame {
 
         setContentPane(mainPanel);
 
-        // Impostiamo il titolo con il nome dell'istruttore loggato
         if (controller.getUtenteLoggato() != null) {
             setTitle("Area Istruttore - " + controller.getUtenteLoggato().getUsername());
         } else {
@@ -49,7 +48,6 @@ public class IstruttoreGUI extends JFrame {
 
     private void popolaTendinaIscritti() {
         JcomboBoxIscritti.removeAllItems();
-        // Questo metodo dovra essere aggiunto al Controller
         List<Iscritto> tuttiGliIscritti = controller.ottieniTuttiGliIscritti();
 
         if (tuttiGliIscritti != null) {
