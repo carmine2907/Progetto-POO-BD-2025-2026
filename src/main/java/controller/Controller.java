@@ -96,20 +96,18 @@ public class Controller {
         return schedaCreata;
     }
 
-    public void AssegnaScheda(String id_scheda,String descrizione ,Istruttore istruttoreCreatore,Iscritto iscrittoPropietario,String id_iscritto) throws Exception{
+    public void AssegnaScheda(String id_scheda, String descrizione, Istruttore istruttoreCreatore, Iscritto iscrittoPropietario, String id_iscritto) throws Exception {
+        SchedaAllenamentoDAO schedaDAO = new SchedaAllenamentoImplementazionePostgresDAO();
+
+        // 2. Verifica se l'iscritto ha già una scheda nel database
+        SchedaAllenamento schedaEsistente = schedaDAO.cercaPerid_Iscritto(id_iscritto);
+
+        if (schedaEsistente != null) {
+            throw new SchedaGiaAssegnataException("scheda gia assegnata !");
+        }
 
         SchedaAllenamento nuovaScheda = new SchedaAllenamento(id_scheda, descrizione, istruttoreCreatore, iscrittoPropietario);
-if(nuovaScheda!= null){
-    throw new  SchedaGiaAssegnataException("scheda gia assegnata !");
-}
-
-        istruttoreCreatore.getSchedeCreate().add(nuovaScheda);
-        iscrittoPropietario.setSchedaAllenamento(nuovaScheda);
-
-        // 3. Salva la scheda nel database richiamando il DAO esistente
-        SchedaAllenamentoDAO schedaDAO = new implementazionePostgresDAO.SchedaAllenamentoImplementazionePostgresDAO();
         schedaDAO.salva(nuovaScheda);
-
     }
 
     public boolean isCorsoAlCompleto(Corso corso ) {
