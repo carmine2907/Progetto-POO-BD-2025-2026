@@ -42,6 +42,7 @@ public class IscrittoGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+        setSize(500, 500);
 
         inizializzaEventi();
         popolaTendinaCorsi();

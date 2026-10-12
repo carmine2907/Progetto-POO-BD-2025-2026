@@ -26,6 +26,9 @@ public class Home extends JFrame{
         frameHome.pack();
         frameHome.setVisible(true);
 
+        setSize(500,500);
+        setLocationRelativeTo(null);
+
         JbuttonLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

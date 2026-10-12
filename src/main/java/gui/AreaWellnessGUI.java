@@ -33,7 +33,7 @@ public class AreaWellnessGUI extends JFrame {
         setLocationRelativeTo(null);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 400);
+        setSize(500, 500);
         setVisible(true);
 
         GestioneEventi();
