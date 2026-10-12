@@ -13,10 +13,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Pagamento implementazione postgres dao.
+ */
 public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
-// Mario Doccia
+
     private Connection connection;
 
+    /**
+     * Instantiates a new Pagamento implementazione postgres dao.
+     */
     public PagamentoImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();
@@ -62,19 +68,19 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    // 1. Ricostruiamo l'oggetto Iscritto (con liste vuote)
+
                     Iscritto iscritto = new Iscritto(
-                            rs.getString("Id_Iscritto"), // corrisponde a Id_Utente
+                            rs.getString("Id_Iscritto"),
                             rs.getString("Nome"),
                             rs.getString("Cognome"),
                             rs.getString("Username"),
                             rs.getString("Password"),
-                            new ArrayList<>(), // pagamenti (vuoto per evitare cicli infiniti)
-                            null,              // schedaAllenamento
-                            new ArrayList<>()  // partecipazioni
+                            new ArrayList<>(),
+                            null,
+                            new ArrayList<>()
                     );
 
-                    // 2. Creiamo l'oggetto Pagamento inserendoci l'Iscritto appena creato
+
                     pagamento = new Pagamento(
                             rs.getString("Id_Pagamento"),
                             rs.getDouble("Importo"),

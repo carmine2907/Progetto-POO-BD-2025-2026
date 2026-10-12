@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The type Controller.
+ */
 public class Controller {
     private UtenteDAO utenteDAO;
     private IscrittoDAO iscrittoDAO;
@@ -21,6 +24,9 @@ public class Controller {
     private PartecipaDAO partecipaDAO;
     private Utente utenteLoggato;
 
+    /**
+     * Instantiates a new Controller.
+     */
     public Controller() {
         this.utenteDAO = new UtenteImplementazionePostgresDAO();
         this.servizioWellnessDAO = new ServizioWellnessImplementazionePostgresDAO();
@@ -35,10 +41,23 @@ public class Controller {
         this.utenteLoggato = null;
     }
 
+    /**
+     * Accedi boolean.
+     *
+     * @param username the username
+     * @param password the password
+     * @return the boolean
+     * @throws Exception the exception
+     */
     public boolean accedi(String username, String password) throws Exception {
         Utente u = utenteDAO.cercaPerUsername(username);
 
         if (u == null) {
+
+            throw new Exception("Credenziali errate!");
+        }
+
+        if (!u.getPassword().trim().equals(password.trim())) {
 
             throw new Exception("Credenziali errate!");
         }
@@ -63,17 +82,36 @@ public class Controller {
             return true;
         }
 
-        throw new Exception("Credenziali errate!");
+        throw new RuntimeException("Credenziali errate!");
     }
 
+    /**
+     * Logout.
+     */
     public void logout() {
         this.utenteLoggato = null;
     }
 
+    /**
+     * Gets utente loggato.
+     *
+     * @return the utente loggato
+     */
     public Utente getUtenteLoggato() {
         return this.utenteLoggato;
     }
 
+    /**
+     * Crea corso corso.
+     *
+     * @param id_Corso          the id corso
+     * @param nomeCorso         the nome corso
+     * @param capienza          the capienza
+     * @param istruttoreGestore the istruttore gestore
+     * @param partecipazione    the partecipazione
+     * @return the corso
+     * @throws CorsoGiaEsistenteException the corso gia esistente exception
+     */
     public Corso CreaCorso  (String id_Corso, String nomeCorso, int capienza, Istruttore istruttoreGestore, ArrayList<Partecipa> partecipazione) throws CorsoGiaEsistenteException{
 
         if(corsoDAO.cercaPerNomeCorso(nomeCorso)!=null || corsoDAO.cercaPerId_Corso(id_Corso)!=null){
@@ -85,9 +123,20 @@ public class Controller {
         return corsoCreato;
     }
 
+    /**
+     * Crea scheda scheda allenamento.
+     *
+     * @param id_scheda           the id scheda
+     * @param descrizione         the descrizione
+     * @param istruttoreCreatore  the istruttore creatore
+     * @param iscrittoPropietario the iscritto propietario
+     * @param id_iscritto         the id iscritto
+     * @return the scheda allenamento
+     * @throws Exception the exception
+     */
     public SchedaAllenamento CreaScheda(String id_scheda,String descrizione ,Istruttore istruttoreCreatore,Iscritto iscrittoPropietario,String id_iscritto)throws Exception{
        if(schedaAllenamentoDAO.cercaPerId_Scheda(id_scheda)!=null && schedaAllenamentoDAO.cercaPerid_Iscritto(id_iscritto)!=null){
-          // checked
+
            throw new SchedaGiaEsistenteException("scheda già esistente!!! ");
        }
 
@@ -96,10 +145,20 @@ public class Controller {
         return schedaCreata;
     }
 
+    /**
+     * Assegna scheda.
+     *
+     * @param id_scheda           the id scheda
+     * @param descrizione         the descrizione
+     * @param istruttoreCreatore  the istruttore creatore
+     * @param iscrittoPropietario the iscritto propietario
+     * @param id_iscritto         the id iscritto
+     * @throws Exception the exception
+     */
     public void AssegnaScheda(String id_scheda, String descrizione, Istruttore istruttoreCreatore, Iscritto iscrittoPropietario, String id_iscritto) throws Exception {
         SchedaAllenamentoDAO schedaDAO = new SchedaAllenamentoImplementazionePostgresDAO();
 
-        // 2. Verifica se l'iscritto ha già una scheda nel database
+
         SchedaAllenamento schedaEsistente = schedaDAO.cercaPerid_Iscritto(id_iscritto);
 
         if (schedaEsistente != null) {
@@ -110,6 +169,12 @@ public class Controller {
         schedaDAO.salva(nuovaScheda);
     }
 
+    /**
+     * Is corso al completo boolean.
+     *
+     * @param corso the corso
+     * @return the boolean
+     */
     public boolean isCorsoAlCompleto(Corso corso ) {
         PartecipaDAO partecipaDAO = new PartecipaImplementazionePostgresDAO();
 
@@ -120,28 +185,44 @@ public class Controller {
         return iscrittiAttuali >= corso.getCapienza();
     }
 
+    /**
+     * Visualizza scheda personale scheda allenamento.
+     *
+     * @param utenteLoggato the utente loggato
+     * @return the scheda allenamento
+     */
     public SchedaAllenamento visualizzaSchedaPersonale(Iscritto utenteLoggato) {
 
         SchedaAllenamentoDAO schedaDAO = new implementazionePostgresDAO.SchedaAllenamentoImplementazionePostgresDAO();
         return schedaDAO.cercaPerid_Iscritto(utenteLoggato.getId_utente());
     }
 
+    /**
+     * Prenota corso boolean.
+     *
+     * @param iscritto the iscritto
+     * @param corso    the corso
+     * @return the boolean
+     * @throws CorsoGiaEsistenteException the corso gia esistente exception
+     * @throws CorsoGiaPrenotatoException the corso gia prenotato exception
+     * @throws CorsoAlCompletoException   the corso al completo exception
+     */
     public boolean prenotaCorso(Iscritto iscritto, Corso corso) throws CorsoGiaEsistenteException,CorsoGiaPrenotatoException,CorsoAlCompletoException{
-// metodo da capire
-        // 1. Controllo se il corso è già al completo
+
+
         if (isCorsoAlCompleto(corso)) {
             throw new CorsoAlCompletoException("il corso ha raggiunto la capienza massima !!");
         }
-        // 2. Controllo se l'iscritto ha già prenotato questo corso
+
+        //  Controllo se l'iscritto ha già prenotato questo corso E se l'ID del corso nella partecipazione è uguale a quello del corso selezionato
         if (iscritto.getPartecipazioni() != null) {
             for (Partecipa partecipazione : iscritto.getPartecipazioni()) {
-                // Controlliamo se l'ID del corso nella partecipazione è uguale a quello del corso selezionato
+
                 if (partecipazione.getId_Corso().equals(corso.getId_Corso())) {
                     throw new CorsoGiaPrenotatoException("Hai già effettuato la prenotazione per il corso: " + corso.getNomeCorso());
                 }
             }
         }
-
 
         Partecipa nuovaPartecipazione = new Partecipa(corso.getId_Corso(), iscritto.getId_utente(), corso, iscritto);
         PartecipaImplementazionePostgresDAO partecipaDAO = new PartecipaImplementazionePostgresDAO();
@@ -153,19 +234,31 @@ public class Controller {
 
         return true;
     }
- public String StampaRicevuta(Pagamento ricevutapag){
+
+    /**
+     * Stampa ricevuta string.
+     *
+     * @param ricevutapag the ricevutapag
+     * @return the string
+     */
+    public String StampaRicevuta(Pagamento ricevutapag){
 
         return "pagamento riuscito \n  "+"idpagamento: "+ricevutapag.getId_Pagamento()+"\n euro: "+ricevutapag.getImporto();
     }
 
+    /**
+     * Paga abbonamento pagamento.
+     *
+     * @param id_pagamento the id pagamento
+     * @return the pagamento
+     * @throws PagamentoGiaEffettuatoException the pagamento gia effettuato exception
+     */
     public Pagamento pagaAbbonamento( String id_pagamento) throws PagamentoGiaEffettuatoException {
 
 
-        if (pagamentoDAO.cercaPerId_Pagamento(id_pagamento) != null) {
-            throw new PagamentoGiaEffettuatoException("Esiste già un pagamento registrato con questo ID!");
-        }
 
-        if (utenteLoggato instanceof Iscritto) {
+
+       if (utenteLoggato instanceof Iscritto) {
             Iscritto iscritto = (Iscritto) utenteLoggato;
             if (iscritto.getPagamenti() != null && !iscritto.getPagamenti().isEmpty()) {
                 throw new PagamentoGiaEffettuatoException("Hai già effettuato il pagamento del tuo abbonamento!");
@@ -174,7 +267,7 @@ public class Controller {
 
         double importoCorretto;
 
-        // 2. Determino l'importo PRIMA di creare l'oggetto
+
         if (utenteLoggato instanceof MembroVip) {
             importoCorretto = 70.0;
             System.out.println("Mario Doccia");
@@ -189,10 +282,10 @@ public class Controller {
 
         Pagamento pagamento = new Pagamento(id_pagamento, importoCorretto, (Iscritto) utenteLoggato);
 
-        // 4. Salvo nel database (ora funzionerà perché l'iscritto esiste nel DB)
+
         pagamentoDAO.salva(pagamento);
 
-        // 5. Aggiorno la lista dell'utente in memoria
+
         if (utenteLoggato instanceof Iscritto) {
             ((Iscritto) utenteLoggato).getPagamenti().add(pagamento);
         }
@@ -201,6 +294,12 @@ public class Controller {
     }
 
 
+    /**
+     * Accesso area wellness boolean.
+     *
+     * @return the boolean
+     * @throws AccessoAreaWellnessException the accesso area wellness exception
+     */
     public boolean AccessoAreaWellness() throws AccessoAreaWellnessException {
 
         if (this.utenteLoggato instanceof MembroVip) {
@@ -210,6 +309,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Get info servizi servizio wellness.
+     *
+     * @param servizioWellness the servizio wellness
+     * @return the servizio wellness
+     */
     public ServizioWellness GetInfoServizi(ServizioWellness servizioWellness){
   servizioWellness.getId_ServizioWellness();
      servizioWellness.getNomeServizio();
@@ -219,35 +324,45 @@ public class Controller {
     }
 
 
-
-        public boolean prenotaServizi(MembroVip utenteLoggato, List<ServizioWellness> serviziSelezionati) {
+    /**
+     * Prenota servizi boolean.
+     *
+     * @param utenteLoggato      the utente loggato
+     * @param serviziSelezionati the servizi selezionati
+     * @return the boolean
+     */
+    public boolean prenotaServizi(MembroVip utenteLoggato, List<ServizioWellness> serviziSelezionati) {
             ServizioWellnessDAO servizioDAO = new implementazionePostgresDAO.ServizioWellnessImplementazionePostgresDAO();
 
             for (ServizioWellness servizio : serviziSelezionati) {
 
-
                 servizio.setDisponibile(false);
                 servizio.setMembroPrenotante(utenteLoggato);
-
-
                 servizioDAO.aggiornaServizioWellness(servizio);
 
 
                 if (utenteLoggato.getServiziPrenotati() != null) {
-                    utenteLoggato.getServiziPrenotati().add(servizio);
+                    utenteLoggato.getServiziPrenotati().add(servizio); //aggiungere il servizio all'utente
                 }
             }
-
             return true;
         }
 
+    /**
+     * Ottieni tutti i corsi list.
+     *
+     * @return the list
+     */
     public List<Corso> ottieniTuttiICorsi() {
-        return corsoDAO.trovaTutti();
-    }
+        return corsoDAO.trovaTutti();}
 
+    /**
+     * Ottieni tutti gli iscritti list.
+     *
+     * @return the list
+     */
     public List<Iscritto> ottieniTuttiGliIscritti() {
         return iscrittoDAO.trovaTutti();
     }
-
     }
 

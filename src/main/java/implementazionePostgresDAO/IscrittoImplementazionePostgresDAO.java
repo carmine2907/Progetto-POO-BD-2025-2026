@@ -15,10 +15,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Iscritto implementazione postgres dao.
+ */
 public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Iscritto implementazione postgres dao.
+     */
     public IscrittoImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();
@@ -51,9 +57,6 @@ public class IscrittoImplementazionePostgresDAO implements IscrittoDAO {
 
             connection.commit();
 
-            // Nota: Il salvataggio delle liste (Pagamenti, Partecipazioni, Scheda)
-            // NON avviene qui. Se l'oggetto iscritto ha dei pagamenti nuovi,
-            // dovrai chiamare PagamentoDAO.salva(pagamento) iterando la lista nel Controller.
 
         } catch (SQLException e) {
             System.err.println("Errore durante il salvataggio dell'iscritto: " + e.getMessage());

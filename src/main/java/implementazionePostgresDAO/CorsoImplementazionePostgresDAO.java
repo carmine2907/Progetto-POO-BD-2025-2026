@@ -13,10 +13,16 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Corso implementazione postgres dao.
+ */
 public class CorsoImplementazionePostgresDAO implements CorsoDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Corso implementazione postgres dao.
+     */
     public CorsoImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();
@@ -49,7 +55,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
 
     @Override
     public Corso cercaPerNomeCorso(String nomeCorso) {
-        // Query corretta: NomeCorso senza underscore
+
         String query = "SELECT * FROM Corso WHERE NomeCorso = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -57,7 +63,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    // Estrazione utilizzando i nomi esatti delle colonne SQL
+
                     String idCorsoEstratto = rs.getString("Id_Corso");
                     String nomeCorsoEstratto = rs.getString("NomeCorso");
                     int capienzaEstratta = rs.getInt("Capienza");
@@ -80,7 +86,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
 
     @Override
     public Corso cercaPerId_Corso(String id_Corso) {
-        // Query corretta: Id_Corso senza underscore superfluo sulla "c"
+
         String query = "SELECT * FROM Corso WHERE Id_Corso = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -140,7 +146,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
 
     @Override
     public void aggiornaCorso(Corso corso) {
-        // Query corretta: allineata ai nomi delle colonne del database
+
         String query = "UPDATE Corso SET NomeCorso = ?, Capienza = ?, Id_Istruttore = ? WHERE Id_Corso = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

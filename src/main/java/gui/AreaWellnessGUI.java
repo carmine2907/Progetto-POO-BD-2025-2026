@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Area wellness gui.
+ */
 public class AreaWellnessGUI extends JFrame {
     private JCheckBox saunaCheckBox;
     private JCheckBox fisioterapiaCheckBox;
@@ -19,6 +22,12 @@ public class AreaWellnessGUI extends JFrame {
     private Controller controller;
     private JFrame framePrecendente;
 
+    /**
+     * Instantiates a new Area wellness gui.
+     *
+     * @param controller       the controller
+     * @param framePrecendente the frame precendente
+     */
     public AreaWellnessGUI(Controller controller,JFrame framePrecendente) {
         this.controller = controller;
         this.framePrecendente= framePrecendente;
@@ -38,19 +47,20 @@ public class AreaWellnessGUI extends JFrame {
 
         GestioneEventi();
         controllaServiziGiaPrenotati();
+
     }
     private void controllaServiziGiaPrenotati() {
         try {
-            // Recuperiamo l'utente loggato e facciamo il cast a MembroVip
+
             MembroVip membroVip = (MembroVip) controller.getUtenteLoggato();
 
-            // Verifichiamo che la sua lista di servizi prenotati esista e non sia vuota
+
             if (membroVip.getServiziPrenotati() != null) {
 
-                // Scorriamo tutti i servizi che ha già acquistato
+
                 for (ServizioWellness servizio : membroVip.getServiziPrenotati()) {
 
-                    // Blocchiamo le caselle in base al nome del servizio che troviamo
+
                     if (servizio.getNomeServizio().equalsIgnoreCase("Sauna")) {
                         saunaCheckBox.setSelected(true);
                         saunaCheckBox.setEnabled(false);
@@ -69,7 +79,6 @@ public class AreaWellnessGUI extends JFrame {
             System.err.println("Errore durante il caricamento dello storico servizi: " + ex.getMessage());
         }
     }
-
     private void GestioneEventi() {
 
 
@@ -79,13 +88,13 @@ public class AreaWellnessGUI extends JFrame {
                 List<ServizioWellness> serviziSelezionati = new ArrayList<>();
 
 
-                if (saunaCheckBox.isSelected()) {
+                if (saunaCheckBox.isSelected() && saunaCheckBox.isEnabled()) {
                     serviziSelezionati.add(new ServizioWellness("SAUNA", "Sauna", true, null));
                 }
-                if (fisioterapiaCheckBox.isSelected()) {
+                if (fisioterapiaCheckBox.isSelected()&& fisioterapiaCheckBox.isEnabled()) {
                     serviziSelezionati.add(new ServizioWellness("FISIO", "Fisioterapia", true, null));
                 }
-                if (nutrizionistaCheckBox.isSelected()) {
+                if (nutrizionistaCheckBox.isSelected() && nutrizionistaCheckBox.isEnabled()) {
                     serviziSelezionati.add(new ServizioWellness("NUTRI", "Nutrizionista", true, null));
                 }
 

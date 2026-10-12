@@ -12,6 +12,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Istruttore gui.
+ */
 public class IstruttoreGUI extends JFrame {
 
     private JPanel mainPanel;
@@ -27,6 +30,11 @@ public class IstruttoreGUI extends JFrame {
 
     private Controller controller;
 
+    /**
+     * Instantiates a new Istruttore gui.
+     *
+     * @param controller the controller
+     */
     public IstruttoreGUI(Controller controller) {
         this.controller = controller;
 
@@ -59,7 +67,7 @@ public class IstruttoreGUI extends JFrame {
 
     private void inizializzaEventi() {
 
-        // Azione per creare un nuovo corso
+
         JCreaCorso.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,19 +80,18 @@ public class IstruttoreGUI extends JFrame {
                 }
 
                 try {
-                    // Convertiamo la stringa della capienza in un numero intero
+
                     int capienza = Integer.parseInt(capienzaStr);
 
-                    // Generiamo un ID univoco per il corso
+
                     String idCorso = "C_" + System.currentTimeMillis();
                     Istruttore istruttoreLoggato = (Istruttore) controller.getUtenteLoggato();
 
-                    // Richiamiamo il controller per la creazione
                     controller.CreaCorso(idCorso, nomeCorso, capienza, istruttoreLoggato, new ArrayList<>());
 
                     JOptionPane.showMessageDialog(mainPanel, "Corso creato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-                    // Puliamo i campi dopo la creazione
+
                     JtextNome.setText("");
                     JtextCapienza.setText("");
 
@@ -98,20 +105,15 @@ public class IstruttoreGUI extends JFrame {
             }
         });
 
-        // Azione per assegnare una scheda di allenamento
+
         JAssegna.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Iscritto iscrittoSelezionato = (Iscritto) JcomboBoxIscritti.getSelectedItem();
                 String descrizioneScheda = textArea1.getText().trim();
 
-                if (iscrittoSelezionato == null) {
-                    JOptionPane.showMessageDialog(mainPanel, "Seleziona un iscritto dalla lista.", "Attenzione", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
                 if (descrizioneScheda.isEmpty()) {
-                    JOptionPane.showMessageDialog(mainPanel, "Inserisci la descrizione/esercizi della scheda.", "Attenzione", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(mainPanel, "Inserisci la descrizione/esercizi della scheda.", "Attenzione", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
 
@@ -119,7 +121,7 @@ public class IstruttoreGUI extends JFrame {
                     String idScheda = "SCH_" + System.currentTimeMillis();
                     Istruttore istruttoreLoggato = (Istruttore) controller.getUtenteLoggato();
 
-                    // Richiamiamo il metodo del controller per assegnare la scheda
+
                     controller.AssegnaScheda(idScheda, descrizioneScheda, istruttoreLoggato, iscrittoSelezionato, iscrittoSelezionato.getId_utente());
 
                     JOptionPane.showMessageDialog(mainPanel, "Scheda assegnata con successo all'iscritto " + iscrittoSelezionato.getUsername() + "!", "Successo", JOptionPane.INFORMATION_MESSAGE);

@@ -14,10 +14,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Istruttore implementazione postgres dao.
+ */
 public class IstruttoreImplementazionePostgresDAO implements IstruttoreDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Istruttore implementazione postgres dao.
+     */
     public IstruttoreImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();
@@ -32,10 +38,10 @@ public class IstruttoreImplementazionePostgresDAO implements IstruttoreDAO {
         String insertIstruttore = "INSERT INTO Istruttore (Id_Istruttore) VALUES (?)";
 
         try {
-            // Disabilitiamo l'autocommit per la transazione
+
             connection.setAutoCommit(false);
 
-            // 1. Salviamo i dati anagrafici nella superclasse Utente
+
             try (PreparedStatement pstmtUtente = connection.prepareStatement(insertUtente)) {
                 pstmtUtente.setString(1, istruttore.getId_utente());
                 pstmtUtente.setString(2, istruttore.getNome());
@@ -55,7 +61,7 @@ public class IstruttoreImplementazionePostgresDAO implements IstruttoreDAO {
         } catch (SQLException e) {
             System.err.println("Errore durante il salvataggio dell'istruttore: " + e.getMessage());
             try {
-                // In caso di errore, si fa il rollback per evitare dati parziali
+
                 connection.rollback();
             } catch (SQLException rollbackEx) {
                 System.err.println("Errore durante il rollback: " + rollbackEx.getMessage());

@@ -13,10 +13,16 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Scheda allenamento implementazione postgres dao.
+ */
 public class SchedaAllenamentoImplementazionePostgresDAO implements SchedaAllenamentoDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Scheda allenamento implementazione postgres dao.
+     */
     public SchedaAllenamentoImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();

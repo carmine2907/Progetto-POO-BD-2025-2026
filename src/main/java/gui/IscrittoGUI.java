@@ -10,12 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * The type Iscritto gui.
+ */
 public class IscrittoGUI extends JFrame {
-
-    // Ricordati di assegnare "mainPanel" come nome del pannello principale nell'editor visivo di IntelliJ (file .form)
     private JPanel mainPanel;
 
-    // Componenti grafici dichiarati
+
     private JButton JVisualizzaScheda;
     private JTextArea JtextVisualizzaS;
     private JComboBox<Corso> JSelezionaCorso;
@@ -27,12 +28,17 @@ public class IscrittoGUI extends JFrame {
     private Controller controller;
 
 
+    /**
+     * Instantiates a new Iscritto gui.
+     *
+     * @param controller the controller
+     */
     public IscrittoGUI(Controller controller) {
         this.controller = controller;
 
         setContentPane(mainPanel);
 
-        // Imposta il titolo includendo l'username dell'utente loggato
+
         if (controller.getUtenteLoggato() != null) {
             setTitle("Area Iscritto - " + controller.getUtenteLoggato().getUsername());
         } else {
@@ -47,23 +53,19 @@ public class IscrittoGUI extends JFrame {
         inizializzaEventi();
         popolaTendinaCorsi();
 
-        // Blocca la finestra all'avvio finché non viene effettuato il pagamento
+
         bloccaFunzionalita();
     }
 
     private void bloccaFunzionalita() {
-        // Disabilita tutti i bottoni e i menu
         JVisualizzaScheda.setEnabled(false);
         JSelezionaCorso.setEnabled(false);
         JPrenota.setEnabled(false);
         JAreaWellness.setEnabled(false);
-
-        // Lascia attivo solo il pagamento
         JPaga.setEnabled(true);
     }
 
     private void sbloccaFunzionalita() {
-        // Riattiva i componenti dopo il pagamento
         JVisualizzaScheda.setEnabled(true);
         JSelezionaCorso.setEnabled(true);
         JPrenota.setEnabled(true);
@@ -92,18 +94,14 @@ public class IscrittoGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Iscritto utenteLoggato = (Iscritto) controller.getUtenteLoggato();
 
-
-
-
                 SchedaAllenamento scheda = controller.visualizzaSchedaPersonale(utenteLoggato);
 
                 if (scheda != null) {
 
-                   // System.out.println("DEBUG GUI: Scheda trovata! Descrizione estratta: '" + scheda.getDescrizione() + "'");
+
                     JtextVisualizzaS.setText(scheda.getDescrizione());
                 } else {
-                    // 3. Confermiamo che il DAO ha restituito il vuoto
-                   // System.out.println("DEBUG GUI: ERRORE - Il metodo del DAO ha restituito null.");
+
                     JtextVisualizzaS.setText("Nessuna scheda attualmente assegnata.");
                 }
             }
@@ -137,16 +135,16 @@ public class IscrittoGUI extends JFrame {
                     try {
                         Iscritto utenteLoggato = (Iscritto) controller.getUtenteLoggato();
 
-                        // Richiamiamo il controller. Se qualcosa va storto, salterà direttamente ai "catch"
+
                         controller.prenotaCorso(utenteLoggato, corsoSelezionato);
                         JOptionPane.showMessageDialog(mainPanel, "Iscrizione al corso confermata con successo!");
 
                     } catch (CorsoAlCompletoException ex) {
-                        // Catturiamo l'eccezione del corso pieno
+
                         JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Errore", JOptionPane.WARNING_MESSAGE);
 
                     } catch (CorsoGiaPrenotatoException ex) {
-                        // Catturiamo l'eccezione della prenotazione duplicata
+
                         JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Prenotazione Duplicata", JOptionPane.WARNING_MESSAGE);
                     }
                 }

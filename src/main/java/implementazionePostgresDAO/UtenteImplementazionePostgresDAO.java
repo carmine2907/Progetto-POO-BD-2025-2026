@@ -12,13 +12,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Utente implementazione postgres dao.
+ */
 public class UtenteImplementazionePostgresDAO implements UtenteDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Utente implementazione postgres dao.
+     */
     public UtenteImplementazionePostgresDAO() {
         try {
-            // Ottiene la connessione tramite la tua classe Singleton
+
             connection = ConnessioneDatabase.getInstance().getConnection();
         } catch (SQLException e) {
             e.printStackTrace();

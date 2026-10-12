@@ -11,10 +11,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Partecipa implementazione postgres dao.
+ */
 public class PartecipaImplementazionePostgresDAO implements PartecipaDAO {
 
     private Connection connection;
 
+    /**
+     * Instantiates a new Partecipa implementazione postgres dao.
+     */
     public PartecipaImplementazionePostgresDAO() {
         try {
             connection = ConnessioneDatabase.getInstance().getConnection();
@@ -25,7 +31,7 @@ public class PartecipaImplementazionePostgresDAO implements PartecipaDAO {
 
     @Override
     public void salva(Partecipa partecipa) {
-       // String query = "INSERT INTO Partecipa (Id_Corso, Id_Iscritto) VALUES (?, ?)";
+
         String query = "INSERT INTO Partecipa (Id_Corso, Id_Iscritto) VALUES (?, ?) ON CONFLICT DO NOTHING";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, partecipa.getId_Corso());
@@ -48,7 +54,7 @@ public class PartecipaImplementazionePostgresDAO implements PartecipaDAO {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    // Il costruttore richiede (String, String, Corso, Iscritto)
+
                     partecipa = new Partecipa(
                             rs.getString("Id_Corso"),
                             rs.getString("Id_Iscritto"),
@@ -66,8 +72,7 @@ public class PartecipaImplementazionePostgresDAO implements PartecipaDAO {
 
     @Override
     public void aggiornaPartecipazione(Partecipa partecipa) {
-        // Essendo una tabella associativa che contiene solo le due chiavi primarie,
-        // non ha senso fare un UPDATE. Per cambiare un'iscrizione si esegue una DELETE e poi una INSERT.
+
         System.out.println("Nessun attributo aggiornabile nella tabella associativa Partecipa.");
     }
 

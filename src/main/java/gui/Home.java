@@ -8,6 +8,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Home.
+ */
 public class Home extends JFrame{
     private JPanel mainPanel;
     private JTextField Jtext;
@@ -18,16 +21,19 @@ public class Home extends JFrame{
     private static JFrame frameHome;
     private Controller controller;
 
+    /**
+     * Instantiates a new Home.
+     */
     public Home () {
         controller = new Controller();
         frameHome = new JFrame("Home");
         frameHome.setContentPane(this.mainPanel);
         frameHome.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameHome.pack();
-        frameHome.setVisible(true);
 
-        setSize(500,500);
-        setLocationRelativeTo(null);
+        frameHome.setLocationRelativeTo(null);
+        frameHome.setSize(250,250);
+        frameHome.setVisible(true);
 
         JbuttonLogin.addActionListener(new ActionListener() {
             @Override
@@ -38,12 +44,12 @@ public class Home extends JFrame{
                 String username = Jtext.getText().trim();
                 String password = new String(JpasswordField.getText().trim());
 
-                // Controllo campi vuoti lato GUI
+
                 if (username.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Inserisci sia username che password.", "Campi incompleti", JOptionPane.WARNING_MESSAGE);
                 }
                 try {
-                    // Richiamo il TUO metodo del controller
+
                     boolean successo = controller.accedi(username, password);
 
                     if (successo) {
@@ -55,7 +61,6 @@ public class Home extends JFrame{
 
                         if (utenteLoggato instanceof Istruttore) {
 
-                            // (Opzionale) Se ti servono metodi specifici dell'istruttore, fai il cast:
                             Istruttore istruttore = (Istruttore) utenteLoggato;
 
                             IstruttoreGUI istruttoreGUI = new IstruttoreGUI(controller);
@@ -68,7 +73,7 @@ public class Home extends JFrame{
                         }
                     }
                 } catch (Exception ex) {
-                    // Cattura l'eccezione lanciata dal tuo metodo (es. "Credenziali errate!")
+
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore di Accesso", JOptionPane.ERROR_MESSAGE);
                 }
             }
