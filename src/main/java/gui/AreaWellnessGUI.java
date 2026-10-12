@@ -37,39 +37,8 @@ public class AreaWellnessGUI extends JFrame {
         setVisible(true);
 
         GestioneEventi();
-        controllaServiziGiaPrenotati();
-
     }
-    private void controllaServiziGiaPrenotati() {
-        try {
-            // Recuperiamo l'utente loggato e facciamo il cast a MembroVip
-            MembroVip membroVip = (MembroVip) controller.getUtenteLoggato();
 
-            // Verifichiamo che la sua lista di servizi prenotati esista e non sia vuota
-            if (membroVip.getServiziPrenotati() != null) {
-
-                // Scorriamo tutti i servizi che ha già acquistato
-                for (ServizioWellness servizio : membroVip.getServiziPrenotati()) {
-
-                    // Blocchiamo le caselle in base al nome del servizio che troviamo
-                    if (servizio.getNomeServizio().equalsIgnoreCase("Sauna")) {
-                        saunaCheckBox.setSelected(true);
-                        saunaCheckBox.setEnabled(false);
-                    }
-                    else if (servizio.getNomeServizio().equalsIgnoreCase("Fisioterapia")) {
-                        fisioterapiaCheckBox.setSelected(true);
-                        fisioterapiaCheckBox.setEnabled(false);
-                    }
-                    else if (servizio.getNomeServizio().equalsIgnoreCase("Nutrizionista")) {
-                        nutrizionistaCheckBox.setSelected(true);
-                        nutrizionistaCheckBox.setEnabled(false);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            System.err.println("Errore durante il caricamento dello storico servizi: " + ex.getMessage());
-        }
-    }
     private void GestioneEventi() {
 
 
