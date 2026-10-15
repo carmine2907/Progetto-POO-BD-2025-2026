@@ -83,6 +83,10 @@ public class IstruttoreGUI extends JFrame {
 
                     int capienza = Integer.parseInt(capienzaStr);
 
+                    if (capienza <= 0) {
+                        JOptionPane.showMessageDialog(mainPanel, "La capienza del corso deve essere un numero maggiore di zero.", "Valore non valido", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
 
                     String idCorso = "C_" + System.currentTimeMillis();
                     Istruttore istruttoreLoggato = (Istruttore) controller.getUtenteLoggato();

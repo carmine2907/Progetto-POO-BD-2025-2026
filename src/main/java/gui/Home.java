@@ -47,6 +47,7 @@ public class Home extends JFrame{
 
                 if (username.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Inserisci sia username che password.", "Campi incompleti", JOptionPane.WARNING_MESSAGE);
+                    return ;
                 }
                 try {
 
@@ -76,6 +77,7 @@ public class Home extends JFrame{
 
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore di Accesso", JOptionPane.ERROR_MESSAGE);
                 }
+
             }
         });
 }}
