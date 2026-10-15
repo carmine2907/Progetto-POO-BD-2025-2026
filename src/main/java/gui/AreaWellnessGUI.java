@@ -51,27 +51,34 @@ public class AreaWellnessGUI extends JFrame {
     }
     private void controllaServiziGiaPrenotati() {
         try {
+            List<ServizioWellness> listaServiziDb = controller.ottieniStatoServiziWellness();
+            MembroVip utenteLoggato = (MembroVip) controller.getUtenteLoggato();
 
-            MembroVip membroVip = (MembroVip) controller.getUtenteLoggato();
+            for (ServizioWellness servizio : listaServiziDb) {
 
 
-            if (membroVip.getServiziPrenotati() != null) {
+                if (!servizio.getDisponibile()) {
 
+                    // 3. Capiamo se l'ha prenotato l'utente attualmente loggato o qualcun altro.
 
-                for (ServizioWellness servizio : membroVip.getServiziPrenotati()) {
+                    boolean prenotatoDaMe = false;
+                    if (servizio.getMembroPrenotante() != null &&
+                            servizio.getMembroPrenotante().equals(utenteLoggato.getId_utente())) {
+                        prenotatoDaMe = true;
+                    }
 
 
                     if (servizio.getNomeServizio().equalsIgnoreCase("Sauna")) {
-                        saunaCheckBox.setSelected(true);
                         saunaCheckBox.setEnabled(false);
+                        if (prenotatoDaMe) saunaCheckBox.setSelected(true);
                     }
-                    else if (servizio.getNomeServizio().equalsIgnoreCase("Fisioterapia")) {
-                        fisioterapiaCheckBox.setSelected(true);
+                    else if (servizio.getNomeServizio().equalsIgnoreCase("Fisioterapia") || servizio.getNomeServizio().equalsIgnoreCase("Massaggio Sportivo")) {
                         fisioterapiaCheckBox.setEnabled(false);
+                        if (prenotatoDaMe) fisioterapiaCheckBox.setSelected(true);
                     }
                     else if (servizio.getNomeServizio().equalsIgnoreCase("Nutrizionista")) {
-                        nutrizionistaCheckBox.setSelected(true);
                         nutrizionistaCheckBox.setEnabled(false);
+                        if (prenotatoDaMe) nutrizionistaCheckBox.setSelected(true);
                     }
                 }
             }
@@ -89,13 +96,13 @@ public class AreaWellnessGUI extends JFrame {
 
 
                 if (saunaCheckBox.isSelected() && saunaCheckBox.isEnabled()) {
-                    serviziSelezionati.add(new ServizioWellness("SAUNA", "Sauna", true, null));
+                    serviziSelezionati.add(new ServizioWellness("W1", "Sauna", true, null));
                 }
                 if (fisioterapiaCheckBox.isSelected()&& fisioterapiaCheckBox.isEnabled()) {
-                    serviziSelezionati.add(new ServizioWellness("FISIO", "Fisioterapia", true, null));
+                    serviziSelezionati.add(new ServizioWellness("W3", "Fisioterapia", true, null));
                 }
                 if (nutrizionistaCheckBox.isSelected() && nutrizionistaCheckBox.isEnabled()) {
-                    serviziSelezionati.add(new ServizioWellness("NUTRI", "Nutrizionista", true, null));
+                    serviziSelezionati.add(new ServizioWellness("W2", "Nutrizionista", true, null));
                 }
 
 

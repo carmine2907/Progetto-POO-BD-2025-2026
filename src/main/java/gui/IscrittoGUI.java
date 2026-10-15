@@ -23,6 +23,7 @@ public class IscrittoGUI extends JFrame {
     private JButton JPrenota;
     private JButton JPaga;
     private JButton JAreaWellness;
+    private JButton JLogout;
     private JLabel JLabelSeleziona;
 
     private Controller controller;
@@ -115,7 +116,7 @@ public class IscrittoGUI extends JFrame {
                     String idPagamento = "PAG_" + System.currentTimeMillis();
 
                     Pagamento nuovoPagamento =controller.pagaAbbonamento(idPagamento);
-                    String stampaRicevuta= controller.StampaRicevuta(nuovoPagamento);
+                    String stampaRicevuta= controller.stampaRicevuta(nuovoPagamento);
                     JOptionPane.showMessageDialog(mainPanel,stampaRicevuta,"Ricevuta", JOptionPane.INFORMATION_MESSAGE);
                     JOptionPane.showMessageDialog(mainPanel, "Le funzionalità sono state sbloccate.");
                     sbloccaFunzionalita();
@@ -156,7 +157,7 @@ public class IscrittoGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    boolean accessoConsentito = controller.AccessoAreaWellness();
+                    boolean accessoConsentito = controller.accessoAreaWellness();
 
 
                     if (accessoConsentito) {
@@ -173,5 +174,20 @@ public class IscrittoGUI extends JFrame {
                 }
             }
         });
+
+        JLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int scelta = JOptionPane.showConfirmDialog(mainPanel, "Sei sicuro di voler effettuare il logout?", "Conferma Logout", JOptionPane.YES_NO_OPTION);
+
+                if (scelta == JOptionPane.YES_OPTION) {
+                    controller.logout();
+                    dispose();
+                    new Home();
+                }
+            }
+        });
+
     }
 }

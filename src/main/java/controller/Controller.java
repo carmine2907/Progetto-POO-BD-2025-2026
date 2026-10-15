@@ -1,6 +1,5 @@
 package controller;
 import controller.Exception.CorsoGiaEsistenteException;
-import controller.Exception.SchedaGiaEsistenteException;
 import dao.*;
 import implementazionePostgresDAO.*;
 import model.*;
@@ -123,27 +122,8 @@ public class Controller {
         return corsoCreato;
     }
 
-    /**
-     * Crea scheda scheda allenamento.
-     *
-     * @param id_scheda           the id scheda
-     * @param descrizione         the descrizione
-     * @param istruttoreCreatore  the istruttore creatore
-     * @param iscrittoPropietario the iscritto propietario
-     * @param id_iscritto         the id iscritto
-     * @return the scheda allenamento
-     * @throws Exception the exception
-     */
-    public SchedaAllenamento CreaScheda(String id_scheda,String descrizione ,Istruttore istruttoreCreatore,Iscritto iscrittoPropietario,String id_iscritto)throws Exception{
-       if(schedaAllenamentoDAO.cercaPerId_Scheda(id_scheda)!=null && schedaAllenamentoDAO.cercaPerid_Iscritto(id_iscritto)!=null){
 
-           throw new SchedaGiaEsistenteException("scheda già esistente!!! ");
-       }
 
-        SchedaAllenamento schedaCreata= new SchedaAllenamento(id_scheda,descrizione,istruttoreCreatore,iscrittoPropietario);
-        schedaAllenamentoDAO.salva(schedaCreata);
-        return schedaCreata;
-    }
 
     /**
      * Assegna scheda.
@@ -155,7 +135,7 @@ public class Controller {
      * @param id_iscritto         the id iscritto
      * @throws Exception the exception
      */
-    public void AssegnaScheda(String id_scheda, String descrizione, Istruttore istruttoreCreatore, Iscritto iscrittoPropietario, String id_iscritto) throws Exception {
+    public void creaeAssegnaScheda(String id_scheda, String descrizione, Istruttore istruttoreCreatore, Iscritto iscrittoPropietario, String id_iscritto) throws Exception {
         SchedaAllenamentoDAO schedaDAO = new SchedaAllenamentoImplementazionePostgresDAO();
 
 
@@ -241,7 +221,7 @@ public class Controller {
      * @param ricevutapag the ricevutapag
      * @return the string
      */
-    public String StampaRicevuta(Pagamento ricevutapag){
+    public String stampaRicevuta(Pagamento ricevutapag){
 
         return "pagamento riuscito \n  "+"idpagamento: "+ricevutapag.getId_Pagamento()+"\n euro: "+ricevutapag.getImporto();
     }
@@ -300,7 +280,7 @@ public class Controller {
      * @return the boolean
      * @throws AccessoAreaWellnessException the accesso area wellness exception
      */
-    public boolean AccessoAreaWellness() throws AccessoAreaWellnessException {
+    public boolean accessoAreaWellness() throws AccessoAreaWellnessException {
 
         if (this.utenteLoggato instanceof MembroVip) {
             return true;
@@ -309,40 +289,28 @@ public class Controller {
         }
     }
 
-    /**
-     * Get info servizi servizio wellness.
-     *
-     * @param servizioWellness the servizio wellness
-     * @return the servizio wellness
-     */
-    public ServizioWellness GetInfoServizi(ServizioWellness servizioWellness){
-  servizioWellness.getId_ServizioWellness();
-     servizioWellness.getNomeServizio();
-          servizioWellness.getDisponibile();
 
-          return servizioWellness;
-    }
 
 
     /**
      * Prenota servizi boolean.
      *
-     * @param utenteLoggato      the utente loggato
+     * @param membroVip      the utente loggato
      * @param serviziSelezionati the servizi selezionati
      * @return the boolean
      */
-    public boolean prenotaServizi(MembroVip utenteLoggato, List<ServizioWellness> serviziSelezionati) {
+    public boolean prenotaServizi(MembroVip membroVip, List<ServizioWellness> serviziSelezionati) {
             ServizioWellnessDAO servizioDAO = new implementazionePostgresDAO.ServizioWellnessImplementazionePostgresDAO();
 
             for (ServizioWellness servizio : serviziSelezionati) {
 
                 servizio.setDisponibile(false);
-                servizio.setMembroPrenotante(utenteLoggato);
+                servizio.setMembroPrenotante(membroVip);
                 servizioDAO.aggiornaServizioWellness(servizio);
 
 
-                if (utenteLoggato.getServiziPrenotati() != null) {
-                    utenteLoggato.getServiziPrenotati().add(servizio); //aggiungere il servizio all'utente
+                if (membroVip.getServiziPrenotati() != null) {
+                    membroVip.getServiziPrenotati().add(servizio); //aggiungere il servizio all'utente
                 }
             }
             return true;
@@ -364,5 +332,12 @@ public class Controller {
     public List<Iscritto> ottieniTuttiGliIscritti() {
         return iscrittoDAO.trovaTutti();
     }
+
+
+    public List<ServizioWellness> ottieniStatoServiziWellness() {
+        ServizioWellnessImplementazionePostgresDAO serviziDAO = new ServizioWellnessImplementazionePostgresDAO();
+        return serviziDAO.trovaTutti();
+     }
+
     }
 

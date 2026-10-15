@@ -62,7 +62,7 @@ public class Home extends JFrame{
 
                         if (utenteLoggato instanceof Istruttore) {
 
-                            Istruttore istruttore = (Istruttore) utenteLoggato;
+
 
                             IstruttoreGUI istruttoreGUI = new IstruttoreGUI(controller);
                             istruttoreGUI.setVisible(true);

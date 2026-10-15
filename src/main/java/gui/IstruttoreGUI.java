@@ -24,6 +24,7 @@ public class IstruttoreGUI extends JFrame {
     private JComboBox<Iscritto> JcomboBoxIscritti;
     private JTextArea textArea1;
     private JButton JAssegna;
+    private JButton JLogout;
     private JLabel JNomeCorso;
     private JLabel JCapienza;
     private JLabel JSeleziona;
@@ -126,7 +127,7 @@ public class IstruttoreGUI extends JFrame {
                     Istruttore istruttoreLoggato = (Istruttore) controller.getUtenteLoggato();
 
 
-                    controller.AssegnaScheda(idScheda, descrizioneScheda, istruttoreLoggato, iscrittoSelezionato, iscrittoSelezionato.getId_utente());
+                    controller.creaeAssegnaScheda(idScheda, descrizioneScheda, istruttoreLoggato, iscrittoSelezionato, iscrittoSelezionato.getId_utente());
 
                     JOptionPane.showMessageDialog(mainPanel, "Scheda assegnata con successo all'iscritto " + iscrittoSelezionato.getUsername() + "!", "Successo", JOptionPane.INFORMATION_MESSAGE);
 
@@ -136,6 +137,20 @@ public class IstruttoreGUI extends JFrame {
                     JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Scheda Esistente", JOptionPane.WARNING_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(mainPanel, "Errore durante l'assegnazione della scheda: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        JLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int scelta = JOptionPane.showConfirmDialog(mainPanel, "Sei sicuro di voler effettuare il logout?", "Conferma Logout", JOptionPane.YES_NO_OPTION);
+
+                if (scelta == JOptionPane.YES_OPTION) {
+                  controller.logout();
+                    dispose();
+                    new Home();
                 }
             }
         });

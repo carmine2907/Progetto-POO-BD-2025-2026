@@ -43,7 +43,7 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
     @Override
     public void salva(ServizioWellness servizioWellness) {
 
-        String query = "INSERT INTO servizio_wellness (Id_ServizioWellness, nome_servizio, disponibile, id_membro_prenotante) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO servizio_wellness (id_serviziowellness, nome_servizio, disponibile, id_membro_prenotante) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -173,7 +173,8 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
     @Override
     public void aggiornaServizioWellness(ServizioWellness servizioWellness) {
 
-        String query = "UPDATE ServizioWellness SET NomeServizio = ?, Disponibile = ? WHERE Id_ServizioWellness = ?";
+
+        String query = "UPDATE servizio_wellness SET nome_servizio = ?, disponibile = ?, id_membro_prenotante = ? WHERE id_serviziowellness = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
@@ -191,11 +192,11 @@ public class ServizioWellnessImplementazionePostgresDAO implements ServizioWelln
             if (servizioWellness.getMembroPrenotante() != null) {
                 stmt.setString(3, servizioWellness.getMembroPrenotante().getId_utente());
             } else {
-                stmt.setNull(3, Types.VARCHAR); // Se il membro prenotante è null, rimuoviamo l'associazione nel DB
+                stmt.setNull(3, Types.VARCHAR);
             }
 
-            stmt.setString(3, servizioWellness.getId_ServizioWellness());
 
+            stmt.setString(4, servizioWellness.getId_ServizioWellness());
 
             stmt.executeUpdate();
 
