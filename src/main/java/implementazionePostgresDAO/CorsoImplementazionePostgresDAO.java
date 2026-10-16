@@ -56,7 +56,7 @@ public class CorsoImplementazionePostgresDAO implements CorsoDAO {
     @Override
     public Corso cercaPerNomeCorso(String nomeCorso) {
 
-        String query = "SELECT * FROM Corso WHERE NomeCorso = ?";
+        String query = "SELECT * FROM corso WHERE NomeCorso ILIKE ?;";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, nomeCorso);

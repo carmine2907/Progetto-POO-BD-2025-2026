@@ -59,7 +59,7 @@ public class AreaWellnessGUI extends JFrame {
 
                 if (!servizio.getDisponibile()) {
 
-                    // 3. Capiamo se l'ha prenotato l'utente attualmente loggato o qualcun altro.
+
 
                     boolean prenotatoDaMe = false;
                     if (servizio.getMembroPrenotante() != null &&
@@ -111,7 +111,7 @@ public class AreaWellnessGUI extends JFrame {
                     return;
                 }
 
-                try {
+
 
                     MembroVip membroVip = (MembroVip) controller.getUtenteLoggato();
 
@@ -134,9 +134,7 @@ public class AreaWellnessGUI extends JFrame {
                             nutrizionistaCheckBox.setSelected(false);
                         }
                     }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(mainPanel, "Si è verificato un errore durante la prenotazione: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-                }
+
             }
         });
 

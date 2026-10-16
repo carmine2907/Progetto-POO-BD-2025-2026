@@ -2,6 +2,7 @@ package gui;
 
 import controller.Controller;
 import controller.Exception.CorsoGiaEsistenteException;
+import controller.Exception.SchedaGiaAssegnataException;
 import controller.Exception.SchedaGiaEsistenteException;
 import model.Iscritto;
 import model.Istruttore;
@@ -103,9 +104,7 @@ public class IstruttoreGUI extends JFrame {
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(mainPanel, "La capienza deve essere un numero intero valido.", "Errore Formato", JOptionPane.ERROR_MESSAGE);
                 } catch (CorsoGiaEsistenteException ex) {
-                    JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Corso Duplicato", JOptionPane.WARNING_MESSAGE);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(mainPanel, "Errore durante la creazione del corso: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Corso Duplicato", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -133,9 +132,7 @@ public class IstruttoreGUI extends JFrame {
 
                     textArea1.setText("");
 
-                } catch (SchedaGiaEsistenteException ex) {
-                    JOptionPane.showMessageDialog(mainPanel, ex.getMessage(), "Scheda Esistente", JOptionPane.WARNING_MESSAGE);
-                } catch (Exception ex) {
+                }  catch (SchedaGiaAssegnataException ex) {
                     JOptionPane.showMessageDialog(mainPanel, "Errore durante l'assegnazione della scheda: " + ex.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }
             }

@@ -135,7 +135,7 @@ public class Controller {
      * @param id_iscritto         the id iscritto
      * @throws Exception the exception
      */
-    public void creaeAssegnaScheda(String id_scheda, String descrizione, Istruttore istruttoreCreatore, Iscritto iscrittoPropietario, String id_iscritto) throws Exception {
+    public void creaeAssegnaScheda(String id_scheda, String descrizione, Istruttore istruttoreCreatore, Iscritto iscrittoPropietario, String id_iscritto) throws SchedaGiaAssegnataException {
         SchedaAllenamentoDAO schedaDAO = new SchedaAllenamentoImplementazionePostgresDAO();
 
 
